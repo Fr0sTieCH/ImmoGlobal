@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ImmoGlobalAdmin"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             StartupUri="MainWindow.xaml">
+             xmlns:views="clr-namespace:ImmoGlobalAdmin.View"
+              xmlns:viewmodels="clr-namespace:ImmoGlobalAdmin.ViewModel">
     <Application.Resources>
         <ResourceDictionary>
+            <DataTemplate DataType="{x:Type viewmodels:EFTestingViewModel}">
+                <views:EFTesting/>
+            </DataTemplate>
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="LightBlue" SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />

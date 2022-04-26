@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using ImmoGlobalAdmin.ViewModel;
 
 namespace ImmoGlobalAdmin
 {
@@ -13,5 +14,18 @@ namespace ImmoGlobalAdmin
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            EFTestingViewModel efTestingViewModel = EFTestingViewModel.GetInstance;
+
+            MainWindow = new MainWindow()
+            {
+                DataContext = new MainViewModel(efTestingViewModel)
+            };
+
+            MainWindow.Show();
+
+            base.OnStartup(e);
+        }
     }
 }
