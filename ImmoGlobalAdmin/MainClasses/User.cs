@@ -18,7 +18,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public Permissions PermissionLevel { get; set; }
 
         public bool Enabled { get; private set; }
-        public string ReasonForDeleting { get; private set; }
+        public string ReasonForDeleting { get; private set; } = "";
 
         public User()
         {

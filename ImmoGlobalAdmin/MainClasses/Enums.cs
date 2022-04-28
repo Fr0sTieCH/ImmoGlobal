@@ -52,10 +52,8 @@ namespace ImmoGlobalAdmin.MainClasses
 
     public enum Permissions
     {
-        ManageUsers,
-        EditRealEstate,
-        EditTransactions,
-        ManageRentalObjects,
-        CreateInvoices
+        Admin,
+        RentalObjectManager,
+        FinanceManager
     }
 }

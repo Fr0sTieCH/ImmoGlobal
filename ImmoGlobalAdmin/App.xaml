@@ -4,11 +4,14 @@
              xmlns:local="clr-namespace:ImmoGlobalAdmin"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:views="clr-namespace:ImmoGlobalAdmin.View"
-              xmlns:viewmodels="clr-namespace:ImmoGlobalAdmin.ViewModel">
+             xmlns:viewmodels="clr-namespace:ImmoGlobalAdmin.ViewModel">
     <Application.Resources>
         <ResourceDictionary>
-            <DataTemplate DataType="{x:Type viewmodels:EFTestingViewModel}">
-                <views:EFTesting/>
+            <DataTemplate DataType="{x:Type viewmodels:MainMenuViewModel}">
+                <views:MainMenuView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:RealEstateViewModel}">
+                <views:RealEstateView/>
             </DataTemplate>
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="LightBlue" SecondaryColor="Lime" />

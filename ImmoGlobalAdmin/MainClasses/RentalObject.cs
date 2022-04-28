@@ -66,9 +66,9 @@ namespace ImmoGlobalAdmin.MainClasses
         /// <param name="nonRentalSpaceInQM">Space wich is not part of any rental object in squaremeters</param>
         /// <param name="owner">owner of the realEstate</param>
         /// <param name="account">Bankaccount on wich all the transactions of this realestate will get debited or deposited</param>
-        public RentalObject(RealEstate realEstate,double nonRentalRoomCount,double nonRentalSpaceInQM,Person owner, BankAccount account)
+        public RentalObject(string realEstateName,double nonRentalRoomCount,double nonRentalSpaceInQM,Person owner, BankAccount account)
         {
-            this.RentalObjectName = $"{realEstate.RealEstateName}BaseObject";
+            this.RentalObjectName = $"{realEstateName}BaseObject";
             this.Type = RentalObjectType.RealEstateBaseObject;
             this.AddressSupplement = "";
             this.RoomCount = nonRentalRoomCount;
@@ -87,11 +87,18 @@ namespace ImmoGlobalAdmin.MainClasses
 
         public void Delete(string reason)
         {
-            if (Type == RentalObjectType.RealEstateBaseObject)
+            if (Type == RentalObjectType.RealEstateBaseObject) //Every realestate has to have a baseobject, therefore deleting of a realestateobject is not allowed
             {
                 return;
             }
 
+            Enabled = false;
+            ReasonForDeleting = reason;
+        }
+
+        public void DeleteBaseObject(string reason)
+        {
+           
             Enabled = false;
             ReasonForDeleting = reason;
         }

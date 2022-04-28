@@ -20,10 +20,12 @@ namespace ImmoGlobalAdmin.Model
 
         protected DataAccessLayer()
         {
+            using(ImmoGlobalContext context = new ImmoGlobalContext()){
+                context.Database.EnsureCreated();
+            }
             //create new context object
             //make sure we always use the same context-object to be able to lazyload the objects
             db = new ImmoGlobalContext();
-            db.Database.EnsureCreated();
 
         }
 
@@ -123,6 +125,15 @@ namespace ImmoGlobalAdmin.Model
             return db.realEstates.Where(x => x.Enabled).ToList();
         }
 
+        public List<Person> GetPersonsUnfiltered()
+        {
+            return db.persons.Where(x => x.Enabled).ToList();
+        }
+
+        public List<BankAccount> GetBankAccountsUnfiltered()
+        {
+            return db.bankAccounts.Where(x => x.Enabled).ToList();
+        }
 
         #endregion
 

@@ -1,0 +1,13 @@
+﻿<ResourceDictionary 
+        xmlns ="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+        <system:String x:Key="dashboard">Dashboard</system:String>
+        <system:String x:Key="finance">Finanzen</system:String>
+        <system:String x:Key="realEstate">Liegenschaften</system:String>
+        <system:String x:Key="person">Personen</system:String>
+        <system:String x:Key="user">Benutzer</system:String>
+        <system:String x:Key="settings">Einstellungen</system:String>
+
+</ResourceDictionary> 

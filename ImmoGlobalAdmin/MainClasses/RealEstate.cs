@@ -14,7 +14,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public string Address { get; set; }
         public virtual Person? Janitor { get; set; }
         public virtual ICollection<RentalObject?> RentalObjects { get; set; }
-        public virtual RentalObject? BaseObject { get; set; }
+        public virtual RentalObject? BaseObject { get; private set; }
 
         public bool Enabled { get; private set; }
         public string ReasonForDeleting { get; private set; } = "";
@@ -26,14 +26,14 @@ namespace ImmoGlobalAdmin.MainClasses
         {
         }
 
-        public RealEstate(string realEstateName, string address, Person owner, Person janitor, List<RentalObject> rentalObjects,double nonRentalRoomCount, double nonRentalSpaceinQM,BankAccount account)
+        public RealEstate(string realEstateName, string address, Person owner, Person janitor, double nonRentalRoomCount, double nonRentalSpaceinQM,BankAccount account)
         {
             this.RealEstateName = realEstateName;
             this.Address = address;
             this.Janitor = janitor;
-            this.RentalObjects = rentalObjects;
+            RentalObjects = new List<RentalObject>();
             //generate a baseObject for the realEstate
-            this.BaseObject = new RentalObject(this, nonRentalRoomCount, nonRentalSpaceinQM, owner, account);
+            this.BaseObject = new RentalObject(realEstateName, nonRentalRoomCount, nonRentalSpaceinQM, owner, account);
 
             this.Enabled = true;
         }
@@ -61,6 +61,7 @@ namespace ImmoGlobalAdmin.MainClasses
 
         public void Delete(string reason)
         {
+            BaseObject.DeleteBaseObject($"Deleted because the realestate got deleted with the reason:{reason}");
             foreach(RentalObject ro in RentalObjects)
             {
                 ro.Delete($"Deleted because the realestate got deleted with the reason:{reason}"); 
