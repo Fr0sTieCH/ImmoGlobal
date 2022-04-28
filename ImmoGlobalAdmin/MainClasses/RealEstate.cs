@@ -16,8 +16,8 @@ namespace ImmoGlobalAdmin.MainClasses
         public virtual ICollection<RentalObject?> RentalObjects { get; set; }
         public virtual RentalObject? BaseObject { get; set; }
 
-        private bool Enabled { get; set; }
-        private string ReasonForDeleting { get; set; } = "";
+        public bool Enabled { get; private set; }
+        public string ReasonForDeleting { get; private set; } = "";
 
 
 

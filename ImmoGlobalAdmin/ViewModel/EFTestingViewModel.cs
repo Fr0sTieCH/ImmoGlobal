@@ -1,5 +1,6 @@
 ﻿using ImmoGlobalAdmin.Commands;
 using ImmoGlobalAdmin.Model;
+using ImmoGlobalAdmin.MainClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,16 +53,14 @@ namespace ImmoGlobalAdmin.ViewModel
 
         private void TestButtonClicked(object obj)
         {
-            using (var client = new ImmoGlobalContext())
-            {
-                client.Database.EnsureCreated();
-            }
+            DataAccessLayer.GetInstance.UpdateDB();
 
-            ImmoGlobalContext db = new ImmoGlobalContext();
-           
+            //Create Test Objects
 
-            DataAccessLayer dal = new DataAccessLayer(db);
-            dal.UpdateDB();
+            Person dummyPerson = new Person("Test","Anna","Testweg 1","079 000 00 00","","testanna@gmail.com",null,"This Is A Test Person");
+
+            DataAccessLayer.GetInstance.StoreNewPerson(dummyPerson);
+
         }
     }
 }

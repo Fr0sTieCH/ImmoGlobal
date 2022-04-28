@@ -7,39 +7,125 @@ using ImmoGlobalAdmin.MainClasses;
 
 namespace ImmoGlobalAdmin.Model
 {
+    /// <summary>
+    /// Accessing (Store,Edit,Delete) data from the specified database using entity framework core
+    /// </summary>
     internal class DataAccessLayer
     {
-       
-            private ImmoGlobalContext db;
+        private ImmoGlobalContext db;
 
-            public DataAccessLayer(ImmoGlobalContext _db) => this.db = _db;
+        #region Singleton
+        private static DataAccessLayer? instance = null;
+        private static readonly object padlock = new();
 
-            #region Store/Delete
-            public void CreateNewUser(User _newUser)
+        protected DataAccessLayer()
+        {
+            //create new context object
+            //make sure we always use the same context-object to be able to lazyload the objects
+            db = new ImmoGlobalContext();
+            db.Database.EnsureCreated();
+
+        }
+
+        /// <summary>
+        /// returns instance of class DataAccessLayer
+        /// </summary>
+        public static DataAccessLayer GetInstance
+        {
+            get
             {
-                db.users.Add(_newUser);
-                db.SaveChanges();
+                lock (padlock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new DataAccessLayer();
+                    }
+                    return instance;
+                }
             }
+        }
+        #endregion
+
+        public void UpdateDB()
+        {
+            db.SaveChanges();
+        }
 
 
-            public void UpdateDB()
-            {
-                db.SaveChanges();
-            }
 
-        
-            #endregion
+        #region Store
+        public void StoreNewUser(User newUser)
+        {
+            db.users.Add(newUser);
+            UpdateDB();
+        }
 
-            #region Retrieve
-            public User GetUserByName(string _username)
-            {
-                return db.users.Where(x => x.Username == _username).FirstOrDefault();
-            }
+        public void StoreNewTransaction(Transaction newTransaction)
+        {
+            db.transactions.Add(newTransaction);
+            UpdateDB();
+        }
 
-          
+        public void StoreNewRentalObject(RentalObject newRentalObject)
+        {
+            db.rentalObjects.Add(newRentalObject);
+            UpdateDB();
+        }
 
-            #endregion
+        public void StoreNewRentalContract(RentalContract newRentalContract)
+        {
+            db.rentalContracts.Add(newRentalContract);
+            UpdateDB();
+        }
 
-        
+        public void StoreNewRealEstate(RealEstate newRealEstate)
+        {
+            db.realEstates.Add(newRealEstate);
+            UpdateDB();
+        }
+
+        public void StoreNewProtocol(Protocol newProtocol)
+        {
+            db.protocols.Add(newProtocol);
+            UpdateDB();
+        }
+
+        public void StoreNewPerson(Person newPerson)
+        {
+            db.persons.Add(newPerson);
+            UpdateDB();
+        }
+
+        public void StoreNewInvoice(Invoice newInvoice)
+        {
+            db.invoices.Add(newInvoice);
+            UpdateDB();
+        }
+
+        public void StoreNewBankAccount(BankAccount newBankAccount)
+        {
+            db.bankAccounts.Add(newBankAccount);
+            UpdateDB();
+        }
+
+
+        #endregion
+
+        #region Retrieve
+
+        public User? GetUserByName(string username)
+        {
+            return db.users.Where(x => x.Username == username && x.Enabled).FirstOrDefault();
+        }
+
+        public List<RealEstate> GetRealEstatesUnfiltered()
+        {
+            return db.realEstates.Where(x => x.Enabled).ToList();
+        }
+
+
+        #endregion
+
+
     }
 }
