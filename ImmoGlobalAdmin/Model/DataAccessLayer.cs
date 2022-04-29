@@ -20,7 +20,8 @@ namespace ImmoGlobalAdmin.Model
 
         protected DataAccessLayer()
         {
-            using(ImmoGlobalContext context = new ImmoGlobalContext()){
+            using (ImmoGlobalContext context = new ImmoGlobalContext())
+            {
                 context.Database.EnsureCreated();
             }
             //create new context object
@@ -48,66 +49,68 @@ namespace ImmoGlobalAdmin.Model
         }
         #endregion
 
-        public void UpdateDB()
+        public void SaveChanges()
         {
             db.SaveChanges();
         }
-
-
+        public void RestoreValuesFromDB(object entity)
+        {
+            db.Entry(entity).Reload();
+        }
 
         #region Store
         public void StoreNewUser(User newUser)
         {
             db.users.Add(newUser);
-            UpdateDB();
+            SaveChanges();
         }
 
         public void StoreNewTransaction(Transaction newTransaction)
         {
             db.transactions.Add(newTransaction);
-            UpdateDB();
+            SaveChanges();
         }
 
         public void StoreNewRentalObject(RentalObject newRentalObject)
         {
             db.rentalObjects.Add(newRentalObject);
-            UpdateDB();
+            SaveChanges();
         }
 
         public void StoreNewRentalContract(RentalContract newRentalContract)
         {
             db.rentalContracts.Add(newRentalContract);
-            UpdateDB();
+            SaveChanges();
         }
 
         public void StoreNewRealEstate(RealEstate newRealEstate)
         {
             db.realEstates.Add(newRealEstate);
-            UpdateDB();
+            SaveChanges();
         }
 
         public void StoreNewProtocol(Protocol newProtocol)
         {
             db.protocols.Add(newProtocol);
-            UpdateDB();
+            SaveChanges();
         }
 
         public void StoreNewPerson(Person newPerson)
         {
             db.persons.Add(newPerson);
-            UpdateDB();
+            SaveChanges();
         }
 
         public void StoreNewInvoice(Invoice newInvoice)
         {
             db.invoices.Add(newInvoice);
-            UpdateDB();
+            SaveChanges();
         }
 
         public void StoreNewBankAccount(BankAccount newBankAccount)
         {
             db.bankAccounts.Add(newBankAccount);
-            UpdateDB();
+            SaveChanges();
         }
 
 
@@ -129,6 +132,7 @@ namespace ImmoGlobalAdmin.Model
         {
             return db.persons.Where(x => x.Enabled).ToList();
         }
+
 
         public List<BankAccount> GetBankAccountsUnfiltered()
         {

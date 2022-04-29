@@ -51,7 +51,30 @@ namespace ImmoGlobalAdmin.ViewModel
         #endregion
 
         public User LoggedInUser => loggedInUser;
-        public bool InMainMenu => _selectedViewModel==activeMainMenuViewModel;
+        public bool InMainMenu => _selectedViewModel == activeMainMenuViewModel;
+
+
+        private string searchString = "";
+        public string SearchString
+        {
+            get { return searchString; }
+            set 
+            { 
+                searchString = value;
+                OnPropertyChanged(nameof(SearchString));
+            }
+        }
+
+        //EnableDisable Search function
+        public bool SearchAllowed
+        {
+            get
+            {
+                Type type = _selectedViewModel.GetType();
+                return type == typeof(RealEstateViewModel) || type == typeof(DashboardViewModel) || type == typeof(FinanceViewModel) || type == typeof(PersonViewModel) || type == typeof(UserManagementViewModel);
+            }
+
+        }
 
         public BaseViewModel SelectedViewModel
         {
@@ -64,6 +87,7 @@ namespace ImmoGlobalAdmin.ViewModel
                 _selectedViewModel = value;
                 OnPropertyChanged(nameof(SelectedViewModel));
                 OnPropertyChanged(nameof(InMainMenu));
+                OnPropertyChanged(nameof(SearchAllowed));
             }
         }
 
@@ -84,9 +108,52 @@ namespace ImmoGlobalAdmin.ViewModel
         private void HomeButtonClicked(object obj)
         {
 
-           SelectedViewModel = MainMenuViewModel.GetInstance;
+            SelectedViewModel = MainMenuViewModel.GetInstance;
 
         }
+
+        public ICommand SearchButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(SearchButtonClicked);
+            }
+        }
+
+        private void SearchButtonClicked(object obj)
+        {
+
+            ExecuteSearch(SearchString);
+
+        }
+
+        private void ExecuteSearch(string searchString)
+        {
+            Type type = _selectedViewModel.GetType();
+
+            if (type == typeof(RealEstateViewModel))
+            {
+
+            }
+            else if (type == typeof(FinanceViewModel))
+            {
+
+            }
+            else if (type == typeof(PersonViewModel))
+            {
+                PersonViewModel.GetInstance.SearchContent(searchString);
+            }
+            else if (type == typeof(DashboardViewModel))
+            {
+
+            }
+            else if (type == typeof(UserManagementViewModel))
+            {
+
+            }
+      
+        }
+
         #endregion
     }
 }

@@ -9,5 +9,14 @@
         <system:String x:Key="person">Persons</system:String>
         <system:String x:Key="user">Users</system:String>
         <system:String x:Key="settings">Settings</system:String>
+        <system:String x:Key="name">Name</system:String>
+    <system:String x:Key="prename">Prename</system:String>
+    <system:String x:Key="address">Address</system:String>
+    <system:String x:Key="birthdate">Date Of Birth</system:String>
+    <system:String x:Key="phone">Phone</system:String>
+    <system:String x:Key="fax">Fax</system:String>
+    <system:String x:Key="vatNumber">VAT-Number</system:String>
+    <system:String x:Key="note">Note</system:String>
+    <system:String x:Key="areYouSure?">are you sure?</system:String>
 
 </ResourceDictionary> 

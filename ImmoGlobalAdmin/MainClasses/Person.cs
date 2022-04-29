@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,20 +13,53 @@ namespace ImmoGlobalAdmin.MainClasses
     {
         public int PersonID { get; private set; }
         public string Name { get; set; } = "";
-        public string Prename { get;  set; } = "";
+        public string Prename { get; set; } = "";
         public string Adress { get; set; } = "";
-        public string Phone { get;  set; } = "";
+        public string Phone { get; set; } = "";
         public string Fax { get; set; } = "";
         public string EMail { get; set; } = "";
         public string VatNuber { get; set; } = "";
         public DateTime? Birthdate { get; set; }
-        public string Note { get;  set; } = "";
+        public string Note { get; set; } = "";
 
         public bool Enabled { get; private set; }
         public string ReasonForDeleting { get; private set; } = "";
 
+        [NotMapped]
+        public string IGID => PersonID.ToString("0000000000");
+
+        [NotMapped]
+        public string EMailCommand => $"mailto:{EMail}";
+
+        [NotMapped]
+        public DateOnly? BirthdatyDateOnly
+        {
+            
+            get
+            {
+                if (Birthdate == null)
+                {
+                    return null;
+                }
+                else
+                {
+                  return  DateOnly.FromDateTime((DateTime)Birthdate);
+                }
+                
+            }
+            
+}
+
+
+
+
         public Person()
         {
+        }
+
+        public Person(bool enabled)
+        {
+            Enabled = enabled;
         }
 
         #region CONSTRUCTORS

@@ -125,6 +125,11 @@ namespace ImmoGlobalAdmin.ViewModel
 
         //booleans for highlightin the current view
         public bool RealEstateActive => !( MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(RealEstateViewModel));
+        public bool FinanceActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(FinanceViewModel));
+        public bool UserManagementActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(UserManagementViewModel));
+        public bool PersonActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(PersonViewModel));
+        public bool SettingsActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(SettingsViewModel));
+        public bool DashboardActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(DashboardViewModel));
 
         #region ButtonCommands
 
@@ -140,10 +145,104 @@ namespace ImmoGlobalAdmin.ViewModel
         {
 
             MainViewModel.GetInstance.SelectedViewModel = RealEstateViewModel.GetInstance;
-            OnPropertyChanged(nameof(RealEstateActive));
+            OnActiveUserControlChanged();
 
         }
+
+        public ICommand FinanceButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(FinanceButtonClicked);
+            }
+        }
+
+        private void FinanceButtonClicked(object obj)
+        {
+
+            MainViewModel.GetInstance.SelectedViewModel = FinanceViewModel.GetInstance;
+            OnActiveUserControlChanged();
+
+        }
+
+        public ICommand UserManagementButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(UserManagementButtonClicked);
+            }
+        }
+
+        private void UserManagementButtonClicked(object obj)
+        {
+
+            MainViewModel.GetInstance.SelectedViewModel = UserManagementViewModel.GetInstance;
+            OnActiveUserControlChanged();
+
+        }
+
+        public ICommand PersonButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(PersonButtonClicked);
+            }
+        }
+
+        private void PersonButtonClicked(object obj)
+        {
+
+            MainViewModel.GetInstance.SelectedViewModel = PersonViewModel.GetInstance;
+            OnActiveUserControlChanged();
+
+        }
+
+        public ICommand SettingsButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(SettingsButtonClicked);
+            }
+        }
+
+        private void SettingsButtonClicked(object obj)
+        {
+
+            MainViewModel.GetInstance.SelectedViewModel = SettingsViewModel.GetInstance;
+            OnActiveUserControlChanged();
+
+        }
+
+        public ICommand DashboardButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(DashboardButtonClicked);
+            }
+        }
+
+        private void DashboardButtonClicked(object obj)
+        {
+
+            MainViewModel.GetInstance.SelectedViewModel = DashboardViewModel.GetInstance;
+            OnActiveUserControlChanged();
+
+        }
+
         #endregion
+
+        /// <summary>
+        /// Updates all booleans for enabling/disabling the main menu buttons based on the current active viewmodel
+        /// </summary>
+        private void OnActiveUserControlChanged()
+        {
+            OnPropertyChanged(nameof(RealEstateActive));
+            OnPropertyChanged(nameof(FinanceActive));
+            OnPropertyChanged(nameof(UserManagementActive));
+            OnPropertyChanged(nameof(PersonActive));
+            OnPropertyChanged(nameof(SettingsActive));
+            OnPropertyChanged(nameof(DashboardActive));
+        }
 
     }
 }

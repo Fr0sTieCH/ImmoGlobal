@@ -28,7 +28,7 @@
         <ScrollViewer VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                    <Button Command="{Binding DashboardButtonCommand}" IsEnabled="{Binding DashboardActive}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                         <materialDesign:PackIcon Kind="MonitorDashboard">
                             <materialDesign:PackIcon.LayoutTransform>
                                 <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
@@ -39,7 +39,7 @@
                 </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                    <Button Command="{Binding FinanceButtonCommand}" IsEnabled="{Binding FinanceActive}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                         <materialDesign:PackIcon Kind="Wallet">
                             <materialDesign:PackIcon.LayoutTransform>
                                 <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
@@ -75,7 +75,7 @@
                 </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                    <Button Command="{Binding PersonButtonCommand}" IsEnabled="{Binding PersonActive}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                         <materialDesign:PackIcon Kind="People">
                             <materialDesign:PackIcon.LayoutTransform>
                                 <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
@@ -93,7 +93,7 @@
                 </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                    <Button Command="{Binding UserManagementButtonCommand}" IsEnabled="{Binding UserManagementActive}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                         <materialDesign:PackIcon Kind="UserEdit">
                             <materialDesign:PackIcon.LayoutTransform>
                                 <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
@@ -111,7 +111,7 @@
                 </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                    <Button Command="{Binding SettingsButtonCommand}" IsEnabled="{Binding SettingsActive}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                         <materialDesign:PackIcon Kind="Settings">
                             <materialDesign:PackIcon.LayoutTransform>
                                 <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>

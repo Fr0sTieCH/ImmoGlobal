@@ -57,7 +57,7 @@ namespace ImmoGlobalAdmin.ViewModel
 
         private void TestButtonClicked(object obj)
         {
-            DataAccessLayer.GetInstance.UpdateDB();
+            DataAccessLayer.GetInstance.SaveChanges();
 
             StoreTestPersonsToDB();
             StoreTestJuristicPersonsToDB();
