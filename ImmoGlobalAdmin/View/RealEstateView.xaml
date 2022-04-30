@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ImmoGlobalAdmin.View"
               xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewmodels ="clr-namespace:ImmoGlobalAdmin.ViewModel"
+              xmlns:viewHelpers="clr-namespace:ImmoGlobalAdmin.Helpers"
              d:DataContext="{d:DesignInstance Type=viewmodels:RealEstateViewModel}"
              mc:Ignorable="d" 
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -18,167 +19,323 @@
              d:DesignHeight="800
               " d:DesignWidth="1000">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding AllPersons}" SelectedItem="{Binding SelectedPerson}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="5,5,5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding RealEstates}" SelectedItem="{Binding SelectedRealEstate}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="20,0,20,10" ColumnHeaderHeight="34">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding IGID}" FontWeight="Bold" />
-                <DataGridTextColumn Header="{DynamicResource name}" Binding="{Binding Name}" FontWeight="Bold" />
-                <DataGridTextColumn Header="{DynamicResource prename}" Binding="{Binding Prename}"/>
-                <DataGridTextColumn Header="E-Mail" Binding="{Binding EMail}" />
-                <DataGridTextColumn Header="{DynamicResource address}" Binding="{Binding Adress}" />
+                <DataGridTextColumn Header="ID"  Binding="{Binding IGID}" FontWeight="Bold" />
+                <DataGridTextColumn Header="{DynamicResource name}" Binding="{Binding RealEstateName}" FontWeight="Bold" />
+                <DataGridTextColumn Header="{DynamicResource address}" Binding="{Binding Address}"/>
+                <DataGridTextColumn Header="{DynamicResource owner}" Binding="{Binding BaseObject.Owner.Name}"/>
+                <DataGridTextColumn Header="{DynamicResource janitor}" Binding="{Binding Janitor.Name}"/>
+                <DataGridTextColumn Header="{DynamicResource bankAccount}" Binding="{Binding BaseObject.Account.Iban}"/>
+                <DataGridTextColumn Header="{DynamicResource totalObjects}" Binding="{Binding TotalObjectCount}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <!--Dialoghost for the delete "are you sure" Dialog-->
-        <materialDesign:DialogHost IsOpen="{Binding DeleteDialogOpen,Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" MinWidth="500" Width="500" Margin="5,5,5,5">
-            <materialDesign:DialogHost.DialogContent>
-                <StackPanel Width="300">
-                    <Label Content="{DynamicResource areYouSure?}" FontSize="20" FontWeight="ExtraBold" HorizontalAlignment="Center" Margin="10,10,10,10"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Command="{Binding DeletePersonAcceptButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Foreground="GreenYellow" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
-                            <materialDesign:PackIcon Kind="Check">
-                                <materialDesign:PackIcon.LayoutTransform>
-                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                                </materialDesign:PackIcon.LayoutTransform>
-                            </materialDesign:PackIcon>
-                        </Button>
-                        <Button Command="{Binding DeletePersonCancelButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Foreground="Red" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
-                            <materialDesign:PackIcon Kind="Cancel">
-                                <materialDesign:PackIcon.LayoutTransform>
-                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                                </materialDesign:PackIcon.LayoutTransform>
-                            </materialDesign:PackIcon>
-                        </Button>
+        <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="2"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="530" MaxWidth="530"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer HorizontalScrollBarVisibility="auto" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Column="0" Margin="5,5,5,5">
+            <!--Dialoghost for the delete "are you sure" Dialog-->
+            <materialDesign:DialogHost IsOpen="{Binding DeleteDialogOpen,Mode=OneWay}" >
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel Width="300">
+                        <Label Content="{DynamicResource areYouSure?}" FontSize="20" FontWeight="ExtraBold" HorizontalAlignment="Center" Margin="10,10,10,10"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Command="{Binding DeletePersonAcceptButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Foreground="GreenYellow" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
+                                <materialDesign:PackIcon Kind="Check">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                            </Button>
+                            <Button Command="{Binding DeletePersonCancelButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Foreground="Red" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
+                                <materialDesign:PackIcon Kind="Cancel">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+
+                <StackPanel >
+                    <!--Card of the selected RealEstate, textboxes get enabled when the EditMode-bool in the Viewmodel is set to true-->
+                    <materialDesign:Card  >
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="380"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                        <Label Content="ID" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <TextBox IsEnabled="False" Width="170" Text="{Binding SelectedRealEstate.IGID, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                        <Label Content="{DynamicResource name}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <TextBox IsEnabled="{Binding EditMode}" Width="170" Text="{Binding SelectedRealEstate.RealEstateName}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                    <Label Content="{DynamicResource address}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.Address}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <materialDesign:Card Margin="5,5,5,5">
+                                    <StackPanel>
+                                        <Label Content="{DynamicResource notRentable}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                                <Label Content="{DynamicResource totalRooms}" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <TextBox IsEnabled="{Binding EditMode}" Width="100" viewHelpers:TextBoxHelper.OnlyNumeric="Double" viewHelpers:TextBoxHelper.DefaultValue="0" Text="{Binding SelectedRealEstate.BaseObject.RoomCount}"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                                <Label Content="{DynamicResource totalSpace}" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <TextBox IsEnabled="{Binding EditMode}" Width="100" viewHelpers:TextBoxHelper.OnlyNumeric="Double" viewHelpers:TextBoxHelper.DefaultValue="0" Text="{Binding SelectedRealEstate.BaseObject.SpaceInQM}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </materialDesign:Card>
+                                <materialDesign:Card Margin="5,5,5,5">
+                                    <StackPanel>
+                                        <Label Content="{DynamicResource rentable}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                                <Label Content="{DynamicResource totalObjects}" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <TextBox IsEnabled="False" Width="100" viewHelpers:TextBoxHelper.OnlyNumeric="Int" viewHelpers:TextBoxHelper.DefaultValue="0" Text="{Binding SelectedRealEstate.TotalObjectCount, Mode=OneWay}"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                                <Label Content="{DynamicResource totalRooms}" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <TextBox IsEnabled="False" Width="100" viewHelpers:TextBoxHelper.OnlyNumeric="Double" viewHelpers:TextBoxHelper.DefaultValue="0" Text="{Binding SelectedRealEstate.TotalRentalRooms, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                                <Label Content="{DynamicResource totalSpace}" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <TextBox IsEnabled="False" Width="100" viewHelpers:TextBoxHelper.OnlyNumeric="Double" viewHelpers:TextBoxHelper.DefaultValue="0" Text="{Binding SelectedRealEstate.TotalRentalSpace, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </materialDesign:Card>
+                                <!--BankAccount-->
+                                <materialDesign:Card Margin="5,5,5,5">
+                                    <StackPanel>
+                                        <Label Content="{DynamicResource bankAccount}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Bank" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                            <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding AllBankAccounts}" SelectedItem="{Binding SelectedRealEstate.BaseObject.Account}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Iban}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </materialDesign:Card>
+                                <!--Owner-->
+                                <materialDesign:Card Margin="5,5,5,5">
+                                    <StackPanel>
+                                        <Label Content="{DynamicResource owner}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Person" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                            <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding AllPersons}" SelectedItem="{Binding SelectedRealEstate.BaseObject.Owner}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Name}" FontSize="9" Margin="0,0,2,0"></TextBlock>
+                                                            <TextBlock Text="{Binding Prename}" FontSize="9" Margin="0,0,2,0"></TextBlock>
+                                                            <TextBlock Text="{Binding Adress}" FontSize="9" Margin="0,0,2,0"></TextBlock>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </materialDesign:Card>
+                                <!--Janitor-->
+                                <materialDesign:Card Margin="5,5,5,5">
+                                    <StackPanel>
+                                        <Label Content="{DynamicResource janitor}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="VacuumCleaner" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                            <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding AllPersons}" SelectedItem="{Binding SelectedRealEstate.Janitor}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Name}" FontSize="9" Margin="0,0,2,0"></TextBlock>
+                                                            <TextBlock Text="{Binding Prename}" FontSize="9" Margin="0,0,2,0"></TextBlock>
+                                                            <TextBlock Text="{Binding Adress}" FontSize="9" Margin="0,0,2,0"></TextBlock>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </materialDesign:Card>
+                            </StackPanel>
+                            <!--Buttons for editing, deleting the selected person, the visibility changes based on the current mode-->
+                            <StackPanel Grid.Column="1">
+                                <Button Command="{Binding DeletePersonButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
+                                    <materialDesign:PackIcon Kind="Delete">
+                                        <materialDesign:PackIcon.LayoutTransform>
+                                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                        </materialDesign:PackIcon.LayoutTransform>
+                                    </materialDesign:PackIcon>
+                                    <Button.Visibility>
+                                        <Binding Path="EditModeInverted">
+                                            <Binding.Converter>
+                                                <BooleanToVisibilityConverter/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </Button.Visibility>
+                                </Button>
+                                <Button Command="{Binding EditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                                    <materialDesign:PackIcon Kind="Edit">
+                                        <materialDesign:PackIcon.LayoutTransform>
+                                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                        </materialDesign:PackIcon.LayoutTransform>
+                                    </materialDesign:PackIcon>
+                                    <Button.Visibility>
+                                        <Binding Path="EditModeInverted">
+                                            <Binding.Converter>
+                                                <BooleanToVisibilityConverter/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </Button.Visibility>
+                                </Button>
+                                <Button Command="{Binding CancelEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                                    <materialDesign:PackIcon Kind="Cancel"  Foreground="Red">
+                                        <materialDesign:PackIcon.LayoutTransform>
+                                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                        </materialDesign:PackIcon.LayoutTransform>
+                                    </materialDesign:PackIcon>
+                                    <Button.Visibility>
+                                        <Binding Path="EditMode">
+                                            <Binding.Converter>
+                                                <BooleanToVisibilityConverter/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </Button.Visibility>
+                                </Button>
+                                <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
+                                    <materialDesign:PackIcon Kind="Check"  Foreground="GreenYellow">
+                                        <materialDesign:PackIcon.LayoutTransform>
+                                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                        </materialDesign:PackIcon.LayoutTransform>
+                                    </materialDesign:PackIcon>
+                                    <Button.Visibility>
+                                        <Binding Path="EditMode">
+                                            <Binding.Converter>
+                                                <BooleanToVisibilityConverter/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </Button.Visibility>
+                                </Button>
+
+                            </StackPanel>
+                            <!--Button for creating a new Person-->
+                            <Button Command="{Binding CreatePersonButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10" IsEnabled="{Binding RealEstateActive}">
+                                <materialDesign:PackIcon Kind="AddBox">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                                <Button.Visibility>
+                                    <Binding Path="EditModeInverted">
+                                        <Binding.Converter>
+                                            <BooleanToVisibilityConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Button.Visibility>
+                            </Button>
+                        </Grid>
+                    </materialDesign:Card>
                 </StackPanel>
-            </materialDesign:DialogHost.DialogContent>
-            <StackPanel >
-                <!--Card of the selected Person, textboxes get enabled when the EditMode-bool in the Viewmodel is set to true-->
-                <materialDesign:Card  >
-                    <Grid Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="380"/>
-                            <ColumnDefinition Width="120"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                    <Label Content="{DynamicResource name}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <TextBox IsEnabled="{Binding EditMode}" Width="170" Text="{Binding SelectedPerson.Name}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            </materialDesign:DialogHost>
+            </ScrollViewer>
+
+            <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
+
+            <ItemsControl ItemsSource="{Binding SelectedRealEstate.RentalObjects}" Grid.Column="1">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:Card Margin="5,5,5,5" Width="350">
+                            <StackPanel>
+                                <Label Content="{Binding IGID}" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,5,5,0"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="{Binding TypeIconName}" Height="30" Width="30" Margin="5,0,5,5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <TextBox IsEnabled="False" Width="200" Text="{Binding RentalObjectName}"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                    <Label Content="{DynamicResource prename}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <TextBox IsEnabled="{Binding EditMode}" Width="170" Text="{Binding SelectedPerson.Prename}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                </StackPanel>
+                               
+                                <materialDesign:Card Margin="5,5,5,5">
+                                    <StackPanel>
+                                        <Label Content="{DynamicResource tenant}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,0"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Command="" Style="{DynamicResource MaterialDesignIconButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" IsEnabled="{Binding RealEstateActive}">
+                                                <materialDesign:PackIcon Kind="Person">
+                                                    <materialDesign:PackIcon.LayoutTransform>
+                                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1"/>
+                                                    </materialDesign:PackIcon.LayoutTransform>
+                                                </materialDesign:PackIcon>
+                                            </Button>
+                                            <ComboBox IsEnabled="False" Width="300"  SelectedItem="">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Iban}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </materialDesign:Card>
+
+                                <materialDesign:Card Margin="5,5,5,5">
+                                    <StackPanel>
+                                        <Label Content="{DynamicResource tenant}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,0"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Command="" Style="{DynamicResource MaterialDesignIconButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" IsEnabled="{Binding RealEstateActive}">
+                                                <materialDesign:PackIcon Kind="Person">
+                                                    <materialDesign:PackIcon.LayoutTransform>
+                                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1"/>
+                                                    </materialDesign:PackIcon.LayoutTransform>
+                                                </materialDesign:PackIcon>
+                                            </Button>
+                                            <ComboBox IsEnabled="False" Width="300"  SelectedItem="">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Iban}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </materialDesign:Card>
                             </StackPanel>
-                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                <Label Content="{DynamicResource address}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.Adress}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                <Label Content="{DynamicResource birthdate}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <DatePicker IsEnabled="{Binding EditMode}" Width="350" SelectedDate="{Binding SelectedPerson.Birthdate}"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                <Label Content="{DynamicResource phone}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.Phone}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                <Label Content="{DynamicResource fax}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.Fax}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                <Label Content="E-Mail" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.EMail}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                <Label Content="{DynamicResource vatNumber}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.VatNuber}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                <Label Content="{DynamicResource note}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" TextWrapping="Wrap" AcceptsReturn="True" IsEnabled="{Binding EditMode}" MinHeight="100" Height="auto" Width="350" Text="{Binding SelectedPerson.Note}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <!--Buttons for editing, deleting the selected person, the visibility changes based on the current mode-->
-                        <StackPanel Grid.Column="1">
-                            <Button Command="{Binding DeletePersonButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
-                                <materialDesign:PackIcon Kind="Delete">
-                                    <materialDesign:PackIcon.LayoutTransform>
-                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                                    </materialDesign:PackIcon.LayoutTransform>
-                                </materialDesign:PackIcon>
-                                <Button.Visibility>
-                                    <Binding Path="EditModeInverted">
-                                        <Binding.Converter>
-                                            <BooleanToVisibilityConverter/>
-                                        </Binding.Converter>
-                                    </Binding>
-                                </Button.Visibility>
-                            </Button>
-                            <Button Command="{Binding EditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
-                                <materialDesign:PackIcon Kind="Edit">
-                                    <materialDesign:PackIcon.LayoutTransform>
-                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                                    </materialDesign:PackIcon.LayoutTransform>
-                                </materialDesign:PackIcon>
-                                <Button.Visibility>
-                                    <Binding Path="EditModeInverted">
-                                        <Binding.Converter>
-                                            <BooleanToVisibilityConverter/>
-                                        </Binding.Converter>
-                                    </Binding>
-                                </Button.Visibility>
-                            </Button>
-                            <Button Command="{Binding CancelEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
-                                <materialDesign:PackIcon Kind="Cancel"  Foreground="Red">
-                                    <materialDesign:PackIcon.LayoutTransform>
-                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                                    </materialDesign:PackIcon.LayoutTransform>
-                                </materialDesign:PackIcon>
-                                <Button.Visibility>
-                                    <Binding Path="EditMode">
-                                        <Binding.Converter>
-                                            <BooleanToVisibilityConverter/>
-                                        </Binding.Converter>
-                                    </Binding>
-                                </Button.Visibility>
-                            </Button>
-                            <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
-                                <materialDesign:PackIcon Kind="Check"  Foreground="GreenYellow">
-                                    <materialDesign:PackIcon.LayoutTransform>
-                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                                    </materialDesign:PackIcon.LayoutTransform>
-                                </materialDesign:PackIcon>
-                                <Button.Visibility>
-                                    <Binding Path="EditMode">
-                                        <Binding.Converter>
-                                            <BooleanToVisibilityConverter/>
-                                        </Binding.Converter>
-                                    </Binding>
-                                </Button.Visibility>
-                            </Button>
-                        </StackPanel>
-                    </Grid>
-                </materialDesign:Card>
-                <!--Button for creating a new Person-->
-                <Button Command="{Binding CreatePersonButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,50,0,10" IsEnabled="{Binding RealEstateActive}">
-                    <materialDesign:PackIcon Kind="PersonAdd">
-                        <materialDesign:PackIcon.LayoutTransform>
-                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
-                        </materialDesign:PackIcon.LayoutTransform>
-                    </materialDesign:PackIcon>
-                    <Button.Visibility>
-                        <Binding Path="EditModeInverted">
-                            <Binding.Converter>
-                                <BooleanToVisibilityConverter/>
-                            </Binding.Converter>
-                        </Binding>
-                    </Button.Visibility>
-                </Button>
-            </StackPanel>
-        </materialDesign:DialogHost>
+                        </materialDesign:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+
+        </Grid>
+  
+
     </Grid>
 </UserControl>

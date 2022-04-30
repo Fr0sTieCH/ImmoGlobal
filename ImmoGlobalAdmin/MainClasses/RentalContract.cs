@@ -72,7 +72,6 @@ namespace ImmoGlobalAdmin.MainClasses
             this.Locked = false;
         }
 
-
         #endregion
 
         #region PUBLIC SETTERS

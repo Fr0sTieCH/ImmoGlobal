@@ -58,8 +58,8 @@ namespace ImmoGlobalAdmin.ViewModel
         public string SearchString
         {
             get { return searchString; }
-            set 
-            { 
+            set
+            {
                 searchString = value;
                 OnPropertyChanged(nameof(SearchString));
             }
@@ -122,12 +122,11 @@ namespace ImmoGlobalAdmin.ViewModel
 
         private void ExecuteSearch(string searchString)
         {
-            if(SelectedViewModel is IHasSearchableContent)
+            if (SelectedViewModel is IHasSearchableContent)
             {
                 IHasSearchableContent vm = (IHasSearchableContent)SelectedViewModel;
                 vm.SearchContent(searchString);
             }
-
         }
 
         #endregion

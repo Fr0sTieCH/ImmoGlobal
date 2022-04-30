@@ -26,6 +26,11 @@ namespace ImmoGlobalAdmin.MainClasses
         {
         }
 
+        public RealEstate(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
         public RealEstate(string realEstateName, string address, Person owner, Person janitor, double nonRentalRoomCount, double nonRentalSpaceinQM,BankAccount account)
         {
             this.RealEstateName = realEstateName;
@@ -42,6 +47,9 @@ namespace ImmoGlobalAdmin.MainClasses
 
         #region PUBLIC GETTERS
         [NotMapped]
+        public string IGID => BaseObject.RentalObjectID.ToString("1000000000");
+
+        [NotMapped]
         public Person Owner => BaseObject.Owner;
 
         [NotMapped]
@@ -52,6 +60,15 @@ namespace ImmoGlobalAdmin.MainClasses
 
         [NotMapped]
         public double SpaceInQM=> BaseObject.SpaceInQM;
+
+        [NotMapped]
+        public double TotalObjectCount => RentalObjects.Count;
+
+        [NotMapped]
+        public double TotalRentalRooms => RentalObjects.Sum(x => x.RoomCount);
+
+        [NotMapped]
+        public double TotalRentalSpace => RentalObjects.Sum(x=> x.SpaceInQM);
         #endregion
 
         public void AddRentalObject(RentalObject rentalObject)

@@ -18,5 +18,14 @@
     <system:String x:Key="vatNumber">MWStNr</system:String>
     <system:String x:Key="note">Notiz</system:String>
     <system:String x:Key="areYouSure?">sind Sie sicher?</system:String>
+    <system:String x:Key="rentable">Vermietbar</system:String>
+    <system:String x:Key="notRentable">Nicht vermietbar</system:String>
+    <system:String x:Key="totalObjects">Objekte</system:String>
+    <system:String x:Key="totalRooms">Räume</system:String>
+    <system:String x:Key="totalSpace">Fläche in qm</system:String>
+    <system:String x:Key="owner">Besitzer</system:String>
+    <system:String x:Key="janitor">Hauswart</system:String>
+    <system:String x:Key="bankAccount">Bankkonto</system:String>
+    <system:String x:Key="tenant">Aktueller Mieter</system:String>
 
 </ResourceDictionary> 

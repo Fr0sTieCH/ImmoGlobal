@@ -11,6 +11,7 @@ namespace ImmoGlobalAdmin.MainClasses
 /// </summary>
     public class Person
     {
+    
         public int PersonID { get; private set; }
         public string Name { get; set; } = "";
         public string Prename { get; set; } = "";

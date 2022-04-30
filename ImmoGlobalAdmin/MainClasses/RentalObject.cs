@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,9 +82,41 @@ namespace ImmoGlobalAdmin.MainClasses
             this.Enabled=true;
         }
 
-       
+
         #endregion
 
+        #region PUBLIC GETTERS
+        [NotMapped]
+        public string TypeIconName
+        {
+            get
+            {
+                //returns the name of the corresponding Icon based on the RentalObject Type
+                switch (this.Type)
+                {
+                    case RentalObjectType.RealEstateBaseObject:
+                        return "";
+                    case RentalObjectType.Apartement:
+                        return "Home";
+                    case RentalObjectType.Garage:
+                        return "Garage";
+                    case RentalObjectType.Hobby:
+                        return "ChildToy";
+                    case RentalObjectType.ParkingSpot:
+                        return "CarPark";
+                    case RentalObjectType.Office:
+                        return "OfficeChair";
+                    default:
+                        return "";
+                }
+
+            }
+        }
+
+        [NotMapped]
+        public string IGID => RentalObjectID.ToString("2000000000");
+
+        #endregion
 
         public void Delete(string reason)
         {
