@@ -1,21 +1,20 @@
 ﻿using ImmoGlobalAdmin.Commands;
 using ImmoGlobalAdmin.MainClasses;
 using ImmoGlobalAdmin.Model;
-using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ImmoGlobalAdmin.ViewModel
 {
-    internal class PersonViewModel:BaseViewModel
+    internal class PersonViewModel : BaseViewModel
     {
+
         private string searchString = "";
         private Person? selectedPerson = null;
+
         private bool editMode;
         private bool creationMode;
         private bool deleteDialogOpen;
@@ -50,6 +49,8 @@ namespace ImmoGlobalAdmin.ViewModel
         #endregion
 
 
+        #region BindigngProperties
+
         public List<Person> AllPersons
         {
             get
@@ -60,33 +61,34 @@ namespace ImmoGlobalAdmin.ViewModel
                 }
                 else
                 {
+                    //make changes to the search logic here...
                     return DataAccessLayer.GetInstance.GetPersonsUnfiltered().Where(x => x.Name.ToLower().StartsWith(SearchString.ToLower())).ToList();
                 }
 
             }
         }
 
-        public string SearchString 
+        public string SearchString
         {
             get { return searchString; }
-            set 
-            { 
+            set
+            {
                 searchString = value;
                 OnPropertyChanged(nameof(AllPersons));
-            } 
+            }
         }
 
-        public Person? SelectedPerson 
+        public Person? SelectedPerson
         {
-            get 
+            get
             {
-                if(selectedPerson == null)
+                if (selectedPerson == null)
                 {
                     selectedPerson = AllPersons.FirstOrDefault();
                 }
-                return selectedPerson; 
+                return selectedPerson;
             }
-            set 
+            set
             {
                 if (editMode || deleteDialogOpen)
                 {
@@ -94,7 +96,7 @@ namespace ImmoGlobalAdmin.ViewModel
                 }
                 selectedPerson = value;
                 OnPropertyChanged(nameof(SelectedPerson));
-            } 
+            }
         }
 
 
@@ -102,13 +104,23 @@ namespace ImmoGlobalAdmin.ViewModel
         public bool EditModeInverted => !editMode;
         public bool DeleteDialogOpen => deleteDialogOpen;
 
+        #endregion
 
+
+        /// <summary>
+        /// Method to execute the search command from the searchfield
+        /// </summary>
+        /// <param name="searchString"></param>
         public void SearchContent(string searchString)
         {
+            //the actual search gets executed by the "AllPersons" Getter. Changes to the searchlogic have to be made there
             SearchString = searchString;
         }
 
+
         #region Button Commands
+
+        #region Selected Person Buttons
 
         public ICommand EditButtonCommand
         {
@@ -123,7 +135,7 @@ namespace ImmoGlobalAdmin.ViewModel
             editMode = true;
             OnPropertyChanged(nameof(SelectedPerson));
             OnPropertyChanged(nameof(AllPersons));
-            OnPropertyChanged(nameof (EditMode));
+            OnPropertyChanged(nameof(EditMode));
             OnPropertyChanged(nameof(EditModeInverted));
         }
 
@@ -140,7 +152,7 @@ namespace ImmoGlobalAdmin.ViewModel
             if (creationMode)
             {
                 selectedPerson = null;
-               
+
             }
             else
             {
@@ -175,7 +187,7 @@ namespace ImmoGlobalAdmin.ViewModel
             else
             {
                 DataAccessLayer.GetInstance.SaveChanges();
-              
+
             }
 
             creationMode = false;
@@ -201,28 +213,10 @@ namespace ImmoGlobalAdmin.ViewModel
             OnPropertyChanged(nameof(DeleteDialogOpen));
         }
 
-        public ICommand CreatePersonButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(CreatePersonButtonClicked);
-            }
-        }
-
-        private void CreatePersonButtonClicked(object obj)
-        {
-            selectedPerson = new Person(true);
-            OnPropertyChanged(nameof(SelectedPerson));           
-            editMode = true;
-            creationMode = true;
-            OnPropertyChanged(nameof(EditMode));
-            OnPropertyChanged(nameof(EditModeInverted));
-        }
-
-
-
+        #endregion
 
         #region Delete Dialog Buttons
+
         public ICommand DeletePersonAcceptButtonCommand
         {
             get
@@ -254,6 +248,24 @@ namespace ImmoGlobalAdmin.ViewModel
             OnPropertyChanged(nameof(DeleteDialogOpen));
         }
         #endregion
+
+        public ICommand CreatePersonButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(CreatePersonButtonClicked);
+            }
+        }
+
+        private void CreatePersonButtonClicked(object obj)
+        {
+            selectedPerson = new Person(true);
+            OnPropertyChanged(nameof(SelectedPerson));
+            editMode = true;
+            creationMode = true;
+            OnPropertyChanged(nameof(EditMode));
+            OnPropertyChanged(nameof(EditModeInverted));
+        }
 
         #endregion
     }
