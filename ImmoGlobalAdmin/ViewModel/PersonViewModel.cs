@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace ImmoGlobalAdmin.ViewModel
 {
-    internal class PersonViewModel : BaseViewModel
+    internal class PersonViewModel : BaseViewModel,IHasSearchableContent
     {
 
         private string searchString = "";

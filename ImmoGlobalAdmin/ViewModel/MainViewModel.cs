@@ -66,15 +66,8 @@ namespace ImmoGlobalAdmin.ViewModel
         }
 
         //EnableDisable Search function
-        public bool SearchAllowed
-        {
-            get
-            {
-                Type type = _selectedViewModel.GetType();
-                return type == typeof(RealEstateViewModel) || type == typeof(DashboardViewModel) || type == typeof(FinanceViewModel) || type == typeof(PersonViewModel) || type == typeof(UserManagementViewModel);
-            }
+        public bool SearchAllowed => _selectedViewModel is IHasSearchableContent;
 
-        }
 
         public BaseViewModel SelectedViewModel
         {
@@ -129,29 +122,12 @@ namespace ImmoGlobalAdmin.ViewModel
 
         private void ExecuteSearch(string searchString)
         {
-            Type type = _selectedViewModel.GetType();
-
-            if (type == typeof(RealEstateViewModel))
+            if(SelectedViewModel is IHasSearchableContent)
             {
+                IHasSearchableContent vm = (IHasSearchableContent)SelectedViewModel;
+                vm.SearchContent(searchString);
+            }
 
-            }
-            else if (type == typeof(FinanceViewModel))
-            {
-
-            }
-            else if (type == typeof(PersonViewModel))
-            {
-                PersonViewModel.GetInstance.SearchContent(searchString);
-            }
-            else if (type == typeof(DashboardViewModel))
-            {
-
-            }
-            else if (type == typeof(UserManagementViewModel))
-            {
-
-            }
-      
         }
 
         #endregion
