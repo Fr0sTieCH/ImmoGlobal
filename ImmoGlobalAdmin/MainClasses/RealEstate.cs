@@ -28,7 +28,10 @@ namespace ImmoGlobalAdmin.MainClasses
 
         public RealEstate(bool enabled)
         {
-            Enabled = enabled;
+            
+            this.BaseObject = new RentalObject(true,this);
+            this.RentalObjects = new List<RentalObject>();
+            this.Enabled = enabled;
         }
 
         public RealEstate(string realEstateName, string address, Person owner, Person janitor, double nonRentalRoomCount, double nonRentalSpaceinQM,BankAccount account)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace ImmoGlobalAdmin.MainClasses
     public class Transaction
     {
         public int TransactionID { get; private set; }
-        public virtual RentalObject? RentalObject { get; private set; }
+        public virtual RentalObject RentalObject { get; private set; }
         public DateTime DateTimeOfTransaction { get; private set; }
         public double Value { get; private set; }
         public TransactionType Type { get; private set; }

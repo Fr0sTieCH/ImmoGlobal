@@ -84,7 +84,7 @@
                     </Button>
                     <Label Content="{DynamicResource person}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                     <StackPanel.Visibility>
-                        <Binding Path="PersonEnabled">
+                        <Binding Path="PersonsEnabled">
                             <Binding.Converter>
                                 <BooleanToVisibilityConverter/>
                             </Binding.Converter>

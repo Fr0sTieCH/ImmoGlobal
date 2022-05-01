@@ -18,10 +18,11 @@
              d:DesignHeight="800
               " d:DesignWidth="1000">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="125" MinHeight="125"/>
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
         <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding AllPersons}" SelectedItem="{Binding SelectedPerson}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="5,5,5,5">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding IGID}" FontWeight="Bold" />
@@ -31,29 +32,9 @@
                 <DataGridTextColumn Header="{DynamicResource address}" Binding="{Binding Adress}" />
             </DataGrid.Columns>
         </DataGrid>
-        <!--Dialoghost for the delete "are you sure" Dialog-->
-        <materialDesign:DialogHost IsOpen="{Binding DeleteDialogOpen,Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" MinWidth="500" Width="500" Margin="5,5,5,5">
-            <materialDesign:DialogHost.DialogContent>
-                <StackPanel Width="300">
-                    <Label Content="{DynamicResource areYouSure?}" FontSize="20" FontWeight="ExtraBold" HorizontalAlignment="Center" Margin="10,10,10,10"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Command="{Binding DeletePersonAcceptButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Foreground="GreenYellow" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
-                            <materialDesign:PackIcon Kind="Check">
-                                <materialDesign:PackIcon.LayoutTransform>
-                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                                </materialDesign:PackIcon.LayoutTransform>
-                            </materialDesign:PackIcon>
-                        </Button>
-                        <Button Command="{Binding DeletePersonCancelButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Foreground="Red" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
-                            <materialDesign:PackIcon Kind="Cancel">
-                                <materialDesign:PackIcon.LayoutTransform>
-                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                                </materialDesign:PackIcon.LayoutTransform>
-                            </materialDesign:PackIcon>
-                        </Button>
-                    </StackPanel>
-                </StackPanel>
-            </materialDesign:DialogHost.DialogContent>
+        <GridSplitter Grid.Row="0" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" MinWidth="500" Width="500" Margin="5,5,5,5">
             <StackPanel >
                 <!--Card of the selected Person, textboxes get enabled when the EditMode-bool in the Viewmodel is set to true-->
                 <materialDesign:Card  >
@@ -104,7 +85,7 @@
                         </StackPanel>
                         <!--Buttons for editing, deleting the selected person, the visibility changes based on the current mode-->
                         <StackPanel Grid.Column="1">
-                            <Button Command="{Binding DeletePersonButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
+                            <Button Command="{Binding DeleteButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
                                 <materialDesign:PackIcon Kind="Delete">
                                     <materialDesign:PackIcon.LayoutTransform>
                                         <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
@@ -146,7 +127,7 @@
                                     </Binding>
                                 </Button.Visibility>
                             </Button>
-                            <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
+                            <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
                                 <materialDesign:PackIcon Kind="Check"  Foreground="GreenYellow">
                                     <materialDesign:PackIcon.LayoutTransform>
                                         <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
@@ -161,25 +142,26 @@
                                 </Button.Visibility>
                             </Button>
                         </StackPanel>
+                        <Button Grid.Column="1" Command="{Binding CreatePersonButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,50,0,10">
+                            <materialDesign:PackIcon Kind="PersonAdd">
+                                <materialDesign:PackIcon.LayoutTransform>
+                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
+                                </materialDesign:PackIcon.LayoutTransform>
+                            </materialDesign:PackIcon>
+                            <Button.Visibility>
+                                <Binding Path="EditModeInverted">
+                                    <Binding.Converter>
+                                        <BooleanToVisibilityConverter/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.Visibility>
+                        </Button>
                     </Grid>
                 </materialDesign:Card>
                 <!--Button for creating a new Person-->
-                <Button Command="{Binding CreatePersonButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,50,0,10" IsEnabled="{Binding RealEstateActive}">
-                <materialDesign:PackIcon Kind="PersonAdd">
-                    <materialDesign:PackIcon.LayoutTransform>
-                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
-                    </materialDesign:PackIcon.LayoutTransform>
-                </materialDesign:PackIcon>
-                <Button.Visibility>
-                    <Binding Path="EditModeInverted">
-                        <Binding.Converter>
-                            <BooleanToVisibilityConverter/>
-                        </Binding.Converter>
-                    </Binding>
-                </Button.Visibility>
-            </Button>
-        </StackPanel>
-        </materialDesign:DialogHost>
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </UserControl>
     

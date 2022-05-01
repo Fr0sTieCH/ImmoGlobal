@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.IO;
+using System.Diagnostics;
 
 namespace ImmoGlobalAdmin.ViewModel
 {
@@ -64,6 +65,7 @@ namespace ImmoGlobalAdmin.ViewModel
             StoreTestBankAccountsToDB();
             StoreTestRealEstatesToDB();
             StoreTestUsersToDB();
+            StoreTestRentalContractsToDB();
 
         }
 
@@ -210,9 +212,9 @@ namespace ImmoGlobalAdmin.ViewModel
                 string address = data[1];
                 string rooms = data[2];
                 string qm = data[3];
-                Person owner = aviablePersons.Where(x => x.Name == "CreditSuisse").First();
+                Person owner = DataAccessLayer.GetInstance.GetPersonsUnfiltered().Where(x => x.Name == "CreditSuisse").First();
                 Person janitor = new Person($"{name}", "Janitor", address, "079 235 56 32", "", $"{name}janitor@gmail.com", DateTime.Parse("01.01.1980"), "Test janitor, would be a real person");
-                RealEstate tmpRE = new RealEstate(name, address, owner, janitor, double.Parse(rooms), double.Parse(qm), aviableBankAccounts[0]);
+                RealEstate tmpRE = new RealEstate(name, address, owner, janitor, double.Parse(rooms), double.Parse(qm), DataAccessLayer.GetInstance.GetBankAccountsUnfiltered()[0]);
 
                 for (int i = 0; i < 4; i++)//create appartements
                 {
@@ -261,6 +263,39 @@ namespace ImmoGlobalAdmin.ViewModel
             }
 
         }
+
+        #endregion
+
+        #region test RentalContracts
+
+        private void StoreTestRentalContractsToDB()
+        {
+            Random random = new Random();
+            List<Person> persons = DataAccessLayer.GetInstance.GetPersonsUnfiltered();
+            Debug.WriteLine("-----Generating Rental Contracts-----");
+
+            foreach (RealEstate re in DataAccessLayer.GetInstance.GetRealEstatesUnfiltered())
+            {
+                Debug.WriteLine($"Generating for: {re.RealEstateID} ");
+                foreach (RentalObject ro in re.RentalObjects)
+                {
+                    Debug.WriteLine($"Generating for object: {ro.RentalObjectName}");
+                    Debug.WriteLine("Generating Rental Contracts");
+                    Person randomTenant = persons[random.Next(0, persons.Count - 1)];
+
+                    RentalContract newRentalContract = new RentalContract(randomTenant,persons.First(x=>x.Name=="Test"&&x.Prename=="Anna"),ro,900,200,5,DateTime.Parse("01.01.2022"));
+                    newRentalContract.ValidateContract();
+
+                    //ro.RentalContracts.Add(newRentalContract);
+                    DataAccessLayer.GetInstance.StoreNewRentalContract(newRentalContract);
+                    DataAccessLayer.GetInstance.SaveChanges();
+
+                }
+            }
+
+            Debug.WriteLine("----- Finished Generating Rental Contracts-----");
+        }
+
 
         #endregion
     }

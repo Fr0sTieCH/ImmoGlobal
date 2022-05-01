@@ -3,6 +3,7 @@ using ImmoGlobalAdmin.MainClasses;
 using ImmoGlobalAdmin.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,11 +14,10 @@ namespace ImmoGlobalAdmin.ViewModel
     internal class RealEstateViewModel:BaseViewModel,IHasSearchableContent
     {
         private string searchString = "";
-        private RealEstate selectedRealEstate;
+        private RealEstate? selectedRealEstate;
 
         private bool editMode;
         private bool creationMode;
-        private bool deleteDialogOpen;
 
         #region Singleton
         private static RealEstateViewModel? instance = null;
@@ -88,22 +88,21 @@ namespace ImmoGlobalAdmin.ViewModel
             }
             set
             {
-                //if (editMode || deleteDialogOpen)
-                //{
-                //    return;
-                //}
-
+                if (editMode || DeleteDialogOpen)
+                {
+                    return;
+                }
                 selectedRealEstate = value;
                 OnPropertyChanged(nameof(selectedRealEstate));
             }
         }
 
+    
         public List<Person> AllPersons => DataAccessLayer.GetInstance.GetPersonsUnfiltered();
         public List<BankAccount> AllBankAccounts => DataAccessLayer.GetInstance.GetBankAccountsUnfiltered();
 
         public bool EditMode => editMode;
         public bool EditModeInverted => !editMode;
-        public bool DeleteDialogOpen => deleteDialogOpen;
 
         #endregion
 
@@ -196,67 +195,45 @@ namespace ImmoGlobalAdmin.ViewModel
 
         }
 
-        public ICommand DeletePersonButtonCommand
+
+        #endregion
+
+        #region Delete Dialog Button Overrides
+        public override void DeleteButtonClicked(object obj)
         {
-            get
-            {
-                return new RelayCommand<object>(DeletePersonButtonClicked);
-            }
+            MainViewModel.GetInstance.DeleteButtonClicked(obj);
+            base.DeleteButtonClicked(obj);
         }
-
-        private void DeletePersonButtonClicked(object obj)
-        {
-            deleteDialogOpen = true;
-            OnPropertyChanged(nameof(DeleteDialogOpen));
-        }
-
-#endregion
-
-        #region Delete Dialog Buttons
-
-        public ICommand DeletePersonAcceptButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(DeletePersonAcceptButtonClicked);
-            }
-        }
-
-        private void DeletePersonAcceptButtonClicked(object obj)
+        public override void DeleteAcceptButtonClicked(object obj)
         {
             SelectedRealEstate.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this RealEstate on {DateTime.Now}");
             DataAccessLayer.GetInstance.SaveChanges();
-            deleteDialogOpen = false;
-            OnPropertyChanged(nameof(DeleteDialogOpen));
+            SelectedRealEstate=null;
+            OnPropertyChanged(nameof(selectedRealEstate));
             OnPropertyChanged(nameof(RealEstates));
+            MainViewModel.GetInstance.DeleteAcceptButtonClicked(obj);
+            base.DeleteAcceptButtonClicked(obj);    
         }
 
-        public ICommand DeletePersonCancelButtonCommand
+        public override void DeleteCancelButtonClicked(object obj)
         {
-            get
-            {
-                return new RelayCommand<object>(DeletePersonCancelButtonClicked);
-            }
-        }
-
-        private void DeletePersonCancelButtonClicked(object obj)
-        {
-            deleteDialogOpen = false;
-            OnPropertyChanged(nameof(DeleteDialogOpen));
+            MainViewModel.GetInstance.DeleteCancelButtonClicked(obj);
+            base.DeleteCancelButtonClicked(obj);
         }
         #endregion
 
-        public ICommand CreatePersonButtonCommand
+        public ICommand CreateRealEstateButtonCommand
         {
             get
             {
-                return new RelayCommand<object>(CreatePersonButtonClicked);
+                return new RelayCommand<object>(CreateRealEstateButtonClicked);
             }
         }
 
-        private void CreatePersonButtonClicked(object obj)
+        private void CreateRealEstateButtonClicked(object obj)
         {
             SelectedRealEstate = new RealEstate(true);
+
             OnPropertyChanged(nameof(SelectedRealEstate));
             editMode = true;
             creationMode = true;
@@ -264,6 +241,22 @@ namespace ImmoGlobalAdmin.ViewModel
             OnPropertyChanged(nameof(EditModeInverted));
         }
 
-#endregion
+        public ICommand OpenRentalObjectButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(OpenRentalObjectButtonClicked);
+            }
+        }
+
+        private void OpenRentalObjectButtonClicked(object obj)
+        {
+            RentalObjectViewModel.GetInstance.RentalObjectToDisplay = (RentalObject)obj;
+            MainViewModel.GetInstance.DialogViewModel = RentalObjectViewModel.GetInstance;
+        }
+
+
+
+        #endregion
     }
 }

@@ -17,7 +17,6 @@ namespace ImmoGlobalAdmin.ViewModel
 
         private bool editMode;
         private bool creationMode;
-        private bool deleteDialogOpen;
 
         #region Singleton
         private static PersonViewModel? instance = null;
@@ -90,7 +89,7 @@ namespace ImmoGlobalAdmin.ViewModel
             }
             set
             {
-                if (editMode || deleteDialogOpen)
+                if (editMode || DeleteDialogOpen)
                 {
                     return;
                 }
@@ -102,8 +101,6 @@ namespace ImmoGlobalAdmin.ViewModel
 
         public bool EditMode => editMode;
         public bool EditModeInverted => !editMode;
-        public bool DeleteDialogOpen => deleteDialogOpen;
-
         #endregion
 
 
@@ -199,53 +196,29 @@ namespace ImmoGlobalAdmin.ViewModel
 
         }
 
-        public ICommand DeletePersonButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(DeletePersonButtonClicked);
-            }
-        }
-
-        private void DeletePersonButtonClicked(object obj)
-        {
-            deleteDialogOpen = true;
-            OnPropertyChanged(nameof(DeleteDialogOpen));
-        }
-
         #endregion
 
-        #region Delete Dialog Buttons
-
-        public ICommand DeletePersonAcceptButtonCommand
+        #region DeleteDialog Override Methods
+        public override void DeleteButtonClicked(object obj)
         {
-            get
-            {
-                return new RelayCommand<object>(DeletePersonAcceptButtonClicked);
-            }
+            MainViewModel.GetInstance.DeleteButtonClicked(obj);
+            base.DeleteButtonClicked(obj);
         }
-
-        private void DeletePersonAcceptButtonClicked(object obj)
+        public override void DeleteAcceptButtonClicked(object obj)
         {
             selectedPerson.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this Person on {DateTime.Now}");
             DataAccessLayer.GetInstance.SaveChanges();
-            deleteDialogOpen = false;
-            OnPropertyChanged(nameof(DeleteDialogOpen));
             OnPropertyChanged(nameof(AllPersons));
+            selectedPerson= null;
+            OnPropertyChanged(nameof(SelectedPerson));
+            MainViewModel.GetInstance.DeleteAcceptButtonClicked(obj);
+            base.DeleteAcceptButtonClicked(obj);
         }
 
-        public ICommand DeletePersonCancelButtonCommand
+        public override void DeleteCancelButtonClicked(object obj)
         {
-            get
-            {
-                return new RelayCommand<object>(DeletePersonCancelButtonClicked);
-            }
-        }
-
-        private void DeletePersonCancelButtonClicked(object obj)
-        {
-            deleteDialogOpen = false;
-            OnPropertyChanged(nameof(DeleteDialogOpen));
+            MainViewModel.GetInstance.DeleteCancelButtonClicked(obj);
+            base.DeleteCancelButtonClicked(obj);
         }
         #endregion
 

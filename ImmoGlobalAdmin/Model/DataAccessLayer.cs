@@ -138,7 +138,7 @@ namespace ImmoGlobalAdmin.Model
         {
             return db.bankAccounts.Where(x => x.Enabled).ToList();
         }
-
+    
         #endregion
 
 

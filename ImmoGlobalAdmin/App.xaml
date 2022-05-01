@@ -28,6 +28,12 @@
             <DataTemplate DataType="{x:Type viewmodels:DashboardViewModel}">
                 <views:DashboardView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:RentalObjectViewModel}">
+                <views:RentalObjectView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:EFTestingViewModel}">
+                <views:EFTesting/>
+            </DataTemplate>
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="LightBlue" SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />

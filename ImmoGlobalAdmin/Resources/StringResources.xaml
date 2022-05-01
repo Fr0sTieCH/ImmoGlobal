@@ -27,5 +27,10 @@
     <system:String x:Key="janitor">Janitor</system:String>
     <system:String x:Key="bankAccount">Bank account</system:String>
     <system:String x:Key="tenant">Current tenant</system:String>
+    <system:String x:Key="addressSuplement">Address suplement</system:String>
+    <system:String x:Key="rentStatus">Rent payment status</system:String>
+    <system:String x:Key="dueDay">Due on day</system:String>
+    <system:String x:Key="lastPayment">Last payment</system:String>
+    <system:String x:Key="assignedEmployee">Assigned Employee</system:String>
 
 </ResourceDictionary> 

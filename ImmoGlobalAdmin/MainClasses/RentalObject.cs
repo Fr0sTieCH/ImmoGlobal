@@ -12,15 +12,24 @@ namespace ImmoGlobalAdmin.MainClasses
     public class RentalObject
     {
         public int RentalObjectID { get; private set; }
-        public string RentalObjectName { get; set; }
+        public string RentalObjectName { get; set; } = "";
         public RentalObjectType Type { get; set; }
-        public string AddressSupplement { get; set; }
-        public double RoomCount { get; set; }
-        public double SpaceInQM { get; set; }
+        public string AddressSupplement { get; set; } = "";
+        public double RoomCount { get; set; } = 0;
+        public double SpaceInQM { get; set; } = 0;
         public virtual Person? Owner { get; set; }
-        public double EstimatedBaseRent { get; set; }
-        public double EstimatedAdditionalCosts { get; set; }
+        public double EstimatedBaseRent { get; set; } = 0;
+        public double EstimatedAdditionalCosts { get; set; } = 0;
         public virtual BankAccount? Account { get; set; }
+        public virtual ICollection<RentalContract?> RentalContracts { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
+        public bool HasFridge { get; set; } = false;
+        public bool HasDishwasher { get; set; } = false;
+        public bool HasStove { get; set; } = false;
+        public bool HasWashingmachine { get; set; } = false;
+        public bool HasTumbler { get; set; } = false;
+
+
 
         public bool Enabled { get; private set; }
         public string ReasonForDeleting { get; private set; } = "";
@@ -29,6 +38,15 @@ namespace ImmoGlobalAdmin.MainClasses
 
         public RentalObject()
         {
+
+        }
+        public RentalObject(bool IsBaseObject, RealEstate realEstate)
+        {
+            if (IsBaseObject)
+            {
+                Enabled = true;
+                Type = RentalObjectType.RealEstateBaseObject;
+            }
         }
 
         /// <summary>
@@ -50,7 +68,7 @@ namespace ImmoGlobalAdmin.MainClasses
             this.AddressSupplement = addressSupplement;
             this.RoomCount = roomCount;
             this.SpaceInQM = spaceInQM;
-            this.Owner = owner?? realEstate.Owner;
+            this.Owner = owner ?? realEstate.Owner;
             this.EstimatedBaseRent = estimatedBaseRent;
             this.EstimatedAdditionalCosts = estimatedAdditionalCosts;
             this.Account = account;
@@ -67,7 +85,7 @@ namespace ImmoGlobalAdmin.MainClasses
         /// <param name="nonRentalSpaceInQM">Space wich is not part of any rental object in squaremeters</param>
         /// <param name="owner">owner of the realEstate</param>
         /// <param name="account">Bankaccount on wich all the transactions of this realestate will get debited or deposited</param>
-        public RentalObject(string realEstateName,double nonRentalRoomCount,double nonRentalSpaceInQM,Person owner, BankAccount account)
+        public RentalObject(string realEstateName, double nonRentalRoomCount, double nonRentalSpaceInQM, Person owner, BankAccount account)
         {
             this.RentalObjectName = $"{realEstateName}BaseObject";
             this.Type = RentalObjectType.RealEstateBaseObject;
@@ -79,7 +97,7 @@ namespace ImmoGlobalAdmin.MainClasses
             this.EstimatedAdditionalCosts = 0;
             this.Account = account;
 
-            this.Enabled=true;
+            this.Enabled = true;
         }
 
 
@@ -116,7 +134,99 @@ namespace ImmoGlobalAdmin.MainClasses
         [NotMapped]
         public string IGID => RentalObjectID.ToString("2000000000");
 
+
+        [NotMapped]
+        public bool RentalContractActive => ActiveRentalContract != null;
+        [NotMapped]
+        public bool RentStatusOK
+        {
+            get
+            {
+                if (RentsDue.Count>1)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+        }
+        [NotMapped]
+        public bool RentStatusNotOK => !RentStatusOK;
+
+        [NotMapped]
+        public RentalContract? ActiveRentalContract
+        {
+            get
+            {
+                if (RentalContracts == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    foreach(RentalContract rc in RentalContracts)
+                    {
+                        rc.CheckState();
+                    }
+                    return RentalContracts.FirstOrDefault(x => x.State == ContractState.Active);
+                }
+            }
+
+        }
+
+        [NotMapped]
+        public List<Transaction?> PayedRents => Transactions.Where(x => x.Type == TransactionType.Rent).ToList();
+
+        [NotMapped]
+        public List<DateTime> RentsDue
+        {
+            get
+            {
+                if (RentalContractActive)
+                {
+                    List<DateTime> tmp = new List<DateTime>();
+
+                    //loop throught every month since the active contract started
+                    for (DateTime d = ActiveRentalContract.StartDate.Date; d.Date < DateTime.Now.AddMonths(1).Date; d = d.AddMonths(1))
+                    {
+                        
+                        tmp.Add(DateTime.Parse($"{ActiveRentalContract.RentDueDay},{d.Month},{d.Year}"));
+                    }
+
+                    if (PayedRents.Count(x => x.AssociatedPerson == ActiveRentalContract.Tenant) == 0)
+                    {
+                        return tmp;
+                    }
+                    else
+                    {
+
+
+                        foreach (Transaction t in PayedRents.Where(x => x.AssociatedPerson == ActiveRentalContract.Tenant))
+                        {
+
+                            if (t.DateTimeOfTransaction > ActiveRentalContract.StartDate.AddMonths(-1).Date)//in case one tenant was tenant of this object before => only account transactions wich are less than 1 month before the startdate of the contract
+                            {
+                                tmp.RemoveAt(0);
+                                //foreach payment remove one duedate
+                            }
+                        }
+
+                        return tmp;
+                    }
+                }
+                else
+                {
+                    return new List<DateTime>();
+                }
+            }
+        }
+
         #endregion
+
+
 
         public void Delete(string reason)
         {
@@ -131,7 +241,7 @@ namespace ImmoGlobalAdmin.MainClasses
 
         public void DeleteBaseObject(string reason)
         {
-           
+
             Enabled = false;
             ReasonForDeleting = reason;
         }

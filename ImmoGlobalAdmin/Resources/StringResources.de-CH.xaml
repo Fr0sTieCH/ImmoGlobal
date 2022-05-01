@@ -27,5 +27,11 @@
     <system:String x:Key="janitor">Hauswart</system:String>
     <system:String x:Key="bankAccount">Bankkonto</system:String>
     <system:String x:Key="tenant">Aktueller Mieter</system:String>
+    <system:String x:Key="addressSuplement">Adresszusatz</system:String>
+    <system:String x:Key="rentStatus">Mietzins Status</system:String>
+    <system:String x:Key="dueDate">Zahlbar bis</system:String>
+    <system:String x:Key="dueDay">Stichtag</system:String>
+    <system:String x:Key="lastPayment">Letzte Zahlung</system:String>
+    <system:String x:Key="assignedEmployee">Verantwortlicher Mitarbeiter</system:String>
 
 </ResourceDictionary> 

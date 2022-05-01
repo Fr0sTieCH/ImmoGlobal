@@ -17,6 +17,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public virtual RentalObject? RentalObject { get; private set; }
         public double BaseRent { get; private set; }
         public double AdditionalCosts { get; private set; }
+        public int RentDueDay { get; private set; }
         public DateTime StartDate { get; private set; }
         public DateTime? EndDate { get; private set; }
         public ContractState State { get; private set; }
@@ -28,6 +29,7 @@ namespace ImmoGlobalAdmin.MainClasses
         #region CONSTRUCTORS
         public RentalContract()
         {
+            
         }
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace ImmoGlobalAdmin.MainClasses
         /// <param name="baseRent"> base rent per month wich without any additional costs</param>
         /// <param name="additionalCosts">additional costs per month</param>
         /// <param name="startDate">start of the rental contract</param>
-        public RentalContract(Person tenant, Person responsibleEmployee, RentalObject rentalObject, double baseRent, double additionalCosts, DateTime startDate)
+        public RentalContract(Person tenant, Person responsibleEmployee, RentalObject rentalObject, double baseRent, double additionalCosts,int rentDueDay, DateTime startDate)
         {
             this.Tenant = tenant;
             this.ResponsibleEmployee = responsibleEmployee;
@@ -47,6 +49,7 @@ namespace ImmoGlobalAdmin.MainClasses
             this.BaseRent = baseRent;
             this.AdditionalCosts = additionalCosts;
             this.StartDate = startDate;
+            this.RentDueDay = rentDueDay;
             this.State = ContractState.ValidationPending;
             this.Enabled = true;
             this.Locked = false;
@@ -111,6 +114,12 @@ namespace ImmoGlobalAdmin.MainClasses
             set => ResponsibleEmployee = Locked ? ResponsibleEmployee : value;
         }
 
+        [NotMapped]
+        public int SetRentDueDay
+        {
+            set => RentDueDay = Locked ? RentDueDay : value;
+        }
+
         #endregion
 
         /// <summary>
@@ -123,6 +132,7 @@ namespace ImmoGlobalAdmin.MainClasses
                 State = ContractState.Validated;
                 Locked = true;
             }
+            CheckState();
         }
         /// <summary>
         /// Changes the state of the contract to "RunningOut" 
@@ -137,6 +147,7 @@ namespace ImmoGlobalAdmin.MainClasses
             }
 
             this.EndDate = endDate;
+            CheckState();
         }
 
         /// <summary>

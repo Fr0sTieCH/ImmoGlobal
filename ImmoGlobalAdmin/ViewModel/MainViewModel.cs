@@ -14,8 +14,10 @@ namespace ImmoGlobalAdmin.ViewModel
     {
         private BaseViewModel _selectedViewModel;
         private BaseViewModel activeMainMenuViewModel;
-        private User loggedInUser;
+        private BaseViewModel? dialogView;
+        private User? loggedInUser;
 
+        private bool showDialog;
 
         #region Singleton
         private static MainViewModel? instance = null;
@@ -25,6 +27,10 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             //For testing
             loggedInUser = DataAccessLayer.GetInstance.GetUserByName("TestAnna");
+            if(loggedInUser == null)
+            {
+               DialogViewModel= EFTestingViewModel.GetInstance;
+            }
             MainMenuViewModel mainMenu = MainMenuViewModel.GetInstance;
             _selectedViewModel = mainMenu;
             activeMainMenuViewModel = mainMenu;
@@ -68,6 +74,26 @@ namespace ImmoGlobalAdmin.ViewModel
         //EnableDisable Search function
         public bool SearchAllowed => _selectedViewModel is IHasSearchableContent;
 
+        public bool ShowDialog
+        {
+            get 
+            {
+                if (DeleteDialogOpen)
+                {
+                    return false;
+                }
+                else
+                {
+                    return showDialog;
+                }
+                
+            }
+            set
+            {
+                showDialog = value;
+                OnPropertyChanged(nameof(ShowDialog));
+            } 
+        }
 
         public BaseViewModel SelectedViewModel
         {
@@ -86,10 +112,44 @@ namespace ImmoGlobalAdmin.ViewModel
 
         public BaseViewModel ActiveMainMenuViewModel => activeMainMenuViewModel;
 
+        public BaseViewModel? DialogViewModel
+        {
+            get
+            {
+                return dialogView;
+            }
+            set
+            {
+                ShowDialog = true;
+                dialogView= value;
+                OnPropertyChanged(nameof(DialogViewModel));
+            }
+        }
 
 
         #region ButtonCommands
 
+        #region Delete Dialog Buttons
+
+        public override void DeleteButtonClicked(object obj)
+        {
+            
+            base.DeleteButtonClicked(obj);
+            OnPropertyChanged(nameof(ShowDialog));
+        }
+        public override void DeleteAcceptButtonClicked(object obj)
+        {
+           
+            base.DeleteAcceptButtonClicked(obj);
+            OnPropertyChanged(nameof(ShowDialog));
+        }
+        public override void DeleteCancelButtonClicked(object obj)
+        {
+            
+            base.DeleteCancelButtonClicked(obj);
+            OnPropertyChanged(nameof(ShowDialog));
+        }
+        #endregion
         public ICommand HomeButtonCommand
         {
             get
@@ -127,6 +187,22 @@ namespace ImmoGlobalAdmin.ViewModel
                 IHasSearchableContent vm = (IHasSearchableContent)SelectedViewModel;
                 vm.SearchContent(searchString);
             }
+        }
+
+        public ICommand CloseDialogButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(CloseDialogButtonClicked);
+            }
+        }
+
+        private void CloseDialogButtonClicked(object obj)
+        {
+
+            ShowDialog = false;
+            dialogView = null;
+
         }
 
         #endregion

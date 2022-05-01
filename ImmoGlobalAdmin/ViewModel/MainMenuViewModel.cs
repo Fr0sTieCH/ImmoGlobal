@@ -45,6 +45,10 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get 
             {
+                if (MainViewModel.GetInstance.LoggedInUser == null)
+                {
+                    return false;
+                }
                 switch (MainViewModel.GetInstance.LoggedInUser.PermissionLevel)
                 {
                     case Permissions.Admin:
@@ -66,6 +70,10 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
+                if (MainViewModel.GetInstance.LoggedInUser == null)
+                {
+                    return false;
+                }
                 switch (MainViewModel.GetInstance.LoggedInUser.PermissionLevel)
                 {
                     case Permissions.Admin:
@@ -82,10 +90,14 @@ namespace ImmoGlobalAdmin.ViewModel
                 }
             }
         }
-        public bool personsEnabled
+        public bool PersonsEnabled
         {
             get
             {
+                if (MainViewModel.GetInstance.LoggedInUser == null)
+                {
+                    return false;
+                }
                 switch (MainViewModel.GetInstance.LoggedInUser.PermissionLevel)
                 {
                     case Permissions.Admin:
@@ -102,10 +114,14 @@ namespace ImmoGlobalAdmin.ViewModel
                 }
             }
         }
-        public bool userEnabled
+        public bool UserEnabled
         {
             get
             {
+                if (MainViewModel.GetInstance.LoggedInUser == null)
+                {
+                    return false;
+                }
                 switch (MainViewModel.GetInstance.LoggedInUser.PermissionLevel)
                 {
                     case Permissions.Admin:

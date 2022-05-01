@@ -11,7 +11,7 @@ namespace ImmoGlobalAdmin.MainClasses
 /// </summary>
     public class Person
     {
-    
+
         public int PersonID { get; private set; }
         public string Name { get; set; } = "";
         public string Prename { get; set; } = "";
@@ -30,12 +30,15 @@ namespace ImmoGlobalAdmin.MainClasses
         public string IGID => PersonID.ToString("0000000000");
 
         [NotMapped]
+        public string FullName => $"{Name} {Prename}";
+
+        [NotMapped]
         public string EMailCommand => $"mailto:{EMail}";
 
         [NotMapped]
         public DateOnly? BirthdatyDateOnly
         {
-            
+
             get
             {
                 if (Birthdate == null)
@@ -44,12 +47,12 @@ namespace ImmoGlobalAdmin.MainClasses
                 }
                 else
                 {
-                  return  DateOnly.FromDateTime((DateTime)Birthdate);
+                    return DateOnly.FromDateTime((DateTime)Birthdate);
                 }
-                
+
             }
-            
-}
+
+        }
 
 
 

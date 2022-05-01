@@ -1,6 +1,4 @@
-﻿using ImmoGlobalAdmin.MainClasses;
-using ImmoGlobalAdmin.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,15 +16,13 @@ using System.Windows.Shapes;
 namespace ImmoGlobalAdmin.View
 {
     /// <summary>
-    /// Interaction logic for RealEstateView.xaml
+    /// Interaction logic for RentalObjectView.xaml
     /// </summary>
-    public partial class RealEstateView : UserControl
+    public partial class RentalObjectView : UserControl
     {
-        public RealEstateView()
+        public RentalObjectView()
         {
             InitializeComponent();
         }
-
-  
     }
 }
