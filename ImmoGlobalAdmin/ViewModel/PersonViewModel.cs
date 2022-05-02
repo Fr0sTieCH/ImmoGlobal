@@ -9,14 +9,14 @@ using System.Windows.Input;
 
 namespace ImmoGlobalAdmin.ViewModel
 {
-    internal class PersonViewModel : BaseViewModel,IHasSearchableContent
+    internal class PersonViewModel : BaseViewModel, IHasSearchableContent
     {
 
         private string searchString = "";
         private Person? selectedPerson = null;
 
-        private bool editMode;
-        private bool creationMode;
+
+
 
         #region Singleton
         private static PersonViewModel? instance = null;
@@ -50,7 +50,7 @@ namespace ImmoGlobalAdmin.ViewModel
 
         #region BindigngProperties
 
-        public List<Person> AllPersons
+        public override List<Person> AllPersons
         {
             get
             {
@@ -99,8 +99,7 @@ namespace ImmoGlobalAdmin.ViewModel
         }
 
 
-        public bool EditMode => editMode;
-        public bool EditModeInverted => !editMode;
+
         #endregion
 
 
@@ -119,32 +118,14 @@ namespace ImmoGlobalAdmin.ViewModel
 
         #region Selected Person Buttons
 
-        public ICommand EditButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(EditButtonClicked);
-            }
-        }
 
-        private void EditButtonClicked(object obj)
+        protected override void EditButtonClicked(object obj)
         {
-            editMode = true;
             OnPropertyChanged(nameof(SelectedPerson));
             OnPropertyChanged(nameof(AllPersons));
-            OnPropertyChanged(nameof(EditMode));
-            OnPropertyChanged(nameof(EditModeInverted));
+            base.EditButtonClicked(obj);
         }
-
-        public ICommand CancelEditButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(CancelEditButtonClicked);
-            }
-        }
-
-        private void CancelEditButtonClicked(object obj)
+        protected override void CancelEditButtonClicked(object obj)
         {
             if (creationMode)
             {
@@ -156,24 +137,11 @@ namespace ImmoGlobalAdmin.ViewModel
                 DataAccessLayer.GetInstance.RestoreValuesFromDB(selectedPerson);
             }
 
-            editMode = false;
-            creationMode = false;
             OnPropertyChanged(nameof(SelectedPerson));
             OnPropertyChanged(nameof(AllPersons));
-            OnPropertyChanged(nameof(EditMode));
-            OnPropertyChanged(nameof(EditModeInverted));
-
+            base.CancelEditButtonClicked(obj);
         }
-
-        public ICommand SaveEditButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(SaveEditButtonClicked);
-            }
-        }
-
-        private void SaveEditButtonClicked(object obj)
+        protected override void SaveEditButtonClicked(object obj)
         {
             if (creationMode)
             {
@@ -187,15 +155,12 @@ namespace ImmoGlobalAdmin.ViewModel
 
             }
 
-            creationMode = false;
-            editMode = false;
+            base.SaveEditButtonClicked(obj);
+
             OnPropertyChanged(nameof(SelectedPerson));
             OnPropertyChanged(nameof(AllPersons));
-            OnPropertyChanged(nameof(EditMode));
-            OnPropertyChanged(nameof(EditModeInverted));
 
         }
-
         #endregion
 
         #region DeleteDialog Override Methods
@@ -206,13 +171,16 @@ namespace ImmoGlobalAdmin.ViewModel
         }
         public override void DeleteAcceptButtonClicked(object obj)
         {
-            selectedPerson.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this Person on {DateTime.Now}");
+            selectedPerson.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this Person on {DateTime.Now} with reason: ({(string)obj})");
             DataAccessLayer.GetInstance.SaveChanges();
             OnPropertyChanged(nameof(AllPersons));
-            selectedPerson= null;
+
+            base.DeleteAcceptButtonClicked(obj);
+
+            selectedPerson = null;
             OnPropertyChanged(nameof(SelectedPerson));
             MainViewModel.GetInstance.DeleteAcceptButtonClicked(obj);
-            base.DeleteAcceptButtonClicked(obj);
+
         }
 
         public override void DeleteCancelButtonClicked(object obj)
@@ -222,23 +190,15 @@ namespace ImmoGlobalAdmin.ViewModel
         }
         #endregion
 
-        public ICommand CreatePersonButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(CreatePersonButtonClicked);
-            }
-        }
 
-        private void CreatePersonButtonClicked(object obj)
+        #region Creaton Button
+        protected override void CreateButtonClicked(object obj)
         {
             selectedPerson = new Person(true);
             OnPropertyChanged(nameof(SelectedPerson));
-            editMode = true;
-            creationMode = true;
-            OnPropertyChanged(nameof(EditMode));
-            OnPropertyChanged(nameof(EditModeInverted));
+            base.CreateButtonClicked(obj);
         }
+        #endregion
 
         #endregion
     }

@@ -32,5 +32,7 @@
     <system:String x:Key="dueDay">Due on day</system:String>
     <system:String x:Key="lastPayment">Last payment</system:String>
     <system:String x:Key="assignedEmployee">Assigned Employee</system:String>
+    <system:String x:Key="rentalObjectType">Type</system:String>
+    <system:String x:Key="transactions">Transactions</system:String>
 
 </ResourceDictionary> 

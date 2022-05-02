@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ImmoGlobalAdmin.Helpers;
 
 namespace ImmoGlobalAdmin.MainClasses
 {/// <summary>
@@ -109,27 +110,14 @@ namespace ImmoGlobalAdmin.MainClasses
         {
             get
             {
-                //returns the name of the corresponding Icon based on the RentalObject Type
-                switch (this.Type)
-                {
-                    case RentalObjectType.RealEstateBaseObject:
-                        return "";
-                    case RentalObjectType.Apartement:
-                        return "Home";
-                    case RentalObjectType.Garage:
-                        return "Garage";
-                    case RentalObjectType.Hobby:
-                        return "ChildToy";
-                    case RentalObjectType.ParkingSpot:
-                        return "CarPark";
-                    case RentalObjectType.Office:
-                        return "OfficeChair";
-                    default:
-                        return "";
-                }
-
+                return EnumTools.GetDescription(this.Type);
             }
-        }
+            set
+            {
+                this.Type = EnumTools.GetEnumFromDescriptionAttribute<RentalObjectType>(value);
+            }
+        } 
+ 
 
         [NotMapped]
         public string IGID => RentalObjectID.ToString("2000000000");

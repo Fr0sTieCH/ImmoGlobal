@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,11 +9,17 @@ namespace ImmoGlobalAdmin.MainClasses
 {
     public enum RentalObjectType
     {
+        //Descriptions are used to display the corresponding icons
         RealEstateBaseObject,
+        [Description("Home")]
         Apartement,
+        [Description("Garage")]
         Garage,
+        [Description("ChildToy")]
         Hobby,
+        [Description("OfficeChair")]
         Office,
+        [Description("CarPark")]
         ParkingSpot
     }
 

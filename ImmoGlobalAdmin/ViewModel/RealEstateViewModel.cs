@@ -11,13 +11,10 @@ using System.Windows.Input;
 
 namespace ImmoGlobalAdmin.ViewModel
 {
-    internal class RealEstateViewModel:BaseViewModel,IHasSearchableContent
+    internal class RealEstateViewModel : BaseViewModel, IHasSearchableContent
     {
         private string searchString = "";
         private RealEstate? selectedRealEstate;
-
-        private bool editMode;
-        private bool creationMode;
 
         #region Singleton
         private static RealEstateViewModel? instance = null;
@@ -49,7 +46,7 @@ namespace ImmoGlobalAdmin.ViewModel
 
         #region Binding Properties
 
-        public List<RealEstate> RealEstates
+        public override List<RealEstate> AllRealEstates
         {
             get
             {
@@ -72,7 +69,7 @@ namespace ImmoGlobalAdmin.ViewModel
             set
             {
                 searchString = value;
-                OnPropertyChanged(nameof(RealEstates));
+                OnPropertyChanged(nameof(AllRealEstates));
             }
         }
 
@@ -82,7 +79,7 @@ namespace ImmoGlobalAdmin.ViewModel
             {
                 if (selectedRealEstate == null)
                 {
-                    selectedRealEstate = RealEstates.FirstOrDefault();
+                    selectedRealEstate = AllRealEstates.FirstOrDefault();
                 }
                 return selectedRealEstate;
             }
@@ -97,12 +94,9 @@ namespace ImmoGlobalAdmin.ViewModel
             }
         }
 
-    
-        public List<Person> AllPersons => DataAccessLayer.GetInstance.GetPersonsUnfiltered();
-        public List<BankAccount> AllBankAccounts => DataAccessLayer.GetInstance.GetBankAccountsUnfiltered();
 
-        public bool EditMode => editMode;
-        public bool EditModeInverted => !editMode;
+       
+
 
         #endregion
 
@@ -114,37 +108,18 @@ namespace ImmoGlobalAdmin.ViewModel
         #region Button Commands
 
         #region Selected RealEstate Buttons
-        public ICommand EditButtonCommand
+        protected override void EditButtonClicked(object obj)
         {
-            get
-            {
-                return new RelayCommand<object>(EditButtonClicked);
-            }
-        }
-
-        private void EditButtonClicked(object obj)
-        {
-            editMode = true;
             OnPropertyChanged(nameof(SelectedRealEstate));
-            OnPropertyChanged(nameof(RealEstates));
-            OnPropertyChanged(nameof(EditMode));
-            OnPropertyChanged(nameof(EditModeInverted));
+            OnPropertyChanged(nameof(AllRealEstates));
+            base.EditButtonClicked(obj);
         }
 
-        public ICommand CancelEditButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(CancelEditButtonClicked);
-            }
-        }
-
-        private void CancelEditButtonClicked(object obj)
+        protected override void CancelEditButtonClicked(object obj)
         {
             if (creationMode)
             {
                 SelectedRealEstate = null;
-
             }
             else
             {
@@ -156,24 +131,14 @@ namespace ImmoGlobalAdmin.ViewModel
                 }
             }
 
-            editMode = false;
-            creationMode = false;
+            base.CancelEditButtonClicked(obj);
+
             OnPropertyChanged(nameof(SelectedRealEstate));
-            OnPropertyChanged(nameof(RealEstates));
-            OnPropertyChanged(nameof(EditMode));
-            OnPropertyChanged(nameof(EditModeInverted));
-
+            OnPropertyChanged(nameof(AllRealEstates));
         }
 
-        public ICommand SaveEditButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(SaveEditButtonClicked);
-            }
-        }
 
-        private void SaveEditButtonClicked(object obj)
+        protected override void SaveEditButtonClicked(object obj)
         {
             if (creationMode)
             {
@@ -183,18 +148,21 @@ namespace ImmoGlobalAdmin.ViewModel
             else
             {
                 DataAccessLayer.GetInstance.SaveChanges();
-
             }
 
-            creationMode = false;
-            editMode = false;
+            base.SaveEditButtonClicked(obj);
+
             OnPropertyChanged(nameof(SelectedRealEstate));
-            OnPropertyChanged(nameof(RealEstates));
-            OnPropertyChanged(nameof(EditMode));
-            OnPropertyChanged(nameof(EditModeInverted));
+            OnPropertyChanged(nameof(AllRealEstates));
 
         }
 
+        protected override void CreateButtonClicked(object obj)
+        {
+            SelectedRealEstate = new RealEstate(true);
+            OnPropertyChanged(nameof(SelectedRealEstate));
+            base.CreateButtonClicked(obj);
+        }
 
         #endregion
 
@@ -204,15 +172,19 @@ namespace ImmoGlobalAdmin.ViewModel
             MainViewModel.GetInstance.DeleteButtonClicked(obj);
             base.DeleteButtonClicked(obj);
         }
+
         public override void DeleteAcceptButtonClicked(object obj)
         {
-            SelectedRealEstate.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this RealEstate on {DateTime.Now}");
+            SelectedRealEstate.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this RealEstate on {DateTime.Now} with reason: ({(string)obj})");
             DataAccessLayer.GetInstance.SaveChanges();
-            SelectedRealEstate=null;
+
+            base.DeleteAcceptButtonClicked(obj);
+            
+            SelectedRealEstate = null;
             OnPropertyChanged(nameof(selectedRealEstate));
-            OnPropertyChanged(nameof(RealEstates));
+            OnPropertyChanged(nameof(AllRealEstates));
             MainViewModel.GetInstance.DeleteAcceptButtonClicked(obj);
-            base.DeleteAcceptButtonClicked(obj);    
+            
         }
 
         public override void DeleteCancelButtonClicked(object obj)
@@ -222,24 +194,7 @@ namespace ImmoGlobalAdmin.ViewModel
         }
         #endregion
 
-        public ICommand CreateRealEstateButtonCommand
-        {
-            get
-            {
-                return new RelayCommand<object>(CreateRealEstateButtonClicked);
-            }
-        }
-
-        private void CreateRealEstateButtonClicked(object obj)
-        {
-            SelectedRealEstate = new RealEstate(true);
-
-            OnPropertyChanged(nameof(SelectedRealEstate));
-            editMode = true;
-            creationMode = true;
-            OnPropertyChanged(nameof(EditMode));
-            OnPropertyChanged(nameof(EditModeInverted));
-        }
+       
 
         public ICommand OpenRentalObjectButtonCommand
         {

@@ -14,8 +14,7 @@ namespace ImmoGlobalAdmin.ViewModel
     internal class RentalObjectViewModel:BaseViewModel
     {
         private RentalObject rentalObjectToDisplay;
-        private bool deleteDialogOpen;
-        
+
         #region Singleton
         private static RentalObjectViewModel? instance = null;
         private static readonly object padlock = new();
@@ -67,7 +66,6 @@ namespace ImmoGlobalAdmin.ViewModel
         #endregion
 
         #region Delete Dialog Buttons
-
         public override void DeleteButtonClicked(object obj)
         {
             MainViewModel.GetInstance.DeleteButtonClicked(obj);
@@ -82,6 +80,40 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             MainViewModel.GetInstance.DeleteCancelButtonClicked(obj);
             base.DeleteCancelButtonClicked(obj);
+        }
+
+        protected override void CancelEditButtonClicked(object obj)
+        {
+            if (creationMode)
+            {
+                
+            }
+            else
+            {
+                DataAccessLayer.GetInstance.RestoreValuesFromDB(rentalObjectToDisplay);
+            }
+
+            base.CancelEditButtonClicked(obj);
+            OnPropertyChanged(nameof(RentalObjectToDisplay));
+            OnPropertyChanged(nameof(AllRealEstates));
+        }
+
+
+        protected override void SaveEditButtonClicked(object obj)
+        {
+            if (creationMode)
+            {
+                DataAccessLayer.GetInstance.StoreNewRentalObject(RentalObjectToDisplay);
+            }
+            else
+            {
+                DataAccessLayer.GetInstance.SaveChanges();
+            }
+
+            base.SaveEditButtonClicked(obj);
+            OnPropertyChanged(nameof(AllRealEstates));
+            OnPropertyChanged(nameof(RentalObjectToDisplay));
+
         }
         #endregion
     }

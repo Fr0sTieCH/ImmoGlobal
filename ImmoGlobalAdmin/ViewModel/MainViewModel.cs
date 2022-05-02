@@ -80,6 +80,7 @@ namespace ImmoGlobalAdmin.ViewModel
             {
                 if (DeleteDialogOpen)
                 {
+
                     return false;
                 }
                 else
@@ -149,6 +150,8 @@ namespace ImmoGlobalAdmin.ViewModel
             base.DeleteCancelButtonClicked(obj);
             OnPropertyChanged(nameof(ShowDialog));
         }
+
+        
         #endregion
         public ICommand HomeButtonCommand
         {

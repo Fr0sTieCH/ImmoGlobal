@@ -25,7 +25,7 @@
             <RowDefinition Height="150"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding RealEstates}" SelectedItem="{Binding SelectedRealEstate}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="20,0,20,10" ColumnHeaderHeight="34">
+        <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding AllRealEstates}" SelectedItem="{Binding SelectedRealEstate}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="20,0,20,10" ColumnHeaderHeight="34">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"  Binding="{Binding IGID}" FontWeight="Bold" />
                 <DataGridTextColumn Header="{DynamicResource name}" Binding="{Binding RealEstateName}" FontWeight="Bold" />
@@ -220,7 +220,7 @@
 
                             </StackPanel>
                             <!--Button for creating a new RealEstate-->
-                            <Button Command="{Binding CreateRealEstateButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10" >
+                            <Button Command="{Binding CreateButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10" >
                                 <materialDesign:PackIcon Kind="AddBox">
                                     <materialDesign:PackIcon.LayoutTransform>
                                         <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
@@ -292,7 +292,7 @@
                                             <Expander HorizontalAlignment="Stretch" VerticalAlignment="Top" ExpandDirection="Down">
                                                 <Expander.Header>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <materialDesign:PackIcon Kind="{Binding TypeIconName}" Height="30" Width="30" Margin="5,0,5,5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                                        <materialDesign:PackIcon Kind="{Binding TypeIconName}"  Height="30" Width="30" Margin="5,0,5,5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                                         <Label Width="200" Content="{Binding RentalObjectName}"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                                     </StackPanel>
                                                 </Expander.Header>

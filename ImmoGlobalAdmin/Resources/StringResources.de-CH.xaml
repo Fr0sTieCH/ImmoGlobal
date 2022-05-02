@@ -33,5 +33,7 @@
     <system:String x:Key="dueDay">Stichtag</system:String>
     <system:String x:Key="lastPayment">Letzte Zahlung</system:String>
     <system:String x:Key="assignedEmployee">Verantwortlicher Mitarbeiter</system:String>
+    <system:String x:Key="rentalObjectType">Typ</system:String>
+    <system:String x:Key="transactions">Transaktionen</system:String>
 
 </ResourceDictionary> 
