@@ -63,4 +63,11 @@ namespace ImmoGlobalAdmin.MainClasses
         RentalObjectManager,
         FinanceManager
     }
+
+    public enum PersonType
+    {
+        PrivatePerson,
+        Company,
+        Employee
+    }
 }

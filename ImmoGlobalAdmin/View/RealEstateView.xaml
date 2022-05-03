@@ -246,7 +246,7 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-              
+
                 <!--Rental Objects of selected RealEstate-->
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" Grid.Row="1">
 
@@ -324,8 +324,8 @@
                                                             <ToggleButton IsEnabled="False" IsChecked="{Binding HasTumbler}"  Style="{DynamicResource MaterialDesignFlatToggleButton}" Content="{materialDesign:PackIcon Kind=TumbleDryer}" Margin="5,5,5,5"/>
                                                         </WrapPanel>
                                                     </StackPanel>
-
-
+                                                    
+                                                    <!--responsible employee-->
                                                     <materialDesign:Card Margin="5,5,5,5">
                                                         <StackPanel>
                                                             <Label Content="{DynamicResource assignedEmployee}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,0"/>
@@ -335,9 +335,7 @@
                                                                         <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2" ScaleY="2"/>
                                                                     </materialDesign:PackIcon.LayoutTransform>
                                                                 </materialDesign:PackIcon>
-
                                                                 <TextBox IsEnabled="False" Width="300" Text="{Binding ActiveRentalContract.ResponsibleEmployee.FullName, Mode=OneWay}" HorizontalContentAlignment="Left"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,5"/>
-
                                                             </StackPanel>
                                                         </StackPanel>
                                                     </materialDesign:Card>
@@ -350,7 +348,7 @@
                                                                 </Binding.Converter>
                                                             </Binding>
                                                         </StackPanel.Visibility>
-
+                                                        <!--Rent Status-->
                                                         <materialDesign:Card Margin="5,5,5,5">
                                                             <StackPanel>
                                                                 <StackPanel Orientation="Horizontal">
@@ -388,17 +386,17 @@
                                                                             </materialDesign:PackIcon>
                                                                         </StackPanel>
                                                                     </materialDesign:Card>
-                                                                    <Label Content="{DynamicResource dueDay}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                                                    <TextBox IsEnabled="False" Width="30" Text="NI" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                    <Label Content="{DynamicResource rentsDue}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                    <TextBox IsEnabled="False" Width="30" Text="{Binding RentsDue.Count, Mode=OneWay}" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
                                                                     <Label Content="{DynamicResource lastPayment}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                                                    <DatePicker SelectedDate="01.01.1900"/>
+                                                                    <DatePicker IsEnabled="False" Width="70" SelectedDate="{Binding LastPayedRent.DateTimeOfTransaction}"/>
                                                                 </StackPanel>
                                                             </StackPanel>
                                                         </materialDesign:Card>
 
                                                         <materialDesign:Card Margin="5,5,5,5">
                                                             <StackPanel>
-                                                                <Label Content="{DynamicResource tenant}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,0"/>
+                                                                <Label Content="{DynamicResource currentTenant}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,0"/>
                                                                 <StackPanel Orientation="Horizontal">
                                                                     <materialDesign:PackIcon Kind="Person" VerticalAlignment="Center" Margin="5,5,5,5">
                                                                         <materialDesign:PackIcon.LayoutTransform>

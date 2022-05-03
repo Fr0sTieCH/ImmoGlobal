@@ -122,6 +122,13 @@ namespace ImmoGlobalAdmin.MainClasses
 
         #endregion
 
+        #region PUBLIC GETTERS
+        [NotMapped]
+        public string IGID => RentalContractID.ToString("3000000000");
+        [NotMapped]
+        public double RentTotal => BaseRent + AdditionalCosts;
+        #endregion
+
         /// <summary>
         /// Validates the rental contract
         /// </summary>

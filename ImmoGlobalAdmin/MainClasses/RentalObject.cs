@@ -19,6 +19,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public double RoomCount { get; set; } = 0;
         public double SpaceInQM { get; set; } = 0;
         public virtual Person? Owner { get; set; }
+        public virtual Person? ResponsibleEmployee { get; set; }
         public double EstimatedBaseRent { get; set; } = 0;
         public double EstimatedAdditionalCosts { get; set; } = 0;
         public virtual BankAccount? Account { get; set; }
@@ -121,7 +122,8 @@ namespace ImmoGlobalAdmin.MainClasses
 
         [NotMapped]
         public string IGID => RentalObjectID.ToString("2000000000");
-
+        [NotMapped]
+        public double EstimatedRentTotal => EstimatedBaseRent + EstimatedAdditionalCosts;
 
         [NotMapped]
         public bool RentalContractActive => ActiveRentalContract != null;
@@ -167,6 +169,9 @@ namespace ImmoGlobalAdmin.MainClasses
 
         [NotMapped]
         public List<Transaction?> PayedRents => Transactions.Where(x => x.Type == TransactionType.Rent).ToList();
+
+        [NotMapped]
+        public Transaction LastPayedRent => Transactions.Where(x => x.Type == TransactionType.Rent).FirstOrDefault();
 
         [NotMapped]
         public List<DateTime> RentsDue

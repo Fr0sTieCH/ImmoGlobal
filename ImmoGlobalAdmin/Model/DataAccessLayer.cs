@@ -133,6 +133,20 @@ namespace ImmoGlobalAdmin.Model
             return db.persons.Where(x => x.Enabled).ToList();
         }
 
+        public List<Person> GetEmployeesUnfiltered()
+        {
+            return db.persons.Where(x => x.Enabled&&x.Type==PersonType.Employee).ToList();
+        }
+
+        public List<Person> GetPrivatePersonsUnfiltered()
+        {
+            return db.persons.Where(x => x.Enabled && x.Type == PersonType.PrivatePerson).ToList();
+        }
+
+        public List<Person> GetCompaniesUnfiltered()
+        {
+            return db.persons.Where(x => x.Enabled && x.Type == PersonType.Company).ToList();
+        }
 
         public List<BankAccount> GetBankAccountsUnfiltered()
         {

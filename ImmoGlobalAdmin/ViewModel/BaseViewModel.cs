@@ -29,6 +29,9 @@ namespace ImmoGlobalAdmin.ViewModel
 
 
         public virtual List<Person> AllPersons => DataAccessLayer.GetInstance.GetPersonsUnfiltered();
+        public virtual List<Person> AllEmployees => DataAccessLayer.GetInstance.GetEmployeesUnfiltered();
+        public virtual List<Person> AllPrivatePersons => DataAccessLayer.GetInstance.GetPrivatePersonsUnfiltered();
+        public virtual List<Person> AllCompanies => DataAccessLayer.GetInstance.GetCompaniesUnfiltered();
         public virtual List<BankAccount> AllBankAccounts => DataAccessLayer.GetInstance.GetBankAccountsUnfiltered();
         public virtual List<RealEstate> AllRealEstates => DataAccessLayer.GetInstance.GetRealEstatesUnfiltered();
 

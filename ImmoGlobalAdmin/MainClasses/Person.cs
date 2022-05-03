@@ -22,6 +22,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public string VatNuber { get; set; } = "";
         public DateTime? Birthdate { get; set; }
         public string Note { get; set; } = "";
+        public PersonType Type { get; set; } = PersonType.PrivatePerson;
 
         public bool Enabled { get; private set; }
         public string ReasonForDeleting { get; private set; } = "";

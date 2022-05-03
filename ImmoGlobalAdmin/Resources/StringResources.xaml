@@ -26,13 +26,25 @@
     <system:String x:Key="owner">Owner</system:String>
     <system:String x:Key="janitor">Janitor</system:String>
     <system:String x:Key="bankAccount">Bank account</system:String>
-    <system:String x:Key="tenant">Current tenant</system:String>
+    <system:String x:Key="currentTenant">Current tenant</system:String>
+    <system:String x:Key="tenant">Tenant</system:String>
     <system:String x:Key="addressSuplement">Address suplement</system:String>
     <system:String x:Key="rentStatus">Rent payment status</system:String>
     <system:String x:Key="dueDay">Due on day</system:String>
+    <system:String x:Key="rentsDue">Rents due</system:String>
     <system:String x:Key="lastPayment">Last payment</system:String>
     <system:String x:Key="assignedEmployee">Assigned Employee</system:String>
     <system:String x:Key="rentalObjectType">Type</system:String>
     <system:String x:Key="transactions">Transactions</system:String>
+    <system:String x:Key="activeRentalContract">Active rental contract</system:String>
+    <system:String x:Key="allRentalContracts">All rental contracts</system:String>
+    <system:String x:Key="estimatedBaseRent">estimated base rent</system:String>
+    <system:String x:Key="baseRent">Base rent</system:String>
+    <system:String x:Key="estimatedAdditionalCosts">Estimated additional costs</system:String>
+    <system:String x:Key="additionalCosts">Additional costs</system:String>
+    <system:String x:Key="estimatedRentTotal">Estimatet rent total</system:String>
+    <system:String x:Key="rentTotal">Rent total</system:String>
+    <system:String x:Key="startDate">Start date</system:String>
+    <system:String x:Key="annulationDate">Annulation Date</system:String>
 
 </ResourceDictionary> 

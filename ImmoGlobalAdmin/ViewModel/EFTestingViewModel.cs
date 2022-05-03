@@ -114,8 +114,11 @@ namespace ImmoGlobalAdmin.ViewModel
                 string email = data[5];
                 DateTime birthdate = DateTime.Parse(data[6]);
                 string note = data[7];
+                int type = int.Parse(data[8]);
 
-                return new Person(name, prename, address, phone, fax, email, birthdate, note);
+                Person newPerson = new Person(name, prename, address, phone, fax, email, birthdate, note);
+                newPerson.Type = (PersonType)type;
+                return newPerson;
             }).ToList();
         }
 
@@ -134,8 +137,11 @@ namespace ImmoGlobalAdmin.ViewModel
                 string email = data[4];
                 string vatNumber = data[5];
                 string note = data[6];
+                int type = int.Parse(data[7]);
 
-                return new Person(name, adress, phone, fax, email, vatNumber, note);
+                Person newPerson = new Person(name, adress, phone, fax, email, vatNumber, note);
+                newPerson.Type = (PersonType)type;
+                return newPerson;
             }).ToList();
         }
         private bool JuristicPersonExists(Person personToCheck)
@@ -219,14 +225,19 @@ namespace ImmoGlobalAdmin.ViewModel
                 for (int i = 0; i < 4; i++)//create appartements
                 {
                     RentalObject newObject = new RentalObject($"{i + 1}.Appartment of {tmpRE.RealEstateName}", RentalObjectType.Apartement, $"Ap.{i + 1}", 3, 72.5, tmpRE.Owner, 900, 200, tmpRE, tmpRE.Account);
+                    newObject.ResponsibleEmployee = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x=> x.Name=="Test" && x.Prename=="Anna");
                 }
                 for (int i = 0; i < 4; i++)//create Garages
                 {
                     RentalObject newObject = new RentalObject($"{i + 1}.Garage of {tmpRE.RealEstateName}", RentalObjectType.Garage, "", 1, 12, tmpRE.Owner, 60, 10, tmpRE, tmpRE.Account);
+                    newObject.ResponsibleEmployee = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x => x.Name == "Test" && x.Prename == "Anna");
+
                 }
                 for (int i = 0; i < 2; i++)//create hobbyrooms
                 {
                     RentalObject newObject = new RentalObject($"{i + 1}.Hobbyroom in {tmpRE.RealEstateName}", RentalObjectType.Hobby, $"HR.{i + 1}", 1, 12, tmpRE.Owner, 100, 20, tmpRE, tmpRE.Account);
+                    newObject.ResponsibleEmployee = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x => x.Name == "Test" && x.Prename == "Anna");
+
                 }
 
                 return tmpRE;
@@ -250,16 +261,19 @@ namespace ImmoGlobalAdmin.ViewModel
             }
             else
             {
-                for (int i = 0; i < 3; i++)
+                foreach(Person p in DataAccessLayer.GetInstance.GetEmployeesUnfiltered())
                 {
-                    Person userPerson = aviablePersons[i];
-                    string username = $"{userPerson.Name}{userPerson.Prename}";
+
+                    string username = $"{p.Name}{p.Prename}";
 
                     if (DataAccessLayer.GetInstance.GetUserByName(username) == null)
                     {
-                        DataAccessLayer.GetInstance.StoreNewUser(new User(username, userPerson, "Passwort1234", Permissions.Admin));
+                        DataAccessLayer.GetInstance.StoreNewUser(new User(username, p, "Passwort1234", Permissions.Admin));
                     }
                 }
+                
+                  
+                
             }
 
         }

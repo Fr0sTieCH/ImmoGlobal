@@ -26,14 +26,28 @@
     <system:String x:Key="owner">Besitzer</system:String>
     <system:String x:Key="janitor">Hauswart</system:String>
     <system:String x:Key="bankAccount">Bankkonto</system:String>
-    <system:String x:Key="tenant">Aktueller Mieter</system:String>
+    <system:String x:Key="currentTenant">Aktueller Mieter</system:String>
+    <system:String x:Key="tenant">Mieter</system:String>
     <system:String x:Key="addressSuplement">Adresszusatz</system:String>
     <system:String x:Key="rentStatus">Mietzins Status</system:String>
     <system:String x:Key="dueDate">Zahlbar bis</system:String>
+    <system:String x:Key="rentsDue">Nicht bezahlt</system:String>
     <system:String x:Key="dueDay">Stichtag</system:String>
     <system:String x:Key="lastPayment">Letzte Zahlung</system:String>
     <system:String x:Key="assignedEmployee">Verantwortlicher Mitarbeiter</system:String>
     <system:String x:Key="rentalObjectType">Typ</system:String>
     <system:String x:Key="transactions">Transaktionen</system:String>
+    <system:String x:Key="activeRentalContract">Aktiver Mietvertrag</system:String>
+    <system:String x:Key="allRentalContracts">Alle Mietverträge</system:String>
+    <system:String x:Key="estimatedBaseRent">Geschätzter Basismietzins</system:String>
+    <system:String x:Key="baseRent">Basismietzins</system:String>
+    <system:String x:Key="estimatedAdditionalCosts">Geschätzte Nebenkosten</system:String>
+    <system:String x:Key="additionalCosts">Nebenkosten</system:String>
+    <system:String x:Key="estimatedRentTotal">Geschätzter Gesammtmietzins</system:String>
+    <system:String x:Key="rentTotal">Gesammtmietzins</system:String>
+    <system:String x:Key="startDate">Start Datum</system:String>
+    <system:String x:Key="annulationDate">Kündigungs Datum</system:String>
+
+
 
 </ResourceDictionary> 

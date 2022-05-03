@@ -36,26 +36,26 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2" Margin="5,5,5,5">
 
-                                <StackPanel VerticalAlignment="bottom" HorizontalAlignment="Center" Margin="5,5,5,5">
-                                    <ComboBox Grid.Column="0" IsEnabled="{Binding EditMode}" Width="70" ItemsSource="{Binding ObjectTypeIcons}" SelectedItem="{Binding RentalObjectToDisplay.TypeIconName}" HorizontalContentAlignment="Center">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <materialDesign:Card Height="40" Width="40" >
-                                                    <materialDesign:PackIcon Kind="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                        <materialDesign:PackIcon.LayoutTransform>
-                                                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
-                                                        </materialDesign:PackIcon.LayoutTransform>
-                                                    </materialDesign:PackIcon>
-                                                </materialDesign:Card>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                    <Label Content="ID" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <TextBox IsEnabled="False" Width="170" Text="{Binding RentalObjectToDisplay.IGID, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <!--Name and address suplement-->
+                            <StackPanel VerticalAlignment="bottom" HorizontalAlignment="Center" Margin="5,5,5,5">
+                                <ComboBox Grid.Column="0" IsEnabled="{Binding EditMode}" Width="70" ItemsSource="{Binding ObjectTypeIcons}" SelectedItem="{Binding RentalObjectToDisplay.TypeIconName}" HorizontalContentAlignment="Center">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:Card Height="40" Width="40" >
+                                                <materialDesign:PackIcon Kind="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <materialDesign:PackIcon.LayoutTransform>
+                                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
+                                                    </materialDesign:PackIcon.LayoutTransform>
+                                                </materialDesign:PackIcon>
+                                            </materialDesign:Card>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="ID" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBox IsEnabled="False" Width="170" Text="{Binding RentalObjectToDisplay.IGID, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <!--Name and address suplement-->
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                     <Label Content="{DynamicResource name}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -67,7 +67,7 @@
                                 </StackPanel>
 
                             </StackPanel>
-
+                            <!--Room and space-->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10">
                                     <Label Content="{DynamicResource totalRooms}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalContentAlignment="Center"/>
@@ -133,6 +133,33 @@
                                     </ToggleButton>
                                 </StackPanel>
                             </materialDesign:Card>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10">
+                                    <Label Content="{DynamicResource estimatedBaseRent}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalContentAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox IsEnabled="{Binding EditMode}" Width="50" viewHelpers:TextBoxHelper.OnlyNumeric="Double" viewHelpers:TextBoxHelper.DefaultValue="0" Text="{Binding RentalObjectToDisplay.EstimatedBaseRent}" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+                                        <Label IsEnabled="{Binding EditMode}" Content="Fr.-" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Bottom"  HorizontalContentAlignment="Left"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10">
+                                    <Label Content="{DynamicResource estimatedAdditionalCosts}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalContentAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox IsEnabled="{Binding EditMode}" Width="50" viewHelpers:TextBoxHelper.OnlyNumeric="Double" viewHelpers:TextBoxHelper.DefaultValue="0" Text="{Binding RentalObjectToDisplay.EstimatedAdditionalCosts}" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+                                        <Label IsEnabled="{Binding EditMode}" Content="Fr.-" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Bottom"  HorizontalContentAlignment="Left"/>
+
+                                    </StackPanel>
+                                </StackPanel>
+                                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10">
+                                    <Label Content="{DynamicResource estimatedRentTotal}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalContentAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label IsEnabled="{Binding EditMode}" Width="50"  Content="{Binding RentalObjectToDisplay.EstimatedRentTotal}" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Right"/>
+                                        <Label IsEnabled="{Binding EditMode}" Content="Fr.-" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Bottom"  HorizontalContentAlignment="Left"/>
+
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+
                             <!--Owner-->
                             <materialDesign:Card Margin="5,5,5,5">
                                 <StackPanel>
@@ -143,8 +170,7 @@
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding Name}" FontSize="9" Margin="0,0,2,0"></TextBlock>
-                                                        <TextBlock Text="{Binding Prename}" FontSize="9" Margin="0,0,2,0"></TextBlock>
+                                                        <TextBlock Text="{Binding FullName}" FontSize="9" Margin="0,0,2,0"></TextBlock>
                                                         <TextBlock Text="{Binding Adress}" FontSize="9" Margin="0,0,2,0"></TextBlock>
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -159,13 +185,11 @@
                                     <Label Content="{DynamicResource assignedEmployee}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
                                     <StackPanel Orientation="Horizontal">
                                         <materialDesign:PackIcon Kind="UserBadge" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                        <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding AllPersons}" SelectedItem="NotImplemented">
+                                        <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding AllEmployees}" SelectedItem="{Binding RentalObjectToDisplay.ResponsibleEmployee}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding Name}" FontSize="9" Margin="0,0,2,0"></TextBlock>
-                                                        <TextBlock Text="{Binding Prename}" FontSize="9" Margin="0,0,2,0"></TextBlock>
-                                                        <TextBlock Text="{Binding Adress}" FontSize="9" Margin="0,0,2,0"></TextBlock>
+                                                        <TextBlock Text="{Binding FullName}" FontSize="9" Margin="0,0,2,0"></TextBlock>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
@@ -173,42 +197,198 @@
                                     </StackPanel>
                                 </StackPanel>
                             </materialDesign:Card>
-                        
-                        <!--BankAccount-->
-                        <materialDesign:Card Margin="5,5,5,5">
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel>
-                                    <Label Content="{DynamicResource bankAccount}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Bank" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                        <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding AllBankAccounts}" SelectedItem="{Binding RentalObjectToDisplay.Account}">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding Iban}" FontSize="12" Margin="0,0,2,0"></TextBlock>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
+
+                            <!--BankAccount-->
+                            <materialDesign:Card Margin="5,5,5,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Width="350">
+                                        <Label Content="{DynamicResource bankAccount}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Bank" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                            <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding AllBankAccounts}" SelectedItem="{Binding RentalObjectToDisplay.Account}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding AccountName}" HorizontalAlignment="Left" FontSize="12" Margin="2,0,2,0"></TextBlock>
+                                                            <TextBlock Text="{Binding Iban}" HorizontalAlignment="Left" FontSize="9" Margin="0,0,2,0"></TextBlock>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <Label Content="{DynamicResource transactions}" Width="150" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                        <ToggleButton Style="{DynamicResource MaterialDesignHamburgerToggleButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5,5,5">
+                                            <materialDesign:PackIcon Kind="Delete">
+                                                <materialDesign:PackIcon.LayoutTransform>
+                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                                </materialDesign:PackIcon.LayoutTransform>
+                                            </materialDesign:PackIcon>
+                                        </ToggleButton>
                                     </StackPanel>
                                 </StackPanel>
+                            </materialDesign:Card>
+
+
+                            <!--RentalContract-->
+                            <materialDesign:Card Margin="5,5,5,5">
                                 <StackPanel>
-                                    <Label Content="{DynamicResource transactions}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                    <ToggleButton Style="{DynamicResource MaterialDesignHamburgerToggleButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5,5,5">
-                                        <materialDesign:PackIcon Kind="Delete">
-                                            <materialDesign:PackIcon.LayoutTransform>
-                                                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                                            </materialDesign:PackIcon.LayoutTransform>
-                                        </materialDesign:PackIcon>
-                                    </ToggleButton>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel Width="350">
+                                            <Label Content="{DynamicResource activeRentalContract}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Contract" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                <Label Content="{Binding RentalObjectToDisplay.ActiveRentalContract.IGID}" Width="150" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel>
+                                            <Label Content="{DynamicResource allRentalContracts}" Width="150" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                            <ToggleButton Style="{DynamicResource MaterialDesignHamburgerToggleButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,5,5,5">
+                                                <materialDesign:PackIcon Kind="Delete">
+                                                    <materialDesign:PackIcon.LayoutTransform>
+                                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                                    </materialDesign:PackIcon.LayoutTransform>
+                                                </materialDesign:PackIcon>
+                                            </ToggleButton>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <materialDesign:Card>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <materialDesign:Card HorizontalAlignment="Stretch">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel>
+                                                            <Label Content="{DynamicResource tenant}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <materialDesign:PackIcon Kind="Person" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                <Label Content="{Binding RentalObjectToDisplay.ActiveRentalContract.Tenant.FullName}" Width="150" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                        <StackPanel>
+                                                            <Label Content="{DynamicResource assignedEmployee}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <materialDesign:PackIcon Kind="Person" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                <Label Content="{Binding RentalObjectToDisplay.ActiveRentalContract.ResponsibleEmployee.FullName}" Width="150" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </materialDesign:Card>
+                                            </Expander.Header>
+                                            <StackPanel>
+                                                <!--Rent-->
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10">
+                                                        <Label Content="{DynamicResource baseRent}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalContentAlignment="Center"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label IsEnabled="False" Width="50" Content="{Binding RentalObjectToDisplay.ActiveRentalContract.BaseRent, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+                                                            <Label IsEnabled="False" Content="Fr.-" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Bottom"  HorizontalContentAlignment="Left"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10">
+                                                        <Label Content="{DynamicResource additionalCosts}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalContentAlignment="Center"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label IsEnabled="False" Width="50" Content="{Binding RentalObjectToDisplay.ActiveRentalContract.AdditionalCosts, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+                                                            <Label IsEnabled="False" Content="Fr.-" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Bottom"  HorizontalContentAlignment="Left"/>
+
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10">
+                                                        <Label Content="{DynamicResource rentTotal}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalContentAlignment="Center"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label IsEnabled="{Binding EditMode}" Width="50"  Content="{Binding RentalObjectToDisplay.ActiveRentalContract.RentTotal, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Right"/>
+                                                            <Label IsEnabled="{Binding EditMode}" Content="Fr.-" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Bottom"  HorizontalContentAlignment="Left"/>
+
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <!--Dates-->
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10">
+                                                        <Label Content="{DynamicResource startDate}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalContentAlignment="Center"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label IsEnabled="False" Width="80" Content="{Binding RentalObjectToDisplay.ActiveRentalContract.StartDate, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+
+                                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10">
+                                                        <Label Content="{DynamicResource annulationDate}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalContentAlignment="Center"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label IsEnabled="{Binding EditMode}" Width="80"  Content="{Binding RentalObjectToDisplay.ActiveRentalContract.EndDate, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <!--Rent status-->
+                                                <materialDesign:Card Margin="5,5,5,5">
+                                                    <StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <materialDesign:PackIcon Kind="Payment" VerticalAlignment="Center" Margin="5,5,5,5">
+                                                                <materialDesign:PackIcon.LayoutTransform>
+                                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2" ScaleY="2"/>
+                                                                </materialDesign:PackIcon.LayoutTransform>
+                                                            </materialDesign:PackIcon>
+                                                            <Label Content="{DynamicResource rentStatus}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                            <materialDesign:Card Margin="5,5,5,5">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <materialDesign:PackIcon Kind="Error" VerticalAlignment="Center" Foreground="OrangeRed">
+                                                                        <materialDesign:PackIcon.LayoutTransform>
+                                                                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2" ScaleY="2"/>
+                                                                        </materialDesign:PackIcon.LayoutTransform>
+                                                                        <materialDesign:PackIcon.Visibility>
+                                                                            <Binding Path="RentalObjectToDisplay.RentStatusNotOK">
+                                                                                <Binding.Converter>
+                                                                                    <BooleanToVisibilityConverter/>
+                                                                                </Binding.Converter>
+                                                                            </Binding>
+                                                                        </materialDesign:PackIcon.Visibility>
+                                                                    </materialDesign:PackIcon>
+                                                                    <materialDesign:PackIcon Kind="CheckCircle" VerticalAlignment="Center" Foreground="GreenYellow">
+                                                                        <materialDesign:PackIcon.LayoutTransform>
+                                                                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2" ScaleY="2"/>
+                                                                        </materialDesign:PackIcon.LayoutTransform>
+                                                                        <materialDesign:PackIcon.Visibility>
+                                                                            <Binding Path="RentalObjectToDisplay.RentStatusOK">
+                                                                                <Binding.Converter>
+                                                                                    <BooleanToVisibilityConverter/>
+                                                                                </Binding.Converter>
+                                                                            </Binding>
+                                                                        </materialDesign:PackIcon.Visibility>
+                                                                    </materialDesign:PackIcon>
+                                                                </StackPanel>
+                                                            </materialDesign:Card>
+                                                            <Label Content="{DynamicResource rentsDue}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                            <TextBox IsEnabled="False" Width="30" Text="{Binding RentalObjectToDisplay.RentsDue.Count, Mode=OneWay}" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                            <Label Content="{DynamicResource lastPayment}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                            <DatePicker IsEnabled="False" Width="70" SelectedDate="{Binding RentalObjectToDisplay.LastPayedRent.DateTimeOfTransaction}"/>
+                                                        </StackPanel>
+                                                       
+                                                    </StackPanel>
+                                                </materialDesign:Card>
+                                                <ListView ItemsSource="{Binding RentalObjectToDisplay.RentsDue}">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <materialDesign:Card>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <materialDesign:PackIcon Kind="DollarOff" Foreground="OrangeRed"/>
+                                                                <Label Content="{Binding}" VerticalAlignment="Center" Foreground="OrangeRed"/>
+                                                                <Label Content="{DynamicResource notPayed}"/>
+                                                            </StackPanel>
+                                                            </materialDesign:Card>
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                            </StackPanel>
+                                        </Expander>
+                                    </materialDesign:Card>
                                 </StackPanel>
-                            </StackPanel>
-                        </materialDesign:Card>
-                        <StackPanel Grid.Column="1">
+                            </materialDesign:Card>
+                            <StackPanel Grid.Column="1">
                             </StackPanel>
                         </StackPanel>
-                        
-                        <!--Buttons for editing, deleting the selected RealEstate, the visibility changes based on the current mode-->
+
+
+                        <!--Buttons for editing, deleting the RentalObjecte, the visibility changes based on the current mode-->
                         <StackPanel Grid.Column="1">
                             <Button Command="{Binding DeleteButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                                 <materialDesign:PackIcon Kind="Delete">
