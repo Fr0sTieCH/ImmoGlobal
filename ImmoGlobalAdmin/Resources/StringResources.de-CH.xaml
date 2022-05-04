@@ -46,8 +46,30 @@
     <system:String x:Key="estimatedRentTotal">Geschätzter Gesammtmietzins</system:String>
     <system:String x:Key="rentTotal">Gesammtmietzins</system:String>
     <system:String x:Key="startDate">Start Datum</system:String>
+    <system:String x:Key="endDate">End Datum</system:String>
     <system:String x:Key="annulationDate">Kündigungs Datum</system:String>
+    <system:String x:Key="contractState">Vertragsstatus</system:String>
+    <system:String x:Key="terminateContract">Kündigen</system:String>
+    <system:String x:Key="revertTermination">Kündigung zurückziehen</system:String>
 
 
+    <!--Rental Contract Document-->
+    <system:String x:Key="rentalContract">Mietvertrag</system:String>
+    <system:String x:Key="between">Zwischen</system:String>
+    <system:String x:Key="landlord">Vermieter</system:String>
+    <system:String x:Key="responsible">Verantwortlich</system:String>
+    <system:String x:Key="rentalObject">Mietobjekt</system:String>
+    <system:String x:Key="rooms:">Zimmer:</system:String>
+    <system:String x:Key="livingSpace:">Wohnfläche:</system:String>
+    <system:String x:Key="furnishing:">Ausstattung:</system:String>
+    <system:String x:Key="fridge">Kühlschrank</system:String>
+    <system:String x:Key="dishwasher">Abwaschmaschine</system:String>
+    <system:String x:Key="stove">Herd/Backofen</system:String>
+    <system:String x:Key="washingmachine">Waschmaschine</system:String>
+    <system:String x:Key="tumbler">Tumbler</system:String>
+    <system:String x:Key="contractDetails">Details</system:String>
+    <system:String x:Key="rentIsDueAtThe:">Der Mietzins muss jeweils bis zum:</system:String>
+    <system:String x:Key="ofTheMonth">Tag des Monats bezahlt werden</system:String>
+    <system:String x:Key="startOfTheContract">Start des Mietverhältnisses ist der</system:String>
 
 </ResourceDictionary> 

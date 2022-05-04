@@ -45,6 +45,33 @@
     <system:String x:Key="estimatedRentTotal">Estimatet rent total</system:String>
     <system:String x:Key="rentTotal">Rent total</system:String>
     <system:String x:Key="startDate">Start date</system:String>
+    <system:String x:Key="endDate">End date</system:String>
     <system:String x:Key="annulationDate">Annulation Date</system:String>
+    <system:String x:Key="contractState">Contract state</system:String>
+    <system:String x:Key="terminateContract">Terminate</system:String>
+    <system:String x:Key="revertTermination">Revert termination</system:String>
+
+
+
+    <!--Rental Contract Document-->
+    <system:String x:Key="rentalContract">Rental Contract</system:String>
+    <system:String x:Key="between">Between</system:String>
+    <system:String x:Key="landlord">Landlord</system:String>
+    <system:String x:Key="responsible">Responsible</system:String>
+    <system:String x:Key="rentalObject">Rental Object</system:String>
+    <system:String x:Key="rooms:">Rooms:</system:String>
+    <system:String x:Key="livingSpace:">Space:</system:String>
+    <system:String x:Key="furnishing:">Furnishing:</system:String>
+    <system:String x:Key="fridge">Fridge</system:String>
+    <system:String x:Key="dishwasher">Dishwasher</system:String>
+    <system:String x:Key="stove">Stove</system:String>
+    <system:String x:Key="washingmachine">Washingmachine</system:String>
+    <system:String x:Key="tumbler">Tumbler</system:String>
+    <system:String x:Key="contractDetails">Details</system:String>
+    <system:String x:Key="rentIsDueAtThe:">The rent is due at the:</system:String>
+    <system:String x:Key="ofTheMonth">Of the month</system:String>
+    <system:String x:Key="startOfTheContract">The contract starts on</system:String>
+
+    
 
 </ResourceDictionary> 

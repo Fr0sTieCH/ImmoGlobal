@@ -43,8 +43,10 @@
             </StackPanel>
         </materialDesign:DialogHost.DialogContent>
         <Grid>
-        <materialDesign:DialogHost IsOpen="{Binding ShowDialog,Mode=OneWay}">
+            <!--Dialog for showing rentalobjects and stuf--> 
+        <materialDesign:DialogHost IsOpen="{Binding ShowDialog,Mode=OneWay}" >
         <materialDesign:DialogHost.DialogContent>
+            
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>

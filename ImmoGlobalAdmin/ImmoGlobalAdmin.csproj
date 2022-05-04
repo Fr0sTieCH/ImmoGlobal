@@ -9,6 +9,13 @@
 
   <ItemGroup>
     <None Remove="ImmoGlobalLogo.png" />
+    <None Remove="Resources\Images\ImmoGlobalLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Images\ImmoGlobalLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

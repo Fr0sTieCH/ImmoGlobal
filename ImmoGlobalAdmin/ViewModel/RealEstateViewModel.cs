@@ -95,7 +95,7 @@ namespace ImmoGlobalAdmin.ViewModel
         }
 
 
-       
+
 
 
         #endregion
@@ -179,12 +179,12 @@ namespace ImmoGlobalAdmin.ViewModel
             DataAccessLayer.GetInstance.SaveChanges();
 
             base.DeleteAcceptButtonClicked(obj);
-            
+
             SelectedRealEstate = null;
             OnPropertyChanged(nameof(selectedRealEstate));
             OnPropertyChanged(nameof(AllRealEstates));
             MainViewModel.GetInstance.DeleteAcceptButtonClicked(obj);
-            
+
         }
 
         public override void DeleteCancelButtonClicked(object obj)
@@ -194,7 +194,7 @@ namespace ImmoGlobalAdmin.ViewModel
         }
         #endregion
 
-       
+
 
         public ICommand OpenRentalObjectButtonCommand
         {
@@ -206,8 +206,10 @@ namespace ImmoGlobalAdmin.ViewModel
 
         private void OpenRentalObjectButtonClicked(object obj)
         {
-            RentalObjectViewModel.GetInstance.RentalObjectToDisplay = (RentalObject)obj;
-            MainViewModel.GetInstance.DialogViewModel = RentalObjectViewModel.GetInstance;
+            if (selectedRealEstate != null) { 
+            RentalObjectViewModel rovm = new RentalObjectViewModel((RentalObject)obj,SelectedRealEstate);
+            MainViewModel.GetInstance.SelectedViewModel = rovm;
+            }
         }
 
 

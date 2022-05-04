@@ -31,6 +31,9 @@
             <DataTemplate DataType="{x:Type viewmodels:RentalObjectViewModel}">
                 <views:RentalObjectView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:RentalContractViewModel}">
+                <views:RentalContractView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:EFTestingViewModel}">
                 <views:EFTesting/>
             </DataTemplate>

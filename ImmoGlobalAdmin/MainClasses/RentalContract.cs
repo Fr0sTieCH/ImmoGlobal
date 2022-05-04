@@ -79,44 +79,51 @@ namespace ImmoGlobalAdmin.MainClasses
 
         #region PUBLIC SETTERS
         [NotMapped]
-        public double SetBaseRent
+        public double ChangeBaseRent
         {
+            get => BaseRent;
             set => BaseRent = Locked ? BaseRent : value;
         }
 
         [NotMapped]
-        public double SetAdditionalCosts
+        public double ChangeAdditionalCosts
         {
+            get => AdditionalCosts;
             set => AdditionalCosts = Locked ? AdditionalCosts : value;
         }
 
         [NotMapped]
-        public DateTime SetStartDate
+        public DateTime ChangeStartDate
         {
+            get => StartDate;
             set => StartDate = Locked ? StartDate : value;
         }
 
         [NotMapped]
-        public DateTime SetEndDate 
+        public DateTime? ChangeEndDate 
         { 
+            get => EndDate;
             set => EndDate = State == ContractState.RunningOut? value : EndDate; //only allowed to change while the contract is running out
         }
 
         [NotMapped]
-        public Person SetTenant
+        public Person? ChangeTenant
         {
+            get => Tenant;
             set => Tenant = Locked ? Tenant : value;
         }
 
         [NotMapped]
-        public Person SetResponsibleEmployee
+        public Person? ChangeResponsibleEmployee
         {
+            get => ResponsibleEmployee;
             set => ResponsibleEmployee = Locked ? ResponsibleEmployee : value;
         }
 
         [NotMapped]
-        public int SetRentDueDay
+        public int ChangeRentDueDay
         {
+            get => RentDueDay;
             set => RentDueDay = Locked ? RentDueDay : value;
         }
 
@@ -127,6 +134,12 @@ namespace ImmoGlobalAdmin.MainClasses
         public string IGID => RentalContractID.ToString("3000000000");
         [NotMapped]
         public double RentTotal => BaseRent + AdditionalCosts;
+        [NotMapped]
+        public bool IsCanceled => State > ContractState.Active;
+        [NotMapped]
+        public bool IsActive => State == ContractState.Active;
+        [NotMapped]
+        public bool IsNotLocked => State == ContractState.ValidationPending;
         #endregion
 
         /// <summary>

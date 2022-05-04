@@ -26,6 +26,7 @@ namespace ImmoGlobalAdmin.Model
             }
             //create new context object
             //make sure we always use the same context-object to be able to lazyload the objects
+            //this approach will be changed in the real application, as it uses a lot of memory
             db = new ImmoGlobalContext();
 
         }
@@ -52,6 +53,12 @@ namespace ImmoGlobalAdmin.Model
         public void SaveChanges()
         {
             db.SaveChanges();
+        }
+
+        public void DisposeContext()
+        {
+            //db.Dispose();
+            //db = new ImmoGlobalContext();
         }
         public void RestoreValuesFromDB(object entity)
         {

@@ -252,6 +252,7 @@ namespace ImmoGlobalAdmin.ViewModel
         /// </summary>
         private void OnActiveUserControlChanged()
         {
+            DisposeDB();
             OnPropertyChanged(nameof(RealEstateActive));
             OnPropertyChanged(nameof(FinanceActive));
             OnPropertyChanged(nameof(UserManagementActive));

@@ -137,7 +137,10 @@ namespace ImmoGlobalAdmin.ViewModel
         }
         #endregion
 
-
+        public void DisposeDB()
+        {
+            DataAccessLayer.GetInstance.DisposeContext();
+        }
         #endregion
     }
 }

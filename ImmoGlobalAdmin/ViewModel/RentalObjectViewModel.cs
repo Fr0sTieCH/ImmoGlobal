@@ -11,59 +11,70 @@ using System.Windows.Input;
 
 namespace ImmoGlobalAdmin.ViewModel
 {
-    internal class RentalObjectViewModel:BaseViewModel
+    internal class RentalObjectViewModel : BaseViewModel
     {
         private RentalObject rentalObjectToDisplay;
+        private RealEstate realEstateOfRentalObject;
+        private BaseViewModel secondaryViewModel;
 
-        #region Singleton
-        private static RentalObjectViewModel? instance = null;
-        private static readonly object padlock = new();
 
-        public RentalObjectViewModel()
+        public RentalObjectViewModel(RentalObject rentalObjectToDisplay, RealEstate realEstateOfRentalObject)
         {
+            this.RentalObjectToDisplay = rentalObjectToDisplay;
+            this.RealEstateOfRentalObject = realEstateOfRentalObject;
+
         }
 
-        /// <summary>
-        /// returns instance of class RentalObjectViewModel
-        /// </summary>
-        public static RentalObjectViewModel GetInstance
+        #region Binding Properties
+        public RentalObject RentalObjectToDisplay
         {
             get
             {
-                lock (padlock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new RentalObjectViewModel();
-                    }
-                    return instance;
-                }
-            }
-        }
-
-
-
-
-        #endregion
-
-        #region Binding Properties
-        public RentalObject RentalObjectToDisplay 
-        {
-            get 
-            { 
-                return rentalObjectToDisplay; 
+                return rentalObjectToDisplay;
             }
             set
             {
-                rentalObjectToDisplay = value; 
+                rentalObjectToDisplay = value;
                 OnPropertyChanged(nameof(RentalObjectToDisplay));
             }
         }
 
+        public RealEstate RealEstateOfRentalObject
+        {
+            get
+            {
+                return realEstateOfRentalObject;
+            }
+            set
+            {
+                realEstateOfRentalObject = value;
+                OnPropertyChanged(nameof(RealEstateOfRentalObject));
+            }
+        }
+
+        public BaseViewModel SecondaryViewModel
+        {
+            get
+            {
+                return secondaryViewModel;
+            }
+            set
+            {
+
+                secondaryViewModel = value;
+                OnPropertyChanged(nameof(SecondaryViewModel));
+            }
+        }
+
 
 
 
         #endregion
+
+        public void UpdateRentalObject()
+        {
+            OnPropertyChanged(nameof(RentalObjectToDisplay));
+        }
 
         #region Delete Dialog Buttons
         public override void DeleteButtonClicked(object obj)
@@ -86,7 +97,7 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             if (creationMode)
             {
-                
+
             }
             else
             {
@@ -114,6 +125,23 @@ namespace ImmoGlobalAdmin.ViewModel
             OnPropertyChanged(nameof(AllRealEstates));
             OnPropertyChanged(nameof(RentalObjectToDisplay));
 
+        }
+
+        public ICommand CloseViewCommand => new RelayCommand<object>(CloseViewClicked);
+
+        private void CloseViewClicked(object obj)
+        {
+            MainViewModel.GetInstance.SelectedViewModel = RealEstateViewModel.GetInstance;
+        }
+
+        public ICommand ShowRentalContractsViewCommand => new RelayCommand<object>(ShowRentalContractsViewClicked);
+
+
+
+        private void ShowRentalContractsViewClicked(object obj)
+        {
+            Debug.WriteLine("Opening Rental COntracts");
+            SecondaryViewModel = new RentalContractViewModel(rentalObjectToDisplay,realEstateOfRentalObject,this);
         }
         #endregion
     }
