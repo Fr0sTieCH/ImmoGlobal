@@ -142,7 +142,7 @@ namespace ImmoGlobalAdmin.Model
 
         public List<Person> GetEmployeesUnfiltered()
         {
-            return db.persons.Where(x => x.Enabled&&x.Type==PersonType.Employee).ToList();
+            return db.persons.Where(x => x.Enabled && x.Type == PersonType.Employee).ToList();
         }
 
         public List<Person> GetPrivatePersonsUnfiltered()
@@ -167,7 +167,7 @@ namespace ImmoGlobalAdmin.Model
 
         public List<Transaction> GetTransactionsByRentalObject(RentalObject rentalObject)
         {
-            return db.transactions.Where(x => x.Enabled && x.RentalObject!=null && x.RentalObject.RentalObjectID ==rentalObject.RentalObjectID).ToList();
+            return db.transactions.Where(x => x.Enabled && x.RentalObject != null && x.RentalObject.RentalObjectID == rentalObject.RentalObjectID).ToList();
         }
 
         #endregion

@@ -143,6 +143,13 @@
 
                     <!--#region BUTTONS FOR CREATING/DELETING A TRANSACTION-->
                     <StackPanel Grid.Column="1">
+                        <StackPanel.Visibility>
+                            <Binding Path="ButtonsEnabled">
+                                <Binding.Converter>
+                                    <BooleanToVisibilityConverter/>
+                                </Binding.Converter>
+                            </Binding>
+                        </StackPanel.Visibility>
 
                         <!--Delete Button-->
                         <Button Command="{Binding DeleteButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >

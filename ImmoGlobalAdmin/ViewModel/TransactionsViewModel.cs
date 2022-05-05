@@ -59,6 +59,7 @@ namespace ImmoGlobalAdmin.ViewModel
                 {
                     selectedTransaction = AllTransactions.FirstOrDefault();
                 }
+
                 return selectedTransaction;
             }
             set
@@ -129,13 +130,16 @@ namespace ImmoGlobalAdmin.ViewModel
                 OnPropertyChanged(nameof(AllTransactions));
             }
         }
+
+        public bool ButtonsEnabled => rentalObjectToFilterTransactions == null;
         #endregion
 
         #region Button Methods
         protected override void CancelEditButtonClicked(object obj)
         {
-            SelectedTransaction = null;
+            
             base.CancelEditButtonClicked(obj);
+            SelectedTransaction = null;
             OnPropertyChanged(nameof(SelectedTransaction));
             OnPropertyChanged(nameof(AllTransactions));
         }

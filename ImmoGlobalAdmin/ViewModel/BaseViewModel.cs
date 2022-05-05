@@ -13,6 +13,7 @@ using ImmoGlobalAdmin.MainClasses;
 using ImmoGlobalAdmin.View;
 using ImmoGlobalAdmin.Helpers;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace ImmoGlobalAdmin.ViewModel
 {
@@ -36,7 +37,7 @@ namespace ImmoGlobalAdmin.ViewModel
         public virtual List<Person> AllCompanies => DataAccessLayer.GetInstance.GetCompaniesUnfiltered();
         public virtual List<BankAccount> AllBankAccounts => DataAccessLayer.GetInstance.GetBankAccountsUnfiltered();
         public virtual List<RealEstate> AllRealEstates => DataAccessLayer.GetInstance.GetRealEstatesUnfiltered();
-        public virtual List<Transaction> AllTransactions => DataAccessLayer.GetInstance.GetTransactionsUnfiltered();
+        public virtual List<Transaction>  AllTransactions => DataAccessLayer.GetInstance.GetTransactionsUnfiltered();
 
         protected bool creationMode;
 
