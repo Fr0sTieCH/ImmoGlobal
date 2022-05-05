@@ -57,6 +57,24 @@
                 </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Command="{Binding TransactionsButtonCommand}" IsEnabled="{Binding TransactionsActive}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                        <materialDesign:PackIcon Kind="Payment">
+                            <materialDesign:PackIcon.LayoutTransform>
+                                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                            </materialDesign:PackIcon.LayoutTransform>
+                        </materialDesign:PackIcon>
+                    </Button>
+                    <Label Content="{DynamicResource transactions}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                    <StackPanel.Visibility>
+                        <Binding Path="FinanceEnabled">
+                            <Binding.Converter>
+                                <BooleanToVisibilityConverter/>
+                            </Binding.Converter>
+                        </Binding>
+                    </StackPanel.Visibility>
+                </StackPanel>
+
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Button Command="{Binding RealEstateButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" IsEnabled="{Binding RealEstateActive}">
                         <materialDesign:PackIcon Kind="City">
                             <materialDesign:PackIcon.LayoutTransform>

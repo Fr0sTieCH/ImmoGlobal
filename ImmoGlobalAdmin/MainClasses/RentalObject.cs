@@ -117,11 +117,25 @@ namespace ImmoGlobalAdmin.MainClasses
             {
                 this.Type = EnumTools.GetEnumFromDescriptionAttribute<RentalObjectType>(value);
             }
-        } 
- 
+        }
+
 
         [NotMapped]
-        public string IGID => RentalObjectID.ToString("2000000000");
+        public string IGID
+        {
+            get
+            {
+                if (this.Type == RentalObjectType.RealEstateBaseObject)
+                {
+                    return RentalObjectID.ToString("RE00000000");
+                }
+                else
+                {
+                    return RentalObjectID.ToString("OB00000000");
+                }
+            }
+        }
+
         [NotMapped]
         public double EstimatedRentTotal => EstimatedBaseRent + EstimatedAdditionalCosts;
 
@@ -132,7 +146,7 @@ namespace ImmoGlobalAdmin.MainClasses
         {
             get
             {
-                if (RentsDue.Count>1)
+                if (RentsDue.Count > 1)
                 {
                     return false;
                 }
@@ -157,11 +171,11 @@ namespace ImmoGlobalAdmin.MainClasses
                 }
                 else
                 {
-                    foreach(RentalContract rc in RentalContracts)
+                    foreach (RentalContract rc in RentalContracts)
                     {
                         rc.CheckState();
                     }
-                    return RentalContracts.FirstOrDefault(x => x.State == ContractState.Active);
+                    return RentalContracts.FirstOrDefault(x => x.State == ContractState.Active || x.State == ContractState.RunningOut);
                 }
             }
 
@@ -185,7 +199,7 @@ namespace ImmoGlobalAdmin.MainClasses
                     //loop throught every month since the active contract started
                     for (DateTime d = ActiveRentalContract.StartDate.Date; d.Date < DateTime.Now.AddMonths(1).Date; d = d.AddMonths(1))
                     {
-                        
+
                         tmp.Add(DateTime.Parse($"{ActiveRentalContract.RentDueDay},{d.Month},{d.Year}"));
                     }
 

@@ -140,8 +140,24 @@ namespace ImmoGlobalAdmin.ViewModel
 
         private void ShowRentalContractsViewClicked(object obj)
         {
-            Debug.WriteLine("Opening Rental COntracts");
-            SecondaryViewModel = new RentalContractViewModel(rentalObjectToDisplay,realEstateOfRentalObject,this);
+            if (secondaryViewModel !=null)
+            {
+                if (secondaryViewModel.GetType() != typeof(RentalContractViewModel))
+                {
+                    SecondaryViewModel = new RentalContractViewModel(rentalObjectToDisplay, realEstateOfRentalObject, this);
+                }
+                else
+                {
+                    SecondaryViewModel = null;
+                }
+            }
+            else
+            {
+                SecondaryViewModel = new RentalContractViewModel(rentalObjectToDisplay, realEstateOfRentalObject, this);
+            }
+
+           
+           
         }
         #endregion
     }

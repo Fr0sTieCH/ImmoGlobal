@@ -50,7 +50,7 @@ namespace ImmoGlobalAdmin.MainClasses
 
         #region PUBLIC GETTERS
         [NotMapped]
-        public string IGID => BaseObject.RentalObjectID.ToString("1000000000");
+        public string IGID => BaseObject.IGID;
 
         [NotMapped]
         public Person Owner => BaseObject.Owner;

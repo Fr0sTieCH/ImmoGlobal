@@ -50,6 +50,8 @@
     <system:String x:Key="contractState">Contract state</system:String>
     <system:String x:Key="terminateContract">Terminate</system:String>
     <system:String x:Key="revertTermination">Revert termination</system:String>
+    <system:String x:Key="validateContract">Validate contract</system:String>
+    <system:String x:Key="object">Object</system:String>
 
 
 
@@ -72,6 +74,9 @@
     <system:String x:Key="ofTheMonth">Of the month</system:String>
     <system:String x:Key="startOfTheContract">The contract starts on</system:String>
 
-    
+    <!--BankAccounts-->
+    <system:String x:Key="balance">Balance</system:String>
+    <system:String x:Key="iban">IBAN</system:String>
+
 
 </ResourceDictionary> 

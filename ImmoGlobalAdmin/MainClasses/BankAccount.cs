@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,17 +39,30 @@ namespace ImmoGlobalAdmin.MainClasses
         public BankAccount()
         {
         }
+
+        public BankAccount(bool enabled)
+        {
+            this.Enabled = enabled;
+            this.Transactions = new List<Transaction>();
+        }
         #endregion
 
-      
+        [NotMapped]
+        public string IGID => BankAccountID.ToString("BA00000000");
+
         /// <summary>
         /// Calculates the current balance based on all transactions associatet with this bankaccount
         /// </summary>
         /// <returns></returns>
         /// 
-        public double CurrentBalance()
+        [NotMapped]
+        public double CurrentBalance
         {
-            return this.Transactions.Where(x => x.Enabled).Sum(x =>  x.Value);
+            get
+            {
+                return this.Transactions.Where(x => x.Enabled).Sum(x => x.Value);
+            }
+            
         }
 
         public void AddTransaction(Transaction transaction)

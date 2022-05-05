@@ -32,6 +32,21 @@ namespace ImmoGlobalAdmin.MainClasses
             
         }
 
+        public RentalContract(RentalObject rentalObject,DateTime startDate)
+        {
+
+            this.ResponsibleEmployee = rentalObject.ResponsibleEmployee;
+            this.RentalObject = rentalObject;
+            this.BaseRent = rentalObject.EstimatedBaseRent;
+            this.AdditionalCosts = rentalObject.EstimatedAdditionalCosts;
+            this.StartDate = startDate;
+            this.RentDueDay = 1;
+            this.State = ContractState.ValidationPending;
+            this.Enabled = true;
+            this.Locked = false;
+
+        }
+
         /// <summary>
         /// New rental Contract
         /// </summary>
@@ -131,7 +146,7 @@ namespace ImmoGlobalAdmin.MainClasses
 
         #region PUBLIC GETTERS
         [NotMapped]
-        public string IGID => RentalContractID.ToString("3000000000");
+        public string IGID => RentalContractID.ToString("RC00000000");
         [NotMapped]
         public double RentTotal => BaseRent + AdditionalCosts;
         [NotMapped]

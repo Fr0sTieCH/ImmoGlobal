@@ -70,7 +70,7 @@
                             <Button IsEnabled="{Binding SelectedRentalContract.Locked}" Command="{Binding TerminateButtonCommand}" Content="{DynamicResource terminateContract}" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </materialDesign:Card>
-                    
+
                     <materialDesign:Card Margin="5,5,5,5">
                         <StackPanel Margin="5,5,5,5" VerticalAlignment="Center">
                             <StackPanel.Visibility>
@@ -81,6 +81,19 @@
                                 </Binding>
                             </StackPanel.Visibility>
                             <Button  Content="{DynamicResource revertTermination}" Command="{Binding RevertTerminationButtonCommand}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+
+                    <materialDesign:Card Margin="5,5,5,5">
+                        <StackPanel Margin="5,5,5,5" VerticalAlignment="Center">
+                            <StackPanel.Visibility>
+                                <Binding Path="AllowedToValidateSelectedContract">
+                                    <Binding.Converter>
+                                        <BooleanToVisibilityConverter/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </StackPanel.Visibility>
+                            <Button  Content="{DynamicResource validateContract}" Command="{Binding ValidateButtonCommand}" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </materialDesign:Card>
                 </StackPanel>
@@ -145,7 +158,7 @@
                         <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
                             <Label  Content="{DynamicResource tenant}" ContentStringFormat="*:" Foreground="Black" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="15" FontFamily="Arial Black"/>
                             <StackPanel>
-                                <ComboBox IsEnabled="{Binding EditMode}" ItemsSource="{Binding AllPersons}" SelectedItem="{Binding SelectedRentalContract.Tenant,Mode=OneWay}">
+                                <ComboBox IsEnabled="{Binding EditMode}" ItemsSource="{Binding AllPersons}" SelectedItem="{Binding SelectedRentalContract.ChangeTenant}">
                                     <ComboBox.Resources>
                                         <SolidColorBrush x:Key="MaterialDesignPaper" Color="Beige"/>
                                     </ComboBox.Resources>
@@ -273,80 +286,80 @@
             <!--Buttons for editing, deleting the selected RealEstate, the visibility changes based on the current mode-->
             <materialDesign:Card Grid.Column="1" Grid.Row="1" Width="150" HorizontalAlignment="Left">
                 <Grid>
-            <StackPanel Grid.Column="1" HorizontalAlignment="Left">
-                <Button Command="{Binding DeleteButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
-                    <materialDesign:PackIcon Kind="Delete">
-                        <materialDesign:PackIcon.LayoutTransform>
-                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                        </materialDesign:PackIcon.LayoutTransform>
-                    </materialDesign:PackIcon>
-                    <Button.Visibility>
-                        <Binding Path="EditModeInverted">
-                            <Binding.Converter>
-                                <BooleanToVisibilityConverter/>
-                            </Binding.Converter>
-                        </Binding>
-                    </Button.Visibility>
-                </Button>
-                <Button IsEnabled="{Binding SelectedRentalContract.IsNotLocked}" Command="{Binding EditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
-                    <materialDesign:PackIcon Kind="Edit">
-                        <materialDesign:PackIcon.LayoutTransform>
-                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                        </materialDesign:PackIcon.LayoutTransform>
-                    </materialDesign:PackIcon>
-                    <Button.Visibility>
-                        <Binding Path="EditModeInverted">
-                            <Binding.Converter>
-                                <BooleanToVisibilityConverter/>
-                            </Binding.Converter>
-                        </Binding>
-                    </Button.Visibility>
-                </Button>
-                <Button Command="{Binding CancelEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
-                    <materialDesign:PackIcon Kind="Cancel"  Foreground="Red">
-                        <materialDesign:PackIcon.LayoutTransform>
-                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                        </materialDesign:PackIcon.LayoutTransform>
-                    </materialDesign:PackIcon>
-                    <Button.Visibility>
-                        <Binding Path="EditMode">
-                            <Binding.Converter>
-                                <BooleanToVisibilityConverter/>
-                            </Binding.Converter>
-                        </Binding>
-                    </Button.Visibility>
-                </Button>
-                <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
-                    <materialDesign:PackIcon Kind="Check"  Foreground="GreenYellow">
-                        <materialDesign:PackIcon.LayoutTransform>
-                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
-                        </materialDesign:PackIcon.LayoutTransform>
-                    </materialDesign:PackIcon>
-                    <Button.Visibility>
-                        <Binding Path="EditMode">
-                            <Binding.Converter>
-                                <BooleanToVisibilityConverter/>
-                            </Binding.Converter>
-                        </Binding>
-                    </Button.Visibility>
-                </Button>
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Left">
+                        <Button IsEnabled="{Binding SelectedRentalContract.IsNotLocked}" Command="{Binding DeleteButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                            <materialDesign:PackIcon Kind="Delete">
+                                <materialDesign:PackIcon.LayoutTransform>
+                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                </materialDesign:PackIcon.LayoutTransform>
+                            </materialDesign:PackIcon>
+                            <Button.Visibility>
+                                <Binding Path="EditModeInverted">
+                                    <Binding.Converter>
+                                        <BooleanToVisibilityConverter/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.Visibility>
+                        </Button>
+                        <Button IsEnabled="{Binding SelectedRentalContract.IsNotLocked}" Command="{Binding EditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                            <materialDesign:PackIcon Kind="Edit">
+                                <materialDesign:PackIcon.LayoutTransform>
+                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                </materialDesign:PackIcon.LayoutTransform>
+                            </materialDesign:PackIcon>
+                            <Button.Visibility>
+                                <Binding Path="EditModeInverted">
+                                    <Binding.Converter>
+                                        <BooleanToVisibilityConverter/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.Visibility>
+                        </Button>
+                        <Button Command="{Binding CancelEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                            <materialDesign:PackIcon Kind="Cancel"  Foreground="Red">
+                                <materialDesign:PackIcon.LayoutTransform>
+                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                </materialDesign:PackIcon.LayoutTransform>
+                            </materialDesign:PackIcon>
+                            <Button.Visibility>
+                                <Binding Path="EditMode">
+                                    <Binding.Converter>
+                                        <BooleanToVisibilityConverter/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.Visibility>
+                        </Button>
+                        <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
+                            <materialDesign:PackIcon Kind="Check"  Foreground="GreenYellow">
+                                <materialDesign:PackIcon.LayoutTransform>
+                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                </materialDesign:PackIcon.LayoutTransform>
+                            </materialDesign:PackIcon>
+                            <Button.Visibility>
+                                <Binding Path="EditMode">
+                                    <Binding.Converter>
+                                        <BooleanToVisibilityConverter/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.Visibility>
+                        </Button>
 
-            </StackPanel>
-            <!--Button for creating a new RealEstate-->
-            <Button Command="{Binding CreateButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="25,0,0,50" >
-                <materialDesign:PackIcon Kind="AddBox">
-                    <materialDesign:PackIcon.LayoutTransform>
-                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
-                    </materialDesign:PackIcon.LayoutTransform>
-                </materialDesign:PackIcon>
-                <Button.Visibility>
-                    <Binding Path="EditModeInverted">
-                        <Binding.Converter>
-                            <BooleanToVisibilityConverter/>
-                        </Binding.Converter>
-                    </Binding>
-                </Button.Visibility>
-            </Button>
+                    </StackPanel>
+                    <!--Button for creating a new RealEstate-->
+                    <Button Command="{Binding CreateButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="25,0,0,50" >
+                        <materialDesign:PackIcon Kind="AddBox">
+                            <materialDesign:PackIcon.LayoutTransform>
+                                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
+                            </materialDesign:PackIcon.LayoutTransform>
+                        </materialDesign:PackIcon>
+                        <Button.Visibility>
+                            <Binding Path="EditModeInverted">
+                                <Binding.Converter>
+                                    <BooleanToVisibilityConverter/>
+                                </Binding.Converter>
+                            </Binding>
+                        </Button.Visibility>
+                    </Button>
                 </Grid>
             </materialDesign:Card>
         </Grid>

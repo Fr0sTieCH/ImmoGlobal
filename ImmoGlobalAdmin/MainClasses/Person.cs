@@ -28,7 +28,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public string ReasonForDeleting { get; private set; } = "";
 
         [NotMapped]
-        public string IGID => PersonID.ToString("0000000000");
+        public string IGID => PersonID.ToString("PE00000000");
 
         [NotMapped]
         public string FullName => $"{Name} {Prename}";

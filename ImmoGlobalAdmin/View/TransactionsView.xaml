@@ -1,0 +1,188 @@
+﻿<UserControl x:Class="ImmoGlobalAdmin.View.TransactionsView"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ImmoGlobalAdmin.View"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewHelpers="clr-namespace:ImmoGlobalAdmin.Helpers"
+             xmlns:viewmodels ="clr-namespace:ImmoGlobalAdmin.ViewModel"
+             xmlns:Mainclasses ="clr-namespace:ImmoGlobalAdmin.MainClasses"
+             d:DataContext="{d:DesignInstance Type=viewmodels:TransactionsViewModel}"
+             mc:Ignorable="d" 
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+            TextElement.FontSize="13"
+            TextOptions.TextFormattingMode="Ideal" 
+            TextOptions.TextRenderingMode="Auto"        
+            Background="{DynamicResource MaterialDesignDarkBackground}"
+               FontFamily="{DynamicResource MaterialDesignFont}"
+             d:DesignHeight="800" d:DesignWidth="800">
+    <Grid Margin="0,0,0,-146">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="125" MinHeight="125"/>
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+        <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding AllTransactions}" SelectedItem="{Binding SelectedTransaction}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="5,5,5,5">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding IGID}" FontWeight="Bold" />
+                <DataGridTextColumn Header="{DynamicResource object}" Binding="{Binding RentalObject.IGID,Mode=OneWay}" FontWeight="Bold" />
+                <DataGridTextColumn Header="{DynamicResource date}" Binding="{Binding DateTimeOfTransaction,Mode=OneWay}"/>
+                <DataGridTextColumn Header="{DynamicResource value}" Binding="{Binding Value,Mode=OneWay}" />
+                <DataGridTextColumn Header="{DynamicResource bankAccount}" Binding="{Binding BankAccount.AccountName,Mode=OneWay}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <GridSplitter Grid.Row="0" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" MinWidth="500" Width="500" Margin="5,5,5,5">
+            <StackPanel >
+
+                <!--#region CARD OF TRANSACTION-->
+                <materialDesign:Card  >
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="380"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="ID" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Label IsEnabled="False" Width="150" Content="{Binding SelectedTransaction.IGID, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource type}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox IsEnabled="{Binding EditMode}" Width="150" ItemsSource="{Binding TransactionTypes}" SelectedItem="{Binding SelectedTransaction.SetType}" HorizontalAlignment="Left">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource realEstate}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox IsEnabled="{Binding EditMode}" Width="150" ItemsSource="{Binding AllRealEstates}" SelectedItem="{Binding RealEstateToSelectObjects}" HorizontalAlignment="Left">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding RealEstateName}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource object}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox IsEnabled="{Binding EditMode}" Width="150" ItemsSource="{Binding ObjectsToSelect}" SelectionChanged=" " SelectedItem="{Binding SelectedTransaction.SetRentalObject}" HorizontalAlignment="Left">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding RentalObjectName}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource bankAccount}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox IsEnabled="{Binding EditMode}" Width="150" ItemsSource="{Binding AllBankAccounts}" SelectedItem="{Binding SelectedTransaction.SetBankAccount}" HorizontalAlignment="Left">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding AccountName}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource creditorDebitor}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox IsEnabled="{Binding EditMode}" Width="150" ItemsSource="{Binding AllPersons}" SelectedItem="{Binding SelectedTransaction.SetAssociatedPerson}" HorizontalAlignment="Left">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding FullName}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                                <TextBlock Text="{Binding Adress}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource value}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBox IsEnabled="{Binding EditMode}" viewHelpers:TextBoxHelper.OnlyNumeric="Double" viewHelpers:TextBoxHelper.DefaultValue="0"  Width="150" Text="{Binding SelectedTransaction.SetValue}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource dateOfTransaction}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <DatePicker IsEnabled="{Binding EditMode}" Width="150" SelectedDate="{Binding SelectedTransaction.SetDateTimeOfTransaction}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource note}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" TextWrapping="Wrap" AcceptsReturn="True" IsEnabled="{Binding EditMode}" MinHeight="100" Height="auto" Width="350" Text="{Binding SelectedTransaction.SetNote}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+
+                        </StackPanel>
+                        <!--Buttons for editing, deleting the selected person, the visibility changes based on the current mode-->
+                        <StackPanel Grid.Column="1">
+                            <Button Command="{Binding DeleteButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
+                                <materialDesign:PackIcon Kind="Delete">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                                <Button.Visibility>
+                                    <Binding Path="EditModeInverted">
+                                        <Binding.Converter>
+                                            <BooleanToVisibilityConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Button.Visibility>
+                            </Button>
+                            <Button Command="{Binding CancelEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                                <materialDesign:PackIcon Kind="Cancel"  Foreground="Red">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                                <Button.Visibility>
+                                    <Binding Path="EditMode">
+                                        <Binding.Converter>
+                                            <BooleanToVisibilityConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Button.Visibility>
+                            </Button>
+                            <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
+                                <materialDesign:PackIcon Kind="Check"  Foreground="GreenYellow">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                                <Button.Visibility>
+                                    <Binding Path="EditMode">
+                                        <Binding.Converter>
+                                            <BooleanToVisibilityConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Button.Visibility>
+                            </Button>
+                        </StackPanel>
+                        <Button Grid.Column="1" Command="{Binding CreateButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,50,0,10">
+                            <materialDesign:PackIcon Kind="Add">
+                                <materialDesign:PackIcon.LayoutTransform>
+                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
+                                </materialDesign:PackIcon.LayoutTransform>
+                            </materialDesign:PackIcon>
+                            <Button.Visibility>
+                                <Binding Path="EditModeInverted">
+                                    <Binding.Converter>
+                                        <BooleanToVisibilityConverter/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.Visibility>
+                        </Button>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!--#endregion-->
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>

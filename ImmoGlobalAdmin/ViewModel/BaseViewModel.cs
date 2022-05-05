@@ -34,6 +34,7 @@ namespace ImmoGlobalAdmin.ViewModel
         public virtual List<Person> AllCompanies => DataAccessLayer.GetInstance.GetCompaniesUnfiltered();
         public virtual List<BankAccount> AllBankAccounts => DataAccessLayer.GetInstance.GetBankAccountsUnfiltered();
         public virtual List<RealEstate> AllRealEstates => DataAccessLayer.GetInstance.GetRealEstatesUnfiltered();
+        public virtual List<Transaction> AllTransactions => DataAccessLayer.GetInstance.GetTransactionsUnfiltered();
 
         protected bool creationMode;
 
@@ -43,6 +44,15 @@ namespace ImmoGlobalAdmin.ViewModel
             { 
                 //gets the descriptions of the enumvalues of RentalObjectType and returns them as an string[] (Excluding RentalObjectType.RealEstateBaseObject)
                return ((int[])Enum.GetValues(typeof(RentalObjectType))).Where(x => x!=0).Select(x => EnumTools.GetDescription((RentalObjectType)x)).ToArray();
+            }
+        }
+
+        public string[] TransactionTypes
+        {
+            get
+            {
+                //gets the enumnames of TransactionType
+                return (Enum.GetNames(typeof(TransactionType)));
             }
         }
 

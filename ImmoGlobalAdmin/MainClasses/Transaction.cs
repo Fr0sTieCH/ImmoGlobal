@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,18 +11,23 @@ namespace ImmoGlobalAdmin.MainClasses
     public class Transaction
     {
         public int TransactionID { get; private set; }
-        public virtual RentalObject RentalObject { get; private set; }
-        public DateTime DateTimeOfTransaction { get; private set; }
+        public virtual RentalObject? RentalObject { get; private set; }
+        public virtual BankAccount? BankAccount { get; private set; }
+        public DateTime? DateTimeOfTransaction { get; private set; }
         public double Value { get; private set; }
-        public TransactionType Type { get; private set; }
+        public TransactionType? Type { get; private set; }
         public virtual Person? AssociatedPerson { get; private set; }
-        public string Note { get; set; }
-
+        public string Note { get; set; } = "";
+        public bool Locked { get; set; }
         public bool Enabled { get; private set; }
         public string ReasonForDeleting { get; private set; } = "";
 
         public Transaction()
         {
+        }
+        public Transaction(bool enabled)
+        {
+            this.Enabled = enabled;
         }
 
         #region CONSTRUCTORS
@@ -72,6 +78,60 @@ namespace ImmoGlobalAdmin.MainClasses
         }
 
         #endregion
+
+        [NotMapped]
+        public string IGID => TransactionID.ToString("TR00000000");
+
+        #region PUBLIC SETTERS
+        [NotMapped]
+        public RentalObject? SetRentalObject 
+        {
+            get => RentalObject;
+            set => RentalObject = Locked ? RentalObject : value;
+        }
+        [NotMapped]
+        public BankAccount? SetBankAccount
+        {
+            get => BankAccount;
+            set => BankAccount = Locked ? BankAccount : value;
+        }
+        [NotMapped]
+        public DateTime? SetDateTimeOfTransaction
+        {
+            get => DateTimeOfTransaction;
+            set => DateTimeOfTransaction = Locked ? DateTimeOfTransaction : value;
+        }
+        [NotMapped]
+        public double SetValue
+        {
+            get => Value;
+            set => Value = Locked? Value:value;
+        }
+        [NotMapped]
+        public TransactionType? SetType
+        {
+            get => Type;
+            set => Type = Locked? Type: value;
+        }
+        [NotMapped]
+        public Person? SetAssociatedPerson
+        {
+            get => AssociatedPerson;
+            set => AssociatedPerson = Locked ? AssociatedPerson : value;
+        }
+        [NotMapped]
+        public string SetNote
+        {
+            get => Note;
+            set => Note = Locked ? Note : value;
+        }
+
+        #endregion
+
+        public void Lock()
+        {
+            Locked = true;
+        }
 
         public void Delete(string reason)
         {

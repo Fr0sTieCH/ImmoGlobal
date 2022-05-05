@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ImmoGlobalAdmin.View"
              xmlns:viewmodels ="clr-namespace:ImmoGlobalAdmin.ViewModel"
+               xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DataContext="{d:DesignInstance Type=viewmodels:FinanceViewModel}"
              mc:Ignorable="d" 
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -16,6 +17,128 @@
                FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="125" MinHeight="125"/>
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+        <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding AllBankAccounts}" SelectedItem="{Binding SelectedBankAccount}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="5,5,5,5">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding IGID}" FontWeight="Bold" />
+                <DataGridTextColumn Header="{DynamicResource name}" Binding="{Binding AccountName}" FontWeight="Bold" />
+                <DataGridTextColumn Header="{DynamicResource iban}" Binding="{Binding Iban}"/>
+                <DataGridTextColumn Header="{DynamicResource balance}" Binding="{Binding CurrentBalance}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <GridSplitter Grid.Row="0" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" MinWidth="500" Width="500" Margin="5,5,5,5">
+            <StackPanel >
+                <!--Card of the selected Person, textboxes get enabled when the EditMode-bool in the Viewmodel is set to true-->
+                <materialDesign:Card  >
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="380"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                    <Label Content="ID" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Label IsEnabled="False" Width="100" Content="{Binding SelectedBankAccount.IGID, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource name}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedBankAccount.AccountName}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource iban}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedBankAccount.Iban}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource balance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Label IsEnabled="False" Width="100" Content="{Binding SelectedBankAccount.CurrentBalance,Mode=OneWay}" ContentStringFormat="0 CHF" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        
+                       
+                        </StackPanel>
+                        <!--Buttons for editing, deleting the selected person, the visibility changes based on the current mode-->
+                        <StackPanel Grid.Column="1">
+                            <Button Command="{Binding DeleteButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
+                                <materialDesign:PackIcon Kind="Delete">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                                <Button.Visibility>
+                                    <Binding Path="EditModeInverted">
+                                        <Binding.Converter>
+                                            <BooleanToVisibilityConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Button.Visibility>
+                            </Button>
+                            <Button Command="{Binding EditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                                <materialDesign:PackIcon Kind="Edit">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                                <Button.Visibility>
+                                    <Binding Path="EditModeInverted">
+                                        <Binding.Converter>
+                                            <BooleanToVisibilityConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Button.Visibility>
+                            </Button>
+                            <Button Command="{Binding CancelEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
+                                <materialDesign:PackIcon Kind="Cancel"  Foreground="Red">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                                <Button.Visibility>
+                                    <Binding Path="EditMode">
+                                        <Binding.Converter>
+                                            <BooleanToVisibilityConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Button.Visibility>
+                            </Button>
+                            <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
+                                <materialDesign:PackIcon Kind="Check"  Foreground="GreenYellow">
+                                    <materialDesign:PackIcon.LayoutTransform>
+                                        <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2.5" ScaleY="2.5"/>
+                                    </materialDesign:PackIcon.LayoutTransform>
+                                </materialDesign:PackIcon>
+                                <Button.Visibility>
+                                    <Binding Path="EditMode">
+                                        <Binding.Converter>
+                                            <BooleanToVisibilityConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Button.Visibility>
+                            </Button>
+                        </StackPanel>
+                        <Button Grid.Column="1" Command="{Binding CreateButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,50,0,10">
+                            <materialDesign:PackIcon Kind="BankAdd">
+                                <materialDesign:PackIcon.LayoutTransform>
+                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="3" ScaleY="3"/>
+                                </materialDesign:PackIcon.LayoutTransform>
+                            </materialDesign:PackIcon>
+                            <Button.Visibility>
+                                <Binding Path="EditModeInverted">
+                                    <Binding.Converter>
+                                        <BooleanToVisibilityConverter/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.Visibility>
+                        </Button>
+                    </Grid>
+                </materialDesign:Card>
+                <!--Button for creating a new Person-->
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </UserControl>

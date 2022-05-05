@@ -66,6 +66,7 @@ namespace ImmoGlobalAdmin.ViewModel
             }
 
         }
+      
         public bool RealEstateEnabled
         {
             get
@@ -142,6 +143,7 @@ namespace ImmoGlobalAdmin.ViewModel
         //booleans for highlightin the current view
         public bool RealEstateActive => !( MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(RealEstateViewModel));
         public bool FinanceActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(FinanceViewModel));
+        public bool TransactionsActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(TransactionsViewModel));
         public bool UserManagementActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(UserManagementViewModel));
         public bool PersonActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(PersonViewModel));
         public bool SettingsActive => !(MainViewModel.GetInstance.SelectedViewModel.GetType() == typeof(SettingsViewModel));
@@ -177,6 +179,22 @@ namespace ImmoGlobalAdmin.ViewModel
         {
 
             MainViewModel.GetInstance.SelectedViewModel = FinanceViewModel.GetInstance;
+            OnActiveUserControlChanged();
+
+        }
+
+        public ICommand TransactionsButtonCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(TransactionsButtonClicked);
+            }
+        }
+
+        private void TransactionsButtonClicked(object obj)
+        {
+
+            MainViewModel.GetInstance.SelectedViewModel = new TransactionsViewModel();
             OnActiveUserControlChanged();
 
         }
@@ -255,6 +273,7 @@ namespace ImmoGlobalAdmin.ViewModel
             DisposeDB();
             OnPropertyChanged(nameof(RealEstateActive));
             OnPropertyChanged(nameof(FinanceActive));
+            OnPropertyChanged(nameof(TransactionsActive));
             OnPropertyChanged(nameof(UserManagementActive));
             OnPropertyChanged(nameof(PersonActive));
             OnPropertyChanged(nameof(SettingsActive));

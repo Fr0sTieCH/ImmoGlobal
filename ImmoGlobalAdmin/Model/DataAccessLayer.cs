@@ -159,7 +159,12 @@ namespace ImmoGlobalAdmin.Model
         {
             return db.bankAccounts.Where(x => x.Enabled).ToList();
         }
-    
+
+        public List<Transaction> GetTransactionsUnfiltered()
+        {
+            return db.transactions.Where(x => x.Enabled).ToList();
+        }
+        
         #endregion
 
 
