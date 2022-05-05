@@ -52,7 +52,7 @@ namespace ImmoGlobalAdmin.ViewModel
             }
         }
 
-        public BaseViewModel SecondaryViewModel
+        public BaseViewModel? SecondaryViewModel
         {
             get
             {
@@ -135,9 +135,6 @@ namespace ImmoGlobalAdmin.ViewModel
         }
 
         public ICommand ShowRentalContractsViewCommand => new RelayCommand<object>(ShowRentalContractsViewClicked);
-
-
-
         private void ShowRentalContractsViewClicked(object obj)
         {
             if (secondaryViewModel !=null)
@@ -156,8 +153,27 @@ namespace ImmoGlobalAdmin.ViewModel
                 SecondaryViewModel = new RentalContractViewModel(rentalObjectToDisplay, realEstateOfRentalObject, this);
             }
 
-           
-           
+        }
+
+        public ICommand ShowTransactionsViewCommand => new RelayCommand<object>(ShowTransactionsViewClicked);
+        private void ShowTransactionsViewClicked(object obj)
+        {
+            if (secondaryViewModel != null)
+            {
+                if (secondaryViewModel.GetType() != typeof(TransactionsViewModel))
+                {
+                    SecondaryViewModel = new TransactionsViewModel(rentalObjectToDisplay);
+                }
+                else
+                {
+                    SecondaryViewModel = null;
+                }
+            }
+            else
+            {
+                SecondaryViewModel = new TransactionsViewModel(rentalObjectToDisplay); 
+            }
+
         }
         #endregion
     }

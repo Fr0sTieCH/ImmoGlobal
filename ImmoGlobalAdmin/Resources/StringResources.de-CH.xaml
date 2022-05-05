@@ -53,6 +53,10 @@
     <system:String x:Key="revertTermination">Kündigung zurückziehen</system:String>
     <system:String x:Key="validateContract">Vertrag Validieren</system:String>
     <system:String x:Key="object">Objekt</system:String>
+    <system:String x:Key="realEstateSingular">Liegenschaft</system:String>
+    <system:String x:Key="creditorDebitor">Kreditor / Debitor</system:String>
+    <system:String x:Key="value">Betrag in CHF</system:String>
+    <system:String x:Key="dateOfTransaction">Zeitpunkt der Transaktion</system:String>
 
 
 

@@ -389,7 +389,7 @@
                                                                     <Label Content="{DynamicResource rentsDue}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
                                                                     <TextBox IsEnabled="False" Width="30" Text="{Binding RentsDue.Count, Mode=OneWay}" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
                                                                     <Label Content="{DynamicResource lastPayment}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                                                    <DatePicker IsEnabled="False" Width="70" SelectedDate="{Binding LastPayedRent.DateTimeOfTransaction}"/>
+                                                                    <DatePicker IsEnabled="False" Width="70" SelectedDate="{Binding LastPayedRent.DateTimeOfTransaction, Mode=OneWay}"/>
                                                                 </StackPanel>
                                                             </StackPanel>
                                                         </materialDesign:Card>

@@ -26,6 +26,8 @@ namespace ImmoGlobalAdmin.ViewModel
         protected bool editMode = false;
         public bool EditMode => editMode;
         public bool EditModeInverted => !editMode;
+        public bool CreationMode => creationMode;
+        public bool CreationModeInverted => !creationMode;
 
 
         public virtual List<Person> AllPersons => DataAccessLayer.GetInstance.GetPersonsUnfiltered();

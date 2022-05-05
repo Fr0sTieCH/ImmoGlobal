@@ -11,30 +11,45 @@ namespace ImmoGlobalAdmin.ViewModel
 {
     internal class TransactionsViewModel : BaseViewModel, IHasSearchableContent
     {
+
         private string searchString = "";
         private Transaction? selectedTransaction;
-        private RealEstate? realEstateToSelectObjects;
+        private RealEstate? realEstateToSelectObjects;//used for choosing a rentalObject on creation
+        private RentalObject? rentalObjectToFilterTransactions = null;
 
-
-
+        #region constructors
+        public TransactionsViewModel() { }
+        public TransactionsViewModel(RentalObject rentalObjectToFilterTransactions)
+        {
+            this.rentalObjectToFilterTransactions = rentalObjectToFilterTransactions;
+        }
+        #endregion
 
         #region Binding Properties
         public override List<Transaction> AllTransactions
         {
             get
             {
-                if (searchString == "" || searchString == null)
+                if (rentalObjectToFilterTransactions == null)//if not null, get only Transactions of the specified rental object
                 {
-                    return DataAccessLayer.GetInstance.GetTransactionsUnfiltered();
+                    if (searchString == "" || searchString == null)
+                    {
+                        return DataAccessLayer.GetInstance.GetTransactionsUnfiltered();
+                    }
+                    else
+                    {
+                        //make changes to the search logic here...
+                        return DataAccessLayer.GetInstance.GetTransactionsUnfiltered().Where(x => x.IGID.ToLower().StartsWith(SearchString.ToLower())).ToList();
+                    }
                 }
                 else
                 {
-                    //make changes to the search logic here...
-                    return DataAccessLayer.GetInstance.GetTransactionsUnfiltered().Where(x => x.IGID.ToLower().StartsWith(SearchString.ToLower())).ToList();
+                        return DataAccessLayer.GetInstance.GetTransactionsByRentalObject(rentalObjectToFilterTransactions); 
                 }
 
             }
         }
+
 
         public Transaction? SelectedTransaction
         {
@@ -53,6 +68,8 @@ namespace ImmoGlobalAdmin.ViewModel
                     return;
                 }
                 selectedTransaction = value;
+                RealEstateToSelectObjects = GetRealEstateFromTransaction(value);
+                OnPropertyChanged(nameof(RealEstateToSelectObjects));
                 OnPropertyChanged(nameof(SelectedTransaction));
             }
         }
@@ -68,13 +85,12 @@ namespace ImmoGlobalAdmin.ViewModel
                 return realEstateToSelectObjects;
             }
             set
-            { 
+            {
                 realEstateToSelectObjects = value;
                 OnPropertyChanged(nameof(RealEstateToSelectObjects));
                 OnPropertyChanged(nameof(ObjectsToSelect));
             }
         }
-
 
 
         public List<RentalObject> ObjectsToSelect
@@ -87,15 +103,22 @@ namespace ImmoGlobalAdmin.ViewModel
                 }
                 else
                 {
-                    List<RentalObject> list = realEstateToSelectObjects.RentalObjects.ToList();
-                    list.Add(realEstateToSelectObjects.BaseObject);
+                    List<RentalObject> list;
+
+                    if (RealEstateToSelectObjects.RentalObjects != null)
+                    {
+                        list = RealEstateToSelectObjects.RentalObjects.ToList();
+                    }
+                    else
+                    {
+                        list = new List<RentalObject>();
+                    }
+
+                    list.Insert(0,realEstateToSelectObjects.BaseObject);
                     return list;
                 }
             }
         }
-
-
-        #endregion
 
         public string SearchString
         {
@@ -103,41 +126,33 @@ namespace ImmoGlobalAdmin.ViewModel
             set
             {
                 searchString = value;
-                OnPropertyChanged(nameof(AllBankAccounts));
+                OnPropertyChanged(nameof(AllTransactions));
             }
         }
+        #endregion
 
-        public void SearchContent(string searchString)
-        {
-            SearchString = searchString;
-        }
-
-
-        #region Buttons
-
+        #region Button Methods
         protected override void CancelEditButtonClicked(object obj)
         {
-
             SelectedTransaction = null;
-
             base.CancelEditButtonClicked(obj);
-
             OnPropertyChanged(nameof(SelectedTransaction));
             OnPropertyChanged(nameof(AllTransactions));
         }
 
-
         protected override void SaveEditButtonClicked(object obj)
         {
-            SelectedTransaction.Lock();
-            DataAccessLayer.GetInstance.StoreNewTransaction(SelectedTransaction);
-            SelectedTransaction = null;
-            realEstateToSelectObjects = null;
+            if (SelectedTransaction != null)
+            {
+                SelectedTransaction.Lock();
+                DataAccessLayer.GetInstance.StoreNewTransaction(SelectedTransaction);
+                SelectedTransaction = null;
+                realEstateToSelectObjects = null;
+            }
 
             base.SaveEditButtonClicked(obj);
             OnPropertyChanged(nameof(SelectedTransaction));
             OnPropertyChanged(nameof(AllTransactions));
-
         }
 
         protected override void CreateButtonClicked(object obj)
@@ -147,9 +162,7 @@ namespace ImmoGlobalAdmin.ViewModel
             base.CreateButtonClicked(obj);
         }
 
-        #endregion
-
-        #region Delete Dialog Button Overrides
+        #region Delete Dialog Button Methods
         public override void DeleteButtonClicked(object obj)
         {
             MainViewModel.GetInstance.DeleteButtonClicked(obj);
@@ -158,12 +171,15 @@ namespace ImmoGlobalAdmin.ViewModel
 
         public override void DeleteAcceptButtonClicked(object obj)
         {
-            SelectedTransaction.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this Transaction on {DateTime.Now} with reason: ({(string)obj})");
-            DataAccessLayer.GetInstance.SaveChanges();
+            if (SelectedTransaction != null)
+            {
+                SelectedTransaction.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this Transaction on {DateTime.Now} with reason: ({(string)obj})");
+                DataAccessLayer.GetInstance.SaveChanges();
 
-            base.DeleteAcceptButtonClicked(obj);
+                base.DeleteAcceptButtonClicked(obj);
 
-            SelectedTransaction = null;
+                SelectedTransaction = null;
+            }
             OnPropertyChanged(nameof(SelectedTransaction));
             OnPropertyChanged(nameof(AllTransactions));
             MainViewModel.GetInstance.DeleteAcceptButtonClicked(obj);
@@ -176,6 +192,33 @@ namespace ImmoGlobalAdmin.ViewModel
             base.DeleteCancelButtonClicked(obj);
         }
         #endregion
+
+        #endregion
+
+        public void SearchContent(string searchString)
+        {
+            SearchString = searchString;
+        }
+
+        /// <summary>
+        /// Returns the RealEstate wich contains the RentalObject of a given Transaction
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
+        public RealEstate? GetRealEstateFromTransaction(Transaction? transaction)
+        {
+            if (transaction == null) return null;
+            if (transaction.RentalObject == null) return null;
+
+            if (transaction.RentalObject.Type == RentalObjectType.RealEstateBaseObject)
+            {
+                return AllRealEstates.FirstOrDefault(x => x.BaseObject != null && x.BaseObject.RentalObjectID == transaction.RentalObject.RentalObjectID);
+            }
+            else
+            {
+                return AllRealEstates.FirstOrDefault(x => x.RentalObjects != null && x.RentalObjects.FirstOrDefault(y => y.RentalObjectID == transaction.RentalObject.RentalObjectID) != null);
+            }
+        }
 
     }
 }

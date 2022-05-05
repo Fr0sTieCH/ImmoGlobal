@@ -164,7 +164,12 @@ namespace ImmoGlobalAdmin.Model
         {
             return db.transactions.Where(x => x.Enabled).ToList();
         }
-        
+
+        public List<Transaction> GetTransactionsByRentalObject(RentalObject rentalObject)
+        {
+            return db.transactions.Where(x => x.Enabled && x.RentalObject!=null && x.RentalObject.RentalObjectID ==rentalObject.RentalObjectID).ToList();
+        }
+
         #endregion
 
 

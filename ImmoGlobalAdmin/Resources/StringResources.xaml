@@ -52,6 +52,11 @@
     <system:String x:Key="revertTermination">Revert termination</system:String>
     <system:String x:Key="validateContract">Validate contract</system:String>
     <system:String x:Key="object">Object</system:String>
+    <system:String x:Key="realEstateSingular">Real estate</system:String>
+    <system:String x:Key="creditorDebitor">Creditor / Debitor</system:String>
+    <system:String x:Key="value">Value in CHF</system:String>
+    <system:String x:Key="dateOfTransaction">Date of transaction</system:String>
+    
 
 
 
