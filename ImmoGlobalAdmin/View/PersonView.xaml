@@ -21,8 +21,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="125" MinHeight="125"/>
             <RowDefinition Height="*"/>
-
         </Grid.RowDefinitions>
+        <!--#region Datagrid of all persons-->
         <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding AllPersons}" SelectedItem="{Binding SelectedPerson}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="5,5,5,5">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding IGID}" FontWeight="Bold" />
@@ -32,18 +32,23 @@
                 <DataGridTextColumn Header="{DynamicResource address}" Binding="{Binding Adress}" />
             </DataGrid.Columns>
         </DataGrid>
+        <!--#endregion-->
+        
         <GridSplitter Grid.Row="0" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
 
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" MinWidth="500" Width="500" Margin="5,5,5,5">
             <StackPanel >
-                <!--Card of the selected Person, textboxes get enabled when the EditMode-bool in the Viewmodel is set to true-->
+                <!--#region CARD OF SELECTED PERSON-->
                 <materialDesign:Card  >
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="380"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
+                        <!--#region Details-->
                         <StackPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+
+                            <!--Name & Prename-->
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                     <Label Content="{DynamicResource name}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -54,37 +59,56 @@
                                     <TextBox IsEnabled="{Binding EditMode}" Width="170" Text="{Binding SelectedPerson.Prename}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </StackPanel>
+
+                            <!--Address-->
                             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                 <Label Content="{DynamicResource address}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.Adress}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </StackPanel>
+
+                            <!--Date of Birth-->
                             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                 <Label Content="{DynamicResource birthdate}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <DatePicker IsEnabled="{Binding EditMode}" Width="350" SelectedDate="{Binding SelectedPerson.Birthdate}"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </StackPanel>
+
+                            <!--Phonenumber-->
                             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                 <Label Content="{DynamicResource phone}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.Phone}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </StackPanel>
+
+                            <!--Faxnumber-->
                             <StackPanel  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                 <Label Content="{DynamicResource fax}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.Fax}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </StackPanel>
+
+                            <!--EMail-->
                             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                 <Label Content="E-Mail" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.EMail}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </StackPanel>
+
+                            <!--VATNumber-->
                             <StackPanel  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                 <Label Content="{DynamicResource vatNumber}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.VatNuber}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </StackPanel>
+
+                            <!--Note-->
                             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                 <Label Content="{DynamicResource note}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" TextWrapping="Wrap" AcceptsReturn="True" IsEnabled="{Binding EditMode}" MinHeight="100" Height="auto" Width="350" Text="{Binding SelectedPerson.Note}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
-                        <!--Buttons for editing, deleting the selected person, the visibility changes based on the current mode-->
+                        <!--#endregion-->
+
+                        <!--#region Buttons for creating, editing or deleting the selected Person-->
+                        <!--Bottons visibility changes based on the current mode-->
                         <StackPanel Grid.Column="1">
+
+                            <!--Delete Person Button-->
                             <Button Command="{Binding DeleteButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
                                 <materialDesign:PackIcon Kind="Delete">
                                     <materialDesign:PackIcon.LayoutTransform>
@@ -99,6 +123,8 @@
                                     </Binding>
                                 </Button.Visibility>
                             </Button>
+
+                            <!--Edit person button-->
                             <Button Command="{Binding EditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                                 <materialDesign:PackIcon Kind="Edit">
                                     <materialDesign:PackIcon.LayoutTransform>
@@ -113,6 +139,8 @@
                                     </Binding>
                                 </Button.Visibility>
                             </Button>
+
+                            <!--Cancel edit / create button-->
                             <Button Command="{Binding CancelEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                                 <materialDesign:PackIcon Kind="Cancel"  Foreground="Red">
                                     <materialDesign:PackIcon.LayoutTransform>
@@ -127,6 +155,8 @@
                                     </Binding>
                                 </Button.Visibility>
                             </Button>
+
+                            <!--Save edit /create button-->
                             <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
                                 <materialDesign:PackIcon Kind="Check"  Foreground="GreenYellow">
                                     <materialDesign:PackIcon.LayoutTransform>
@@ -142,6 +172,8 @@
                                 </Button.Visibility>
                             </Button>
                         </StackPanel>
+
+                        <!--Create new person button-->
                         <Button Grid.Column="1" Command="{Binding CreateButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,50,0,10">
                             <materialDesign:PackIcon Kind="PersonAdd">
                                 <materialDesign:PackIcon.LayoutTransform>
@@ -156,9 +188,10 @@
                                 </Binding>
                             </Button.Visibility>
                         </Button>
+                        <!--#endregion-->
                     </Grid>
                 </materialDesign:Card>
-                <!--Button for creating a new Person-->
+                <!--#endregion-->
             </StackPanel>
         </ScrollViewer>
 

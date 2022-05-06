@@ -1,30 +1,31 @@
-﻿<UserControl  x:Class="ImmoGlobalAdmin.View.RealEstateView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ImmoGlobalAdmin.View"
-              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:viewmodels ="clr-namespace:ImmoGlobalAdmin.ViewModel"
-              xmlns:viewHelpers="clr-namespace:ImmoGlobalAdmin.Helpers"
-              xmlns:mainClasses="clr-namespace:ImmoGlobalAdmin.MainClasses"
-             d:DataContext="{d:DesignInstance Type=viewmodels:RealEstateViewModel}"
-             mc:Ignorable="d" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-             TextElement.FontWeight="Regular"
-            TextElement.FontSize="13"
-            TextOptions.TextFormattingMode="Ideal" 
-            TextOptions.TextRenderingMode="Auto"        
-            Background="{DynamicResource MaterialDesignDarkBackground}"
-               FontFamily="{DynamicResource MaterialDesignFont}"
-             d:DesignHeight="800
-              " d:DesignWidth="1000">
+﻿<UserControl    x:Class="ImmoGlobalAdmin.View.RealEstateView"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                xmlns:local="clr-namespace:ImmoGlobalAdmin.View"
+                xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                xmlns:viewmodels ="clr-namespace:ImmoGlobalAdmin.ViewModel"
+                xmlns:viewHelpers="clr-namespace:ImmoGlobalAdmin.Helpers"
+                xmlns:mainClasses="clr-namespace:ImmoGlobalAdmin.MainClasses"
+                d:DataContext="{d:DesignInstance Type=viewmodels:RealEstateViewModel}"
+                mc:Ignorable="d" 
+                TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+                TextElement.FontWeight="Regular"
+                TextElement.FontSize="13"
+                TextOptions.TextFormattingMode="Ideal" 
+                TextOptions.TextRenderingMode="Auto"        
+                Background="{DynamicResource MaterialDesignDarkBackground}"
+                FontFamily="{DynamicResource MaterialDesignFont}"
+                d:DesignHeight="800" d:DesignWidth="1000">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="150"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <!--#region DATAGRID OF ALL REALESTATES-->
         <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding AllRealEstates}" SelectedItem="{Binding SelectedRealEstate}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="20,0,20,10" ColumnHeaderHeight="34">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"  Binding="{Binding IGID}" FontWeight="Bold" />
@@ -36,22 +37,31 @@
                 <DataGridTextColumn Header="{DynamicResource totalObjects}" Binding="{Binding TotalObjectCount}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <!--#endregion-->
+
         <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="2"/>
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="530" MaxWidth="530"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
             <ScrollViewer HorizontalScrollBarVisibility="auto" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Column="0" Margin="5,5,5,5">
+
+                <!--#region CARD OF SELECTED REALESTATE-->
                 <StackPanel >
-                    <!--Card of the selected RealEstate, textboxes get enabled when the EditMode-bool in the Viewmodel is set to true-->
                     <materialDesign:Card  >
                         <Grid Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="380"/>
                                 <ColumnDefinition Width="120"/>
                             </Grid.ColumnDefinitions>
+
+                            <!--#region Details-->
                             <StackPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+
+                                <!--ID and name of realestate-->
                                 <StackPanel Orientation="Horizontal">
                                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                         <Label Content="ID" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -62,10 +72,14 @@
                                         <TextBox IsEnabled="{Binding EditMode}" Width="170" Text="{Binding SelectedRealEstate.RealEstateName}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </StackPanel>
+
+                                <!--Address of realestate-->
                                 <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                     <Label Content="{DynamicResource address}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                     <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.Address}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 </StackPanel>
+
+                                <!--non rental rooms and space of realestate-->
                                 <materialDesign:Card Margin="5,5,5,5">
                                     <StackPanel>
                                         <Label Content="{DynamicResource notRentable}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
@@ -81,6 +95,8 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </materialDesign:Card>
+
+                                <!--rental objects and total rooms and space of realestate-->
                                 <materialDesign:Card Margin="5,5,5,5">
                                     <StackPanel>
                                         <Label Content="{DynamicResource rentable}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
@@ -100,7 +116,9 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </materialDesign:Card>
-                                <!--BankAccount-->
+
+
+                                <!--BankAccount of realestate-->
                                 <materialDesign:Card Margin="5,5,5,5">
                                     <StackPanel>
                                         <Label Content="{DynamicResource bankAccount}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
@@ -118,7 +136,8 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </materialDesign:Card>
-                                <!--Owner-->
+
+                                <!--Ownerof realestate-->
                                 <materialDesign:Card Margin="5,5,5,5">
                                     <StackPanel>
                                         <Label Content="{DynamicResource owner}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
@@ -138,7 +157,8 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </materialDesign:Card>
-                                <!--Janitor-->
+
+                                <!--Janitor of realestate-->
                                 <materialDesign:Card Margin="5,5,5,5">
                                     <StackPanel>
                                         <Label Content="{DynamicResource janitor}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
@@ -159,8 +179,13 @@
                                     </StackPanel>
                                 </materialDesign:Card>
                             </StackPanel>
-                            <!--Buttons for editing, deleting the selected RealEstate, the visibility changes based on the current mode-->
+                            <!--#endregion-->
+
+                            <!--#region Buttons for creating, editing and deleting the realestate-->
+                            <!--visibility changes based on the current mode-->
                             <StackPanel Grid.Column="1">
+
+                                <!--Delete realestaet button-->
                                 <Button Command="{Binding DeleteButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                                     <materialDesign:PackIcon Kind="Delete">
                                         <materialDesign:PackIcon.LayoutTransform>
@@ -175,6 +200,8 @@
                                         </Binding>
                                     </Button.Visibility>
                                 </Button>
+
+                                <!-- edit realestate button-->
                                 <Button Command="{Binding EditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                                     <materialDesign:PackIcon Kind="Edit">
                                         <materialDesign:PackIcon.LayoutTransform>
@@ -189,6 +216,8 @@
                                         </Binding>
                                     </Button.Visibility>
                                 </Button>
+
+                                <!--cancel edit/create realestate button-->
                                 <Button Command="{Binding CancelEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                                     <materialDesign:PackIcon Kind="Cancel"  Foreground="Red">
                                         <materialDesign:PackIcon.LayoutTransform>
@@ -203,6 +232,8 @@
                                         </Binding>
                                     </Button.Visibility>
                                 </Button>
+
+                                <!--save edit/createnew realestate-->
                                 <Button Command="{Binding SaveEditButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10" >
                                     <materialDesign:PackIcon Kind="Check"  Foreground="GreenYellow">
                                         <materialDesign:PackIcon.LayoutTransform>
@@ -217,8 +248,9 @@
                                         </Binding>
                                     </Button.Visibility>
                                 </Button>
-
                             </StackPanel>
+
+
                             <!--Button for creating a new RealEstate-->
                             <Button Command="{Binding CreateButtonCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10" >
                                 <materialDesign:PackIcon Kind="AddBox">
@@ -234,22 +266,27 @@
                                     </Binding>
                                 </Button.Visibility>
                             </Button>
+
+                            <!--#endregion-->
                         </Grid>
                     </materialDesign:Card>
                 </StackPanel>
+                <!--#endregion-->
+
             </ScrollViewer>
 
             <GridSplitter Grid.Column="0" Width="2" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
-            <!--RentalObject area start-->
+
+            <!--#region RENTAL OBJECTS OF SELECTED REALESTATE-->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!--Rental Objects of selected RealEstate-->
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" Grid.Row="1">
 
+                    <!--Generating Cards foreach rental object of the selected realestate-->
                     <ItemsControl ItemsSource="{Binding SelectedRealEstate.RentalObjects}" >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -258,17 +295,24 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <!--Rental Object Card-->
+
+                                <!--#region CARD TEMPLATE OF RENTAL OBJECT-->
                                 <StackPanel>
                                     <materialDesign:Card Margin="5,5,5,5" >
+
                                         <StackPanel>
+
+                                            <!--#region HEADER-->
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
+                                                <!--Id of rental object-->
                                                 <Label Grid.Column="2" Content="{Binding IGID}" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,5,5,0"/>
+
+                                                <!--Button to open the rental object in a new rentalobjectview-->
                                                 <Button Grid.Column="0" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:RealEstateView}}, Path=DataContext.OpenRentalObjectButtonCommand}" CommandParameter="{Binding}"  Style="{DynamicResource MaterialDesignFlatButton}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Padding="0,0,0,0" Margin="10,0,0,0">
                                                     <materialDesign:PackIcon Kind="OpenInBrowser">
                                                         <materialDesign:PackIcon.LayoutTransform>
@@ -276,6 +320,8 @@
                                                         </materialDesign:PackIcon.LayoutTransform>
                                                     </materialDesign:PackIcon>
                                                 </Button>
+
+                                                <!--Icon "Rentalstatus not ok" this will get shown if there are missing rent-payments -->
                                                 <materialDesign:PackIcon Grid.Column="1" Kind="Payment" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="OrangeRed">
                                                     <materialDesign:PackIcon.LayoutTransform>
                                                         <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1"/>
@@ -288,7 +334,10 @@
                                                         </Binding>
                                                     </materialDesign:PackIcon.Visibility>
                                                 </materialDesign:PackIcon>
+
                                             </Grid>
+                                            <!--#endregion-->
+
                                             <Expander HorizontalAlignment="Stretch" VerticalAlignment="Top" ExpandDirection="Down">
                                                 <Expander.Header>
                                                     <StackPanel Orientation="Horizontal">
@@ -298,8 +347,10 @@
                                                 </Expander.Header>
                                                 <StackPanel Width="500">
 
-                                                    <!--Rental Object Details-->
+                                                    <!--#region DETAILS OF THE RENTAL OBJECTS-->
                                                     <StackPanel Orientation="Horizontal" >
+
+                                                        <!--Addresssuplement, total rooms and total space-->
                                                         <StackPanel>
                                                             <StackPanel>
                                                                 <Label Content="{DynamicResource addressSuplement}" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,0"/>
@@ -316,6 +367,8 @@
                                                                 </StackPanel>
                                                             </StackPanel>
                                                         </StackPanel>
+
+                                                        <!--Furnishing of the rental object-->
                                                         <WrapPanel Margin="20,0,0,0" VerticalAlignment="Center">
                                                             <ToggleButton IsEnabled="False" IsChecked="{Binding HasFridge}" Style="{DynamicResource MaterialDesignFlatToggleButton}" Content="{materialDesign:PackIcon Kind=Fridge}" Margin="5,5,5,5"/>
                                                             <ToggleButton  IsEnabled="False" IsChecked="{Binding HasDishwasher}" Style="{DynamicResource MaterialDesignFlatToggleButton}" Content="{materialDesign:PackIcon Kind=Dishwasher}" Margin="5,5,5,5"/>
@@ -323,8 +376,10 @@
                                                             <ToggleButton  IsEnabled="False" IsChecked="{Binding HasWashingmachine}" Style="{DynamicResource MaterialDesignFlatToggleButton}" Content="{materialDesign:PackIcon Kind=WashingMachine}" Margin="5,5,5,5"/>
                                                             <ToggleButton IsEnabled="False" IsChecked="{Binding HasTumbler}"  Style="{DynamicResource MaterialDesignFlatToggleButton}" Content="{materialDesign:PackIcon Kind=TumbleDryer}" Margin="5,5,5,5"/>
                                                         </WrapPanel>
+
                                                     </StackPanel>
-                                                    
+                                                    <!--#endregion-->
+
                                                     <!--responsible employee-->
                                                     <materialDesign:Card Margin="5,5,5,5">
                                                         <StackPanel>
@@ -335,11 +390,13 @@
                                                                         <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2" ScaleY="2"/>
                                                                     </materialDesign:PackIcon.LayoutTransform>
                                                                 </materialDesign:PackIcon>
-                                                                <TextBox IsEnabled="False" Width="300" Text="{Binding ActiveRentalContract.ResponsibleEmployee.FullName, Mode=OneWay}" HorizontalContentAlignment="Left"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,5"/>
+                                                                <TextBox IsEnabled="False" Width="300" Text="{Binding ResponsibleEmployee, Mode=OneWay}" HorizontalContentAlignment="Left"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,5"/>
                                                             </StackPanel>
                                                         </StackPanel>
                                                     </materialDesign:Card>
 
+                                                    <!--#region RENT STATUS-->
+                                                    <!--will only be shown if there's an active rental contract-->
                                                     <StackPanel>
                                                         <StackPanel.Visibility>
                                                             <Binding Path="RentalContractActive">
@@ -348,7 +405,7 @@
                                                                 </Binding.Converter>
                                                             </Binding>
                                                         </StackPanel.Visibility>
-                                                        <!--Rent Status-->
+
                                                         <materialDesign:Card Margin="5,5,5,5">
                                                             <StackPanel>
                                                                 <StackPanel Orientation="Horizontal">
@@ -358,6 +415,8 @@
                                                                         </materialDesign:PackIcon.LayoutTransform>
                                                                     </materialDesign:PackIcon>
                                                                     <Label Content="{DynamicResource rentStatus}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+
+                                                                    <!--Icons of the rentstatus (Red exclamation mark if notok, green checkmark if ok)-->
                                                                     <materialDesign:Card Margin="5,5,5,5">
                                                                         <StackPanel Orientation="Horizontal">
                                                                             <materialDesign:PackIcon Kind="Error" VerticalAlignment="Center" Foreground="OrangeRed">
@@ -386,14 +445,19 @@
                                                                             </materialDesign:PackIcon>
                                                                         </StackPanel>
                                                                     </materialDesign:Card>
+
+                                                                    <!--Count of how many rent-payments are missing-->
                                                                     <Label Content="{DynamicResource rentsDue}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
                                                                     <TextBox IsEnabled="False" Width="30" Text="{Binding RentsDue.Count, Mode=OneWay}" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+
+                                                                    <!--Date of the last rent-Payment-->
                                                                     <Label Content="{DynamicResource lastPayment}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
                                                                     <DatePicker IsEnabled="False" Width="70" SelectedDate="{Binding LastPayedRent.DateTimeOfTransaction, Mode=OneWay}"/>
                                                                 </StackPanel>
                                                             </StackPanel>
                                                         </materialDesign:Card>
 
+                                                        <!--current tenant-->
                                                         <materialDesign:Card Margin="5,5,5,5">
                                                             <StackPanel>
                                                                 <Label Content="{DynamicResource currentTenant}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,0"/>
@@ -408,17 +472,20 @@
                                                             </StackPanel>
                                                         </materialDesign:Card>
                                                     </StackPanel>
+                                                    <!--#endregion-->
 
                                                 </StackPanel>
                                             </Expander>
                                         </StackPanel>
                                     </materialDesign:Card>
                                 </StackPanel>
+                                <!--#endregion-->
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
-                <!--Rental object area Buttons-->
+
+                <!--#region RENTAL OBJECT AREA BUTTONS-->
                 <materialDesign:Card Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
                         <Button Command="{Binding CreateRealEstateButtonCommand}" Style="{DynamicResource MaterialDesignFlatButton}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" >
@@ -431,10 +498,12 @@
 
                     </StackPanel>
                 </materialDesign:Card>
+                <!--#endregion-->
+                
             </Grid>
+            <!--#endregion-->
+            
         </Grid>
-
-
 
     </Grid>
 </UserControl>
