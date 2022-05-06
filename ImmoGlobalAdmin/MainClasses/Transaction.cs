@@ -15,7 +15,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public virtual BankAccount? BankAccount { get; private set; }
         public DateTime? DateTimeOfTransaction { get; private set; }
         public double Value { get; private set; }
-        public TransactionType? Type { get; private set; }
+        public TransactionType Type { get; private set; } = TransactionType.Deposit;
         public virtual Person? AssociatedPerson { get; private set; }
         public string Note { get; set; } = "";
         public bool Locked { get; set; }
@@ -108,10 +108,16 @@ namespace ImmoGlobalAdmin.MainClasses
             set => Value = Locked? Value:value;
         }
         [NotMapped]
-        public TransactionType? SetType
+        public TransactionType SetType
         {
             get => Type;
             set => Type = Locked? Type: value;
+        }
+        [NotMapped]
+        public string? SetTypeString
+        {
+            get => Enum.GetName(Type);
+            set => Type = Locked ? Type : Enum.Parse<TransactionType>(value);
         }
         [NotMapped]
         public Person? SetAssociatedPerson

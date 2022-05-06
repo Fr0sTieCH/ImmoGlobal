@@ -47,9 +47,8 @@ namespace ImmoGlobalAdmin.MainClasses
 
     public enum TransactionType
     {
+        Deposit,
         Rent,
-        AdditionalCosts,
-        RentIncAdditionalCosts,
         Electricity,
         Water,
         Heating,

@@ -32,23 +32,19 @@ namespace ImmoGlobalAdmin
 
         private void SetLanguageDictionary()
         {
-            ResourceDictionary dict = new ResourceDictionary();
+            
             switch (Thread.CurrentThread.CurrentCulture.ToString())
             {
                 case "en-US":
-                    dict.Source = new Uri("..\\Resources\\StringResources.xaml",
-                                  UriKind.Relative);
+                    SettingsViewModel.GetInstance.CurrentLanguage = "English";
                     break;
                 case "de-CH":
-                    dict.Source = new Uri("..\\Resources\\StringResources.de-CH.xaml",
-                                       UriKind.Relative);
+                    SettingsViewModel.GetInstance.CurrentLanguage = "Deutsch";
                     break;
                 default:
-                    dict.Source = new Uri("..\\Resources\\StringResources.xaml",
-                                      UriKind.Relative);
+                    SettingsViewModel.GetInstance.CurrentLanguage = "English";
                     break;
             }
-            this.Resources.MergedDictionaries.Add(dict);
         }
     }
 }

@@ -209,7 +209,7 @@ namespace ImmoGlobalAdmin.MainClasses
                         State = ContractState.Active;
                         Locked = true;
                     }
-                    else if (EndDate < today)
+                    else if (EndDate <= today)
                     {
                         State = ContractState.Terminated;
                         Locked = true;

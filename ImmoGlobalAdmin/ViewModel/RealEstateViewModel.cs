@@ -196,19 +196,23 @@ namespace ImmoGlobalAdmin.ViewModel
 
 
 
-        public ICommand OpenRentalObjectButtonCommand
+        public ICommand OpenRentalObjectButtonCommand => new RelayCommand<object>(OpenRentalObjectButtonClicked);
+        private void OpenRentalObjectButtonClicked(object obj)
         {
-            get
-            {
-                return new RelayCommand<object>(OpenRentalObjectButtonClicked);
+            if (selectedRealEstate != null) 
+            { 
+            RentalObjectViewModel rovm = new RentalObjectViewModel((RentalObject)obj,SelectedRealEstate,false);
+            MainViewModel.GetInstance.SelectedViewModel = rovm;
             }
         }
 
-        private void OpenRentalObjectButtonClicked(object obj)
+        public ICommand CreateRentalObjectButtonCommand => new RelayCommand<object>(CreateRentalObjectButtonClicked);
+        private void CreateRentalObjectButtonClicked(object obj)
         {
-            if (selectedRealEstate != null) { 
-            RentalObjectViewModel rovm = new RentalObjectViewModel((RentalObject)obj,SelectedRealEstate);
-            MainViewModel.GetInstance.SelectedViewModel = rovm;
+            if (selectedRealEstate != null)
+            {
+                RentalObjectViewModel rovm = new RentalObjectViewModel(new RentalObject(selectedRealEstate.BaseObject), SelectedRealEstate, true);
+                MainViewModel.GetInstance.SelectedViewModel = rovm;
             }
         }
 

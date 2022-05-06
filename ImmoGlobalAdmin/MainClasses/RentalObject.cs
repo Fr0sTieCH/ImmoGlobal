@@ -14,7 +14,7 @@ namespace ImmoGlobalAdmin.MainClasses
     {
         public int RentalObjectID { get; private set; }
         public string RentalObjectName { get; set; } = "";
-        public RentalObjectType Type { get; set; }
+        public RentalObjectType Type { get; set; } = RentalObjectType.Apartement;
         public string AddressSupplement { get; set; } = "";
         public double RoomCount { get; set; } = 0;
         public double SpaceInQM { get; set; } = 0;
@@ -23,8 +23,8 @@ namespace ImmoGlobalAdmin.MainClasses
         public double EstimatedBaseRent { get; set; } = 0;
         public double EstimatedAdditionalCosts { get; set; } = 0;
         public virtual BankAccount? Account { get; set; }
-        public virtual ICollection<RentalContract?> RentalContracts { get; set; }
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<RentalContract?> RentalContracts { get; set; } = new List<RentalContract>();
+        public virtual ICollection<Transaction?> Transactions { get; set; } =new List<Transaction>();
         public bool HasFridge { get; set; } = false;
         public bool HasDishwasher { get; set; } = false;
         public bool HasStove { get; set; } = false;
@@ -40,16 +40,28 @@ namespace ImmoGlobalAdmin.MainClasses
 
         public RentalObject()
         {
-
+            
         }
+
+        public RentalObject(RentalObject refBaseOject)
+        {
+            Owner = refBaseOject.Owner;
+            ResponsibleEmployee = refBaseOject.ResponsibleEmployee;
+            Account = refBaseOject.Account;
+            Enabled = true;
+        }
+
         public RentalObject(bool IsBaseObject, RealEstate realEstate)
         {
             if (IsBaseObject)
             {
-                Enabled = true;
+               
                 Type = RentalObjectType.RealEstateBaseObject;
             }
+
+            Enabled = true;
         }
+
 
         /// <summary>
         /// New Rental Object
@@ -185,7 +197,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public List<Transaction?> PayedRents => Transactions.Where(x => x.Type == TransactionType.Rent).ToList();
 
         [NotMapped]
-        public Transaction LastPayedRent => Transactions.Where(x => x.Type == TransactionType.Rent).FirstOrDefault();
+        public Transaction? LastPayedRent => Transactions.Where(x => x.Type == TransactionType.Rent).FirstOrDefault();
 
         [NotMapped]
         public List<DateTime> RentsDue

@@ -287,7 +287,7 @@
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" Grid.Row="1">
 
                     <!--Generating Cards foreach rental object of the selected realestate-->
-                    <ItemsControl ItemsSource="{Binding SelectedRealEstate.RentalObjects}" >
+                    <ItemsControl ItemsSource="{Binding SelectedRealEstate.SortedRentalObjects}" >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -390,7 +390,7 @@
                                                                         <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="2" ScaleY="2"/>
                                                                     </materialDesign:PackIcon.LayoutTransform>
                                                                 </materialDesign:PackIcon>
-                                                                <TextBox IsEnabled="False" Width="300" Text="{Binding ResponsibleEmployee, Mode=OneWay}" HorizontalContentAlignment="Left"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,5"/>
+                                                                <TextBox IsEnabled="False" Width="300" Text="{Binding ResponsibleEmployee.FullName, Mode=OneWay}" HorizontalContentAlignment="Left"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,5"/>
                                                             </StackPanel>
                                                         </StackPanel>
                                                     </materialDesign:Card>
@@ -488,7 +488,7 @@
                 <!--#region RENTAL OBJECT AREA BUTTONS-->
                 <materialDesign:Card Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <Button Command="{Binding CreateRealEstateButtonCommand}" Style="{DynamicResource MaterialDesignFlatButton}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" >
+                        <Button Command="{Binding CreateRentalObjectButtonCommand}" Style="{DynamicResource MaterialDesignFlatButton}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" >
                             <materialDesign:PackIcon Kind="AddBox">
                                 <materialDesign:PackIcon.LayoutTransform>
                                     <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>

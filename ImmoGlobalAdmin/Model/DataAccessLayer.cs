@@ -167,6 +167,7 @@ namespace ImmoGlobalAdmin.Model
 
         public List<Transaction> GetTransactionsByRentalObject(RentalObject rentalObject)
         {
+            if (rentalObject == null) return new List<Transaction>();
             return db.transactions.Where(x => x.Enabled && x.RentalObject != null && x.RentalObject.RentalObjectID == rentalObject.RentalObjectID).ToList();
         }
 

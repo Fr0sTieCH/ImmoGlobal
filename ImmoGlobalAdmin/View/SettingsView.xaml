@@ -16,6 +16,13 @@
                FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding CurrentLanguage}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Label Content="{Binding}"></Label>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
             
     </Grid>
 </UserControl>

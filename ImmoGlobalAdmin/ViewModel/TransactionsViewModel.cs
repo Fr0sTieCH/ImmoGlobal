@@ -15,7 +15,7 @@ namespace ImmoGlobalAdmin.ViewModel
         private string searchString = "";
         private Transaction? selectedTransaction;
         private RealEstate? realEstateToSelectObjects;//used for choosing a rentalObject on creation
-        private RentalObject? rentalObjectToFilterTransactions = null;
+        private RentalObject? rentalObjectToFilterTransactions = null; //if not null, only the transactions of this specific Object will get loaded
 
         #region constructors
         public TransactionsViewModel() { }
@@ -44,12 +44,12 @@ namespace ImmoGlobalAdmin.ViewModel
                 }
                 else
                 {
-                        return DataAccessLayer.GetInstance.GetTransactionsByRentalObject(rentalObjectToFilterTransactions); 
+
+                    return rentalObjectToFilterTransactions.Transactions.Where(x=>x.Enabled==true).ToList(); 
                 }
 
             }
         }
-
 
         public Transaction? SelectedTransaction
         {
@@ -68,9 +68,13 @@ namespace ImmoGlobalAdmin.ViewModel
                 {
                     return;
                 }
+
                 selectedTransaction = value;
                 RealEstateToSelectObjects = GetRealEstateFromTransaction(value);
+                
                 OnPropertyChanged(nameof(RealEstateToSelectObjects));
+                OnPropertyChanged(nameof(ObjectsToSelect));
+                OnPropertyChanged(nameof(SelectedObject));
                 OnPropertyChanged(nameof(SelectedTransaction));
             }
         }
@@ -79,20 +83,18 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (realEstateToSelectObjects == null)
-                {
-                    realEstateToSelectObjects = AllRealEstates.FirstOrDefault();
-                }
+
                 return realEstateToSelectObjects;
             }
             set
             {
                 realEstateToSelectObjects = value;
                 OnPropertyChanged(nameof(RealEstateToSelectObjects));
+                OnPropertyChanged(nameof(SelectedObject));
                 OnPropertyChanged(nameof(ObjectsToSelect));
+                
             }
         }
-
 
         public List<RentalObject> ObjectsToSelect
         {
@@ -117,6 +119,32 @@ namespace ImmoGlobalAdmin.ViewModel
 
                     list.Insert(0,realEstateToSelectObjects.BaseObject);
                     return list;
+                }
+            }
+        }
+
+        public RentalObject? SelectedObject
+        {
+            get 
+            {
+                if (selectedTransaction == null) return null;
+                return SelectedTransaction.RentalObject; 
+            }
+            set
+            {
+                SelectedTransaction.SetRentalObject = value;
+
+                if (creationMode && value!=null)
+                {
+                    selectedTransaction.SetBankAccount = value.Account;
+
+                    if (selectedTransaction.Type == TransactionType.Rent && value.ActiveRentalContract != null)
+                    {
+
+                        selectedTransaction.SetAssociatedPerson = value.ActiveRentalContract.Tenant;
+                        selectedTransaction.SetValue = value.ActiveRentalContract.RentTotal;
+                    }
+                    OnPropertyChanged(nameof(SelectedTransaction));
                 }
             }
         }
@@ -149,6 +177,7 @@ namespace ImmoGlobalAdmin.ViewModel
             if (SelectedTransaction != null)
             {
                 SelectedTransaction.Lock();
+                selectedTransaction.RentalObject.Transactions.Add(selectedTransaction);
                 DataAccessLayer.GetInstance.StoreNewTransaction(SelectedTransaction);
                 SelectedTransaction = null;
                 realEstateToSelectObjects = null;

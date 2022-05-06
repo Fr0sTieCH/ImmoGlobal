@@ -15,13 +15,15 @@ namespace ImmoGlobalAdmin.ViewModel
     {
         private RentalObject rentalObjectToDisplay;
         private RealEstate realEstateOfRentalObject;
-        private BaseViewModel secondaryViewModel;
+        private BaseViewModel? secondaryViewModel;
 
 
-        public RentalObjectViewModel(RentalObject rentalObjectToDisplay, RealEstate realEstateOfRentalObject)
+        public RentalObjectViewModel(RentalObject rentalObjectToDisplay, RealEstate realEstateOfRentalObject,bool creationMode)
         {
             this.RentalObjectToDisplay = rentalObjectToDisplay;
             this.RealEstateOfRentalObject = realEstateOfRentalObject;
+            this.creationMode = creationMode;
+            this.editMode = creationMode;
 
         }
 
@@ -92,12 +94,17 @@ namespace ImmoGlobalAdmin.ViewModel
             MainViewModel.GetInstance.DeleteCancelButtonClicked(obj);
             base.DeleteCancelButtonClicked(obj);
         }
+        protected override void EditButtonClicked(object obj)
+        {
+            if (SecondaryViewModel != null) SecondaryViewModel = null;
+            base.EditButtonClicked(obj);
+        }
 
         protected override void CancelEditButtonClicked(object obj)
         {
             if (creationMode)
             {
-
+                CloseViewClicked("");
             }
             else
             {
@@ -114,6 +121,7 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             if (creationMode)
             {
+                realEstateOfRentalObject.AddRentalObject(RentalObjectToDisplay);
                 DataAccessLayer.GetInstance.StoreNewRentalObject(RentalObjectToDisplay);
             }
             else

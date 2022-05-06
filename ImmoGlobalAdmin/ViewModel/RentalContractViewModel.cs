@@ -42,6 +42,8 @@ namespace ImmoGlobalAdmin.ViewModel
             }
         }
 
+        public List<RentalContract> RentalContractsOfObject => RentalObjetToGetContractsFrom.RentalContracts.ToList();
+
         public RentalContract? SelectedRentalContract
         {
             get
@@ -54,8 +56,11 @@ namespace ImmoGlobalAdmin.ViewModel
                 selectedRentalContract = value;
                 OnPropertyChanged(nameof(SelectedRentalContract));
                 OnPropertyChanged(nameof(AllowedToValidateSelectedContract));
+                OnPropertyChanged(nameof(RentalContractSelected));
             }
         }
+
+        public bool RentalContractSelected => selectedRentalContract != null;
 
         public RealEstate RealEstateOfRentalObject
         {
@@ -93,6 +98,8 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
+                if (selectedRentalContract == null) return false;
+
                 if (selectedRentalContract.State == ContractState.ValidationPending)
                 {
                     if (rentalObjetToGetContractsFrom.ActiveRentalContract != null)
@@ -133,7 +140,12 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             selectedRentalContract.TerminateContract(TerminationDate);
             DataAccessLayer.GetInstance.SaveChanges();
-            OnPropertyChanged(nameof(RentalObjetToGetContractsFrom.RentalContracts));
+            foreach(RentalContract rc in rentalObjetToGetContractsFrom.RentalContracts)
+            {
+                rc.CheckState();
+            }
+            OnPropertyChanged(nameof(RentalObjetToGetContractsFrom));
+            OnPropertyChanged(nameof(RentalContractsOfObject));
             OnPropertyChanged(nameof(selectedRentalContract));
             viewModelToUpdate.UpdateRentalObject();
         }
@@ -142,9 +154,9 @@ namespace ImmoGlobalAdmin.ViewModel
         private void RevertTerminationButtonClicked(object obj)
         {
             selectedRentalContract.ChangeEndDate = null;
-            selectedRentalContract.CheckState();
             DataAccessLayer.GetInstance.SaveChanges();
-            OnPropertyChanged(nameof(RentalObjetToGetContractsFrom.RentalContracts));
+            OnPropertyChanged(nameof(RentalObjetToGetContractsFrom));
+            OnPropertyChanged(nameof(RentalContractsOfObject));
             OnPropertyChanged(nameof(selectedRentalContract));
             viewModelToUpdate.UpdateRentalObject();
         }

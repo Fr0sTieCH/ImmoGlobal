@@ -65,6 +65,9 @@ namespace ImmoGlobalAdmin.MainClasses
         public double SpaceInQM=> BaseObject.SpaceInQM;
 
         [NotMapped]
+        public ICollection<RentalObject?> SortedRentalObjects => RentalObjects.OrderBy(x => x.Type).ToList();
+
+        [NotMapped]
         public double TotalObjectCount => RentalObjects.Count;
 
         [NotMapped]
@@ -77,7 +80,8 @@ namespace ImmoGlobalAdmin.MainClasses
         public void AddRentalObject(RentalObject rentalObject)
         {
             RentalObjects.Add(rentalObject);
-        }     
+        }
+        
 
         public void Delete(string reason)
         {

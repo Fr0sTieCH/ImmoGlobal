@@ -29,9 +29,12 @@
         <DataGrid SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding AllTransactions}" SelectedItem="{Binding SelectedTransaction}" HeadersVisibility="All" Style="{DynamicResource MaterialDesignDataGrid}" x:Name="PersonsDataGrid" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Margin="5,5,5,5">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding IGID}" FontWeight="Bold" />
-                <DataGridTextColumn Header="{DynamicResource object}" Binding="{Binding RentalObject.IGID,Mode=OneWay}" FontWeight="Bold" />
-                <DataGridTextColumn Header="{DynamicResource date}" Binding="{Binding DateTimeOfTransaction,Mode=OneWay}"/>
+                <DataGridTextColumn Header="{DynamicResource type}" Binding="{Binding Type,Mode=OneWay}" FontWeight="Bold" />
                 <DataGridTextColumn Header="{DynamicResource value}" Binding="{Binding Value,Mode=OneWay}" />
+                <DataGridTextColumn Header="{DynamicResource dateOfTransaction}" Binding="{Binding DateTimeOfTransaction,Mode=OneWay,StringFormat=\{0:dd. MMM. yyyy\}}"/>
+                <DataGridTextColumn Header="{DynamicResource creditorDebitor}" Binding="{Binding AssociatedPerson.FullName}" FontWeight="Bold" />
+                <DataGridTextColumn Header="{DynamicResource object}" Binding="{Binding RentalObject.IGID,Mode=OneWay}" FontWeight="Bold" />
+
                 <DataGridTextColumn Header="{DynamicResource bankAccount}" Binding="{Binding BankAccount.AccountName,Mode=OneWay}" />
             </DataGrid.Columns>
         </DataGrid>
@@ -61,7 +64,7 @@
                         <!--Type of Transaction-->
                         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                             <Label Content="{DynamicResource type}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding TransactionTypes}" SelectedItem="{Binding SelectedTransaction.SetType}" HorizontalAlignment="Left">
+                            <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding TransactionTypes}" SelectedItem="{Binding SelectedTransaction.SetTypeString}" HorizontalAlignment="Left">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding}" FontSize="12" Margin="0,0,2,0"></TextBlock>
@@ -76,7 +79,10 @@
                             <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding AllRealEstates}" SelectedItem="{Binding RealEstateToSelectObjects}" HorizontalAlignment="Left">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding RealEstateName}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding RealEstateName}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                            <TextBlock Text="{Binding Address}" FontSize="10" Margin="0,0,2,0"></TextBlock>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
@@ -85,7 +91,7 @@
                         <!--RentalObject of Transaction-->
                         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                             <Label Content="{DynamicResource object}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding ObjectsToSelect}"  SelectedItem="{Binding SelectedTransaction.SetRentalObject}" HorizontalAlignment="Left">
+                            <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding ObjectsToSelect}"  SelectedItem="{Binding SelectedObject}" HorizontalAlignment="Left">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding RentalObjectName}" FontSize="12" Margin="0,0,2,0"></TextBlock>
@@ -130,7 +136,7 @@
                         <!--Date of Transaction-->
                         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                             <Label Content="{DynamicResource dateOfTransaction}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <DatePicker IsEnabled="{Binding EditMode}" Width="300" SelectedDate="{Binding SelectedTransaction.SetDateTimeOfTransaction}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <DatePicker IsEnabled="{Binding EditMode}" Width="300" SelectedDate="{Binding SelectedTransaction.SetDateTimeOfTransaction}" SelectedDateFormat="Long" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <!--Note of Transaction-->
