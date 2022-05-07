@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ImmoGlobalAdmin.ViewModel
@@ -76,6 +77,21 @@ namespace ImmoGlobalAdmin.ViewModel
                 OnPropertyChanged(nameof(ObjectsToSelect));
                 OnPropertyChanged(nameof(SelectedObject));
                 OnPropertyChanged(nameof(SelectedTransaction));
+            }
+        }
+
+        public string TranslatedTypeOfSelectedTransaction
+        {
+            get
+            {
+                if (selectedTransaction == null) return "";
+                return Application.Current.TryFindResource(SelectedTransaction.SetTypeString) as string ?? SelectedTransaction.SetTypeString;
+            }
+            set
+            {
+                if (selectedTransaction == null) return;
+                string convertedString = Application.Current.TryFindResource(value) as string ?? value;
+                SelectedTransaction.SetTypeString = convertedString;
             }
         }
 

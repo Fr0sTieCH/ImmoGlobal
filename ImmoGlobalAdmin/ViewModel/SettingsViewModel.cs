@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace ImmoGlobalAdmin.ViewModel
 {
-    internal class SettingsViewModel:BaseViewModel
+    internal class SettingsViewModel : BaseViewModel
     {
         private LanguageSetting currentLanguage;
 
@@ -38,58 +38,73 @@ namespace ImmoGlobalAdmin.ViewModel
             }
         }
 
-       public String CurrentLanguage
-       {
-            get 
+
+
+
+        #endregion
+
+        public String CurrentLanguage
+        {
+            get
             {
                 if (currentLanguage == null)
                 {
                     currentLanguage = LanguageSetting.English;
                 }
-                return Enum.GetName(currentLanguage); 
+                return Enum.GetName(currentLanguage);
             }
-            set 
+            set
             {
 
-                currentLanguage = Enum.Parse<LanguageSetting>(value) ;
+                currentLanguage = Enum.Parse<LanguageSetting>(value);
                 SetLanguage();
                 OnPropertyChanged();
             }
 
-       }
+        }
         public string[] Languages => Enum.GetNames(typeof(LanguageSetting));
 
 
         private void SetLanguage()
         {
-            if (App.Current.Resources.MergedDictionaries.Count >= 3)
+            if (App.Current.Resources.MergedDictionaries.Count >= 4)
             {
                 App.Current.Resources.MergedDictionaries.RemoveAt(2);
+                App.Current.Resources.MergedDictionaries.RemoveAt(2);
             }
-            
+
             ResourceDictionary dict = new ResourceDictionary();
+
 
             switch (currentLanguage)
             {
                 case LanguageSetting.English:
-                    dict.Source = new Uri("..\\Resources\\StringResources.xaml",
-                                 UriKind.Relative);
+                    dict.Source = new Uri("..\\Resources\\StringResources.xaml", UriKind.Relative);
                     break;
                 case LanguageSetting.Deutsch:
-                    dict.Source = new Uri("..\\Resources\\StringResources.de-CH.xaml",
-                                       UriKind.Relative);
+                    dict.Source = new Uri("..\\Resources\\StringResources.de-CH.xaml", UriKind.Relative);
                     break;
                 default:
-                    dict.Source = new Uri("..\\Resources\\StringResources.xaml",
-                                     UriKind.Relative);
+                    dict.Source = new Uri("..\\Resources\\StringResources.xaml", UriKind.Relative);
                     break;
             }
 
             App.Current.Resources.MergedDictionaries.Add(dict);
-        }
 
-    
-    #endregion
+            //load a reversed version to translate Back
+            ResourceDictionary dictReversed = new ResourceDictionary();
+
+            foreach (object key in dict.Keys)
+            {
+                object val = dict[key];
+
+                if (dictReversed[val] == null)
+                {
+                    dictReversed.Add(val, key);
+                }
+            }
+            App.Current.Resources.MergedDictionaries.Add(dictReversed);
+        }
     }
 
     enum LanguageSetting

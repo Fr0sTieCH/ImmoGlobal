@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ImmoGlobalAdmin.MainClasses
 {
-    public class Transaction
+    public class Transaction:ImmoGlobalEntity
     {
         public int TransactionID { get; private set; }
         public virtual RentalObject? RentalObject { get; private set; }
@@ -18,9 +18,6 @@ namespace ImmoGlobalAdmin.MainClasses
         public TransactionType Type { get; private set; } = TransactionType.Deposit;
         public virtual Person? AssociatedPerson { get; private set; }
         public string Note { get; set; } = "";
-        public bool Locked { get; set; }
-        public bool Enabled { get; private set; }
-        public string ReasonForDeleting { get; private set; } = "";
 
         public Transaction()
         {
@@ -134,15 +131,5 @@ namespace ImmoGlobalAdmin.MainClasses
 
         #endregion
 
-        public void Lock()
-        {
-            Locked = true;
-        }
-
-        public void Delete(string reason)
-        {
-            Enabled = false;
-            ReasonForDeleting = reason;
-        }
     }
 }

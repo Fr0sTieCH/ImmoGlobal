@@ -23,6 +23,13 @@ namespace ImmoGlobalAdmin.MainClasses
         ParkingSpot
     }
 
+    public enum Sex
+    {
+        Male,
+        Female,
+        Other
+    }
+
     public enum PointCondition
     {
         NotOk,
@@ -52,8 +59,9 @@ namespace ImmoGlobalAdmin.MainClasses
         Electricity,
         Water,
         Heating,
-        Telecomunication,
-        Repair
+        Telecommunication,
+        Repair,
+        OtherT
     }
 
     public enum Permissions

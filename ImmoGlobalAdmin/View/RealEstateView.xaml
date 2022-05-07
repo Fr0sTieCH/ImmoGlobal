@@ -178,6 +178,28 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </materialDesign:Card>
+                            
+                            
+                            <!--#region INSURANCE-->
+                                <materialDesign:Card Margin="5,5,5,5">
+                                    <StackPanel>
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                        <Label Content="{DynamicResource buildingInsurance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.BuildingInsurance}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                        <Label Content="{DynamicResource liabilityInsurance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.LiabilityInsurance}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                        <Label Content="{DynamicResource personalInsurance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.PersonalInsurance}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    </StackPanel>
+                                </materialDesign:Card>
+                                <!--#endregion-->
                             </StackPanel>
                             <!--#endregion-->
 

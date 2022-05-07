@@ -47,6 +47,17 @@
                         </Grid.ColumnDefinitions>
                         <!--#region Details-->
                         <StackPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5">
+                            <!--PersonType-->
+                            <StackPanel  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource type}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox IsEnabled="{Binding EditMode}" Width="350" ItemsSource="{Binding PersonTypesTranslated}" SelectedItem="{Binding TranslatedTypeOfSelectedPerson}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!--Gender-->
+                            <StackPanel  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                <Label Content="{DynamicResource sex}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox IsEnabled="{Binding EditMode}" Width="350" ItemsSource="{Binding SexArrayTranslated}" SelectedItem="{Binding TranslatedSexOfSelectedPerson}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
 
                             <!--Name & Prename-->
                             <StackPanel Orientation="Horizontal">
@@ -76,12 +87,6 @@
                             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
                                 <Label Content="{DynamicResource phone}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.Phone}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            </StackPanel>
-
-                            <!--Faxnumber-->
-                            <StackPanel  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                <Label Content="{DynamicResource fax}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedPerson.Fax}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </StackPanel>
 
                             <!--EMail-->

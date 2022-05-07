@@ -9,7 +9,7 @@ namespace ImmoGlobalAdmin.MainClasses
 /// represents an user
 /// WARNING: NOT SECURE, FOR PROTOTYPE ONLY!!
 /// </summary>
-    public class User
+    public class User:ImmoGlobalEntity
     {
         public int UserID { get; private set; }
         public string Username { get; private set; }
@@ -17,8 +17,6 @@ namespace ImmoGlobalAdmin.MainClasses
         public string Password { get; private set; }
         public Permissions PermissionLevel { get; set; }
 
-        public bool Enabled { get; private set; }
-        public string ReasonForDeleting { get; private set; } = "";
 
         public User()
         {
@@ -117,10 +115,5 @@ namespace ImmoGlobalAdmin.MainClasses
         /// <returns></returns>
         private bool VerifyUsernameRequirements(string username) => username.Length > 5;
 
-        public void Delete(string reason)
-        {
-            Enabled = false;
-            ReasonForDeleting = reason;
-        }
     }
 }

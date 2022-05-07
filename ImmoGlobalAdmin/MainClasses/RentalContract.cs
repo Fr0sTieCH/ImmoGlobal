@@ -9,7 +9,7 @@ namespace ImmoGlobalAdmin.MainClasses
 {/// <summary>
 /// Represents a rental contract
 /// </summary>
-    public class RentalContract
+    public class RentalContract:ImmoGlobalEntity
     {
         public int RentalContractID { get; private set; }
         public virtual Person? Tenant { get; private set; }
@@ -22,9 +22,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public DateTime? EndDate { get; private set; }
         public ContractState State { get; private set; }
 
-        public bool Enabled { get; set; }
-        public string ReasonForDeleting { get; set; } = "";
-        public bool Locked { get; set; }
+     
 
         #region CONSTRUCTORS
         public RentalContract()
@@ -241,12 +239,6 @@ namespace ImmoGlobalAdmin.MainClasses
             }
 
 
-        }
-
-        public void Delete(string reason)
-        {
-            Enabled = false;
-            ReasonForDeleting = reason;
         }
 
     }

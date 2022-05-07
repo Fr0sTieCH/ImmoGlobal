@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ImmoGlobalAdmin.ViewModel
@@ -77,6 +78,8 @@ namespace ImmoGlobalAdmin.ViewModel
             }
         }
 
+
+
         public Person? SelectedPerson
         {
             get
@@ -95,9 +98,40 @@ namespace ImmoGlobalAdmin.ViewModel
                 }
                 selectedPerson = value;
                 OnPropertyChanged(nameof(SelectedPerson));
+                OnPropertyChanged(nameof(TranslatedTypeOfSelectedPerson));
+                OnPropertyChanged(nameof(TranslatedSexOfSelectedPerson));
             }
         }
 
+        public string TranslatedTypeOfSelectedPerson
+        {
+            get
+            {
+                if(selectedPerson == null) return "";
+                return Application.Current.TryFindResource(selectedPerson.SetPersonTypeString) as string ?? selectedPerson.SetPersonTypeString;
+            }
+            set
+            {
+                if (selectedPerson == null) return;
+                string convertedString = Application.Current.TryFindResource(value) as string ?? value;
+                selectedPerson.SetPersonTypeString = convertedString;             
+            }
+        }
+
+        public string TranslatedSexOfSelectedPerson
+        {
+            get
+            {
+                if (selectedPerson == null) return "";
+                return Application.Current.TryFindResource(selectedPerson.SetSexString) as string ?? selectedPerson.SetSexString;
+            }
+            set
+            {
+                if (selectedPerson == null) return;
+                string convertedString = Application.Current.TryFindResource(value) as string ?? value;
+                selectedPerson.SetSexString = convertedString;
+            }
+        }
 
 
         #endregion

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImmoGlobalAdmin.MainClasses
 {
-    public class Invoice
+    public class Invoice:ImmoGlobalEntity
     {
         public int InvoiceID { get; private set; }
         public string Title { get; private set; }
@@ -18,9 +18,6 @@ namespace ImmoGlobalAdmin.MainClasses
         public DateTime Date { get; private set; }
         public virtual Person AssociatedPerson { get; private set; }
 
-        public bool Enabled { get; private set; }
-        public string ReasonForDeleting { get; private set; } = "";
-        public bool Locked { get; private set; }
 
         #region CONSTRUCTORS
         public Invoice()
@@ -81,15 +78,6 @@ namespace ImmoGlobalAdmin.MainClasses
             Sum = Transactions.Sum(x=>x.Value);
         }
 
-        public void Delete(string reason)
-        {
-            Enabled = false;
-            ReasonForDeleting = reason;
-        }
-
-        public void Lock()
-        {
-            Locked = true;
-        }
+     
     }
 }

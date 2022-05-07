@@ -9,23 +9,21 @@ namespace ImmoGlobalAdmin.MainClasses
 {/// <summary>
 /// Represents a legal person or an juristic entity
 /// </summary>
-    public class Person
+    public class Person : ImmoGlobalEntity
     {
 
         public int PersonID { get; private set; }
         public string Name { get; set; } = "";
         public string Prename { get; set; } = "";
+        public Sex Sex { get; set; }
         public string Adress { get; set; } = "";
         public string Phone { get; set; } = "";
-        public string Fax { get; set; } = "";
         public string EMail { get; set; } = "";
         public string VatNuber { get; set; } = "";
         public DateTime? Birthdate { get; set; }
         public string Note { get; set; } = "";
         public PersonType Type { get; set; } = PersonType.PrivatePerson;
 
-        public bool Enabled { get; private set; }
-        public string ReasonForDeleting { get; private set; } = "";
 
         [NotMapped]
         public string IGID => PersonID.ToString("PE00000000");
@@ -37,22 +35,17 @@ namespace ImmoGlobalAdmin.MainClasses
         public string EMailCommand => $"mailto:{EMail}";
 
         [NotMapped]
-        public DateOnly? BirthdatyDateOnly
+        public string SetPersonTypeString
         {
+            get => Enum.GetName(Type);
+            set => Type =  Enum.Parse<PersonType>(value);
+        }
 
-            get
-            {
-                if (Birthdate == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return DateOnly.FromDateTime((DateTime)Birthdate);
-                }
-
-            }
-
+        [NotMapped]
+        public string SetSexString
+        {
+            get => Enum.GetName(Sex);
+            set => Sex = Enum.Parse<Sex>(value);
         }
 
 
@@ -78,13 +71,12 @@ namespace ImmoGlobalAdmin.MainClasses
         /// <param name="eMail">Email adress of the entity </param>
         /// <param name="vatNuber">VAT-Number of the Entity</param>
         /// <param name="note">Additional Info</param>
-        public Person(string name, string adress, string phone, string fax, string eMail, string vatNuber, string note)
+        public Person(string name, string adress, string phone, string eMail, string vatNuber, string note)
         {
             this.Enabled = true;
             this.Name = name;
             this.Adress = adress;
             this.Phone = phone;
-            this.Fax = fax;
             this.EMail = eMail;
             this.VatNuber = vatNuber;
             this.Note = note;
@@ -101,14 +93,13 @@ namespace ImmoGlobalAdmin.MainClasses
         /// <param name="eMail"> Email adress</param>
         /// <param name="birthdate">Birthdate (can be NULL)</param>
         /// <param name="note">additional info</param>
-        public Person(string name, string prename, string adress, string phone, string fax, string eMail, DateTime? birthdate, string note)
+        public Person(string name, string prename, string adress, string phone, string eMail, DateTime? birthdate, string note)
         {
             this.Enabled = true;
             this.Name = name;
             this.Prename = prename;
             this.Adress = adress;
             this.Phone = phone;
-            this.Fax = fax;
             this.EMail = eMail;
             this.Birthdate = birthdate;
             this.Note = note;
@@ -117,10 +108,6 @@ namespace ImmoGlobalAdmin.MainClasses
 
         #endregion
 
-        public void Delete(string reason)
-        {
-            Enabled = false;
-            ReasonForDeleting = reason;
-        }
+       
     }
 }

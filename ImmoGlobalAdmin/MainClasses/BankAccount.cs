@@ -10,16 +10,12 @@ namespace ImmoGlobalAdmin.MainClasses
 {/// <summary>
 /// Represents a physical bankaccount
 /// </summary>
-    public class BankAccount
+    public class BankAccount:ImmoGlobalEntity
     {
         public int BankAccountID { get; private set; }
         public string AccountName { get; set; }
         public string Iban { get; set; }
         public virtual ICollection<Transaction?> Transactions { get; private set; }
-
-        public bool Enabled { get; private set; }
-        public string ReasonForDeleting { get; private set; }= "";
-
         #region CONSTRUCTORS
 
         /// <summary>
@@ -70,13 +66,7 @@ namespace ImmoGlobalAdmin.MainClasses
             Transactions.Add(transaction);
         }
 
-        public void Delete(string reason)
-        {
-            Enabled = false;
-            ReasonForDeleting = reason;
-        }
-
-
+     
         
     }
 }

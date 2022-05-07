@@ -37,27 +37,35 @@ namespace ImmoGlobalAdmin.ViewModel
         public virtual List<Person> AllCompanies => DataAccessLayer.GetInstance.GetCompaniesUnfiltered();
         public virtual List<BankAccount> AllBankAccounts => DataAccessLayer.GetInstance.GetBankAccountsUnfiltered();
         public virtual List<RealEstate> AllRealEstates => DataAccessLayer.GetInstance.GetRealEstatesUnfiltered();
-        public virtual List<Transaction>  AllTransactions => DataAccessLayer.GetInstance.GetTransactionsUnfiltered();
+        public virtual List<Transaction> AllTransactions => DataAccessLayer.GetInstance.GetTransactionsUnfiltered();
 
         protected bool creationMode;
 
         public string[] ObjectTypeIcons
         {
             get
-            { 
+            {
                 //gets the descriptions of the enumvalues of RentalObjectType and returns them as an string[] (Excluding RentalObjectType.RealEstateBaseObject)
-               return ((int[])Enum.GetValues(typeof(RentalObjectType))).Where(x => x!=0).Select(x => EnumTools.GetDescription((RentalObjectType)x)).ToArray();
+                return ((int[])Enum.GetValues(typeof(RentalObjectType))).Where(x => x != 0).Select(x => EnumTools.GetDescription((RentalObjectType)x)).ToArray();
             }
         }
 
-        public string[] TransactionTypes
-        {
-            get
-            {
-                //gets the enumnames of TransactionType
-                return (Enum.GetNames(typeof(TransactionType)));
-            }
-        }
+        //gets the enumnames of TransactionType
+        public string[] TransactionTypes => Enum.GetNames(typeof(TransactionType));
+        //Translated Enumnames of TransactionType
+        public string[] TransactionTypesTranslated => TransactionTypes.Select(x => Application.Current.TryFindResource(x) as string ?? x).ToArray();
+
+        //gets the enumnames of Sex
+        public string[] SexArray => Enum.GetNames(typeof(Sex));
+        //Translated EnumNames of Sex
+        public string[] SexArrayTranslated => SexArray.Select(x => Application.Current.TryFindResource(x) as string ?? x).ToArray();
+
+        //gets the enumnames of PersonType
+        public string[] PersonTypes => Enum.GetNames(typeof(PersonType));
+        //Translated Enumnames of PersonType
+        public string[] PersonTypesTranslated => PersonTypes.Select(x => Application.Current.TryFindResource(x) as string ?? x).ToArray();
+
+
 
         internal void ShowNotification(string titel, string message, NotificationType type)
         {
@@ -80,7 +88,7 @@ namespace ImmoGlobalAdmin.ViewModel
 
         #region Edit/Create ButtonCommands
 
-        public ICommand EditButtonCommand =>new RelayCommand<object>(EditButtonClicked);
+        public ICommand EditButtonCommand => new RelayCommand<object>(EditButtonClicked);
         protected virtual void EditButtonClicked(object obj)
         {
             editMode = true;
@@ -88,10 +96,10 @@ namespace ImmoGlobalAdmin.ViewModel
             OnPropertyChanged(nameof(EditModeInverted));
         }
 
-        public ICommand SaveEditButtonCommand=>  new RelayCommand<object>(SaveEditButtonClicked);
+        public ICommand SaveEditButtonCommand => new RelayCommand<object>(SaveEditButtonClicked);
         protected virtual void SaveEditButtonClicked(object obj)
         {
-           
+
             creationMode = false;
             editMode = false;
             OnPropertyChanged(nameof(EditMode));
@@ -108,7 +116,7 @@ namespace ImmoGlobalAdmin.ViewModel
             OnPropertyChanged(nameof(EditModeInverted));
         }
 
-        public ICommand CreateButtonCommand=> new RelayCommand<object>(CreateButtonClicked);
+        public ICommand CreateButtonCommand => new RelayCommand<object>(CreateButtonClicked);
         protected virtual void CreateButtonClicked(object obj)
         {
             editMode = true;

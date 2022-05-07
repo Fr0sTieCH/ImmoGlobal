@@ -116,7 +116,7 @@ namespace ImmoGlobalAdmin.ViewModel
                 string note = data[7];
                 int type = int.Parse(data[8]);
 
-                Person newPerson = new Person(name, prename, address, phone, fax, email, birthdate, note);
+                Person newPerson = new Person(name, prename, address, phone, email, birthdate, note);
                 newPerson.Type = (PersonType)type;
                 return newPerson;
             }).ToList();
@@ -139,7 +139,7 @@ namespace ImmoGlobalAdmin.ViewModel
                 string note = data[6];
                 int type = int.Parse(data[7]);
 
-                Person newPerson = new Person(name, adress, phone, fax, email, vatNumber, note);
+                Person newPerson = new Person(name, adress, phone, email, vatNumber, note);
                 newPerson.Type = (PersonType)type;
                 return newPerson;
             }).ToList();
@@ -219,7 +219,7 @@ namespace ImmoGlobalAdmin.ViewModel
                 string rooms = data[2];
                 string qm = data[3];
                 Person owner = DataAccessLayer.GetInstance.GetPersonsUnfiltered().Where(x => x.Name == "CreditSuisse").First();
-                Person janitor = new Person($"{name}", "Janitor", address, "079 235 56 32", "", $"{name}janitor@gmail.com", DateTime.Parse("01.01.1980"), "Test janitor, would be a real person");
+                Person janitor = new Person($"{name}", "Janitor", address, "079 235 56 32", $"{name}janitor@gmail.com", DateTime.Parse("01.01.1980"), "Test janitor, would be a real person");
                 RealEstate tmpRE = new RealEstate(name, address, owner, janitor, double.Parse(rooms), double.Parse(qm), DataAccessLayer.GetInstance.GetBankAccountsUnfiltered()[0]);
 
                 for (int i = 0; i < 4; i++)//create appartements

@@ -7,18 +7,17 @@ using System.Threading.Tasks;
 
 namespace ImmoGlobalAdmin.MainClasses
 {
-    public class RealEstate
+    public class RealEstate:ImmoGlobalEntity
     {
         public int RealEstateID { get; private set; }
-        public string RealEstateName { get; set; }
-        public string Address { get; set; }
+        public string RealEstateName { get; set; } = "";
+        public string Address { get; set; } = "";
+        public string BuildingInsurance { get; set; } = "";
+        public string LiabilityInsurance { get; set; } = "";
+        public string PersonalInsurance { get; set; } = "";
         public virtual Person? Janitor { get; set; }
         public virtual ICollection<RentalObject?> RentalObjects { get; set; }
-        public virtual RentalObject? BaseObject { get; private set; }
-
-        public bool Enabled { get; private set; }
-        public string ReasonForDeleting { get; private set; } = "";
-
+        public virtual RentalObject BaseObject { get; private set; }
 
 
         #region CONSTRUCTORS
@@ -83,7 +82,7 @@ namespace ImmoGlobalAdmin.MainClasses
         }
         
 
-        public void Delete(string reason)
+        public override void Delete(string reason)
         {
             BaseObject.DeleteBaseObject($"Deleted because the realestate got deleted with the reason:{reason}");
             foreach(RentalObject ro in RentalObjects)

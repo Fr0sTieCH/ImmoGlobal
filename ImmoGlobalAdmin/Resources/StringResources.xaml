@@ -56,7 +56,34 @@
     <system:String x:Key="creditorDebitor">Creditor / Debitor</system:String>
     <system:String x:Key="value">Value in CHF</system:String>
     <system:String x:Key="dateOfTransaction">Date of transaction</system:String>
-    
+    <system:String x:Key="sex">Sex</system:String>
+    <system:String x:Key="type">Type</system:String>
+    <system:String x:Key="buildingInsurance">Building insurance</system:String>
+    <system:String x:Key="liabilityInsurance">Liability insurance</system:String>
+    <system:String x:Key="personalInsurance">Personal insurance</system:String>
+
+    <!--#region PERSONTYPE ENUM TRANSLATION-->
+    <system:String x:Key="Employee">Employee</system:String>
+    <system:String x:Key="PrivatePerson">Private person</system:String>
+    <system:String x:Key="Company">Company</system:String>
+    <!--#endregion-->
+
+    <!--#region SEX ENUM TRANSLATION-->
+    <system:String x:Key="Male">Male</system:String>
+    <system:String x:Key="Female">Female</system:String>
+    <system:String x:Key="Other">Other</system:String>
+    <!--#endregion-->
+
+    <!--#region TRANSACTIONTYPE ENUM TRANSLATION-->
+    <system:String x:Key="Deposit">Deposit</system:String>
+    <system:String x:Key="Rent">Rentpayment</system:String>
+    <system:String x:Key="Electricity">Power</system:String>
+    <system:String x:Key="Water">Water</system:String>
+    <system:String x:Key="Heating">Heating</system:String>
+    <system:String x:Key="Telecommunication">Tele</system:String>
+    <system:String x:Key="Repair">Repairs</system:String>
+    <system:String x:Key="OtherT">Other</system:String>
+    <!--#endregion-->
 
 
 

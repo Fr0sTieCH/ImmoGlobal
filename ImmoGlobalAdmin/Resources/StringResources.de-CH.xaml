@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:system="clr-namespace:System;assembly=mscorlib">
 
-        <system:String x:Key="dashboard">Dashboard</system:String>
-        <system:String x:Key="finance">Finanzen</system:String>
-        <system:String x:Key="realEstate">Liegenschaften</system:String>
-        <system:String x:Key="person">Personen</system:String>
-        <system:String x:Key="user">Benutzer</system:String>
-        <system:String x:Key="settings">Einstellungen</system:String>
-        <system:String x:Key="name">Name</system:String>
+    <system:String x:Key="dashboard">Dashboard</system:String>
+    <system:String x:Key="finance">Finanzen</system:String>
+    <system:String x:Key="realEstate">Liegenschaften</system:String>
+    <system:String x:Key="person">Personen</system:String>
+    <system:String x:Key="user">Benutzer</system:String>
+    <system:String x:Key="settings">Einstellungen</system:String>
+    <system:String x:Key="name">Name</system:String>
     <system:String x:Key="prename">Vorname</system:String>
     <system:String x:Key="address">Adresse</system:String>
     <system:String x:Key="birthdate">Geburtsdatum</system:String>
@@ -57,8 +57,36 @@
     <system:String x:Key="creditorDebitor">Kreditor / Debitor</system:String>
     <system:String x:Key="value">Betrag in CHF</system:String>
     <system:String x:Key="dateOfTransaction">Zeitpunkt der Transaktion</system:String>
+    <system:String x:Key="sex">Geschlecht</system:String>
+    <system:String x:Key="type">Typ</system:String>
+    <system:String x:Key="buildingInsurance">Gebäudeversicherung</system:String>
+    <system:String x:Key="liabilityInsurance">Haftpflichtversicherung</system:String>
+    <system:String x:Key="personalInsurance">Personenversicherung</system:String>
+    
+    
 
+    <!--#region PERSONTYPE ENUM TRANSLATION-->
+    <system:String x:Key="Employee">Mitarbeiter</system:String>
+    <system:String x:Key="PrivatePerson">Privatperson</system:String>
+    <system:String x:Key="Company">Firma</system:String>
+    <!--#endregion-->
 
+    <!--#region SEX ENUM TRANSLATION-->
+    <system:String x:Key="Male">Männlich</system:String>
+    <system:String x:Key="Female">Weiblich</system:String>
+    <system:String x:Key="Other">Andere</system:String>
+    <!--#endregion-->
+
+    <!--#region TRANSACTIONTYPE ENUM TRANSLATION-->
+    <system:String x:Key="Deposit">Einzahlung</system:String>
+    <system:String x:Key="Rent">Mietzins</system:String>
+    <system:String x:Key="Electricity">Strom</system:String>
+    <system:String x:Key="Water">Wasser</system:String>
+    <system:String x:Key="Heating">Heizung</system:String>
+    <system:String x:Key="Telecommunication">Telekommunikation</system:String>
+    <system:String x:Key="Repair">Reparaturen</system:String>
+    <system:String x:Key="OtherT">Sonstiges</system:String>
+    <!--#endregion-->
 
     <!--Rental Contract Document-->
     <system:String x:Key="rentalContract">Mietvertrag</system:String>

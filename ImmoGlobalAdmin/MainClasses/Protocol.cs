@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImmoGlobalAdmin.MainClasses
 {
-    public class Protocol
+    public class Protocol:ImmoGlobalEntity
     {
         public int ProtocolID { get; private set; }
         public virtual RentalObject? RentalObject { get; private set; }
@@ -15,11 +15,6 @@ namespace ImmoGlobalAdmin.MainClasses
         public ProtocolType Type { get; private set; }
         public virtual ICollection<ProtocolPoint?> Points { get; private set; }
         public DateTime Date { get; private set; }
-
-        public bool Enabled { get; private set; } //is set to false on deletion
-        public string ReasonForDeleting { get; private set; } = "";
-        public bool Locked { get; private set; } //if true, attributes can not be changed anymore (for example when the document is signed)
-
         #region CONSTRUCTORS
 
         /// <summary>
@@ -96,15 +91,6 @@ namespace ImmoGlobalAdmin.MainClasses
 
         #endregion
 
-        public void Delete(string reason)
-        {
-            Enabled = false;
-            ReasonForDeleting = reason;
-        }
-     
-        public void Lock()
-        {
-            Locked = true;
-        }
+       
     }
 }

@@ -10,7 +10,7 @@ namespace ImmoGlobalAdmin.MainClasses
 {/// <summary>
 /// Represents a rental object (Apartement,Garage, Hobbyroom etc)
 /// </summary>
-    public class RentalObject
+    public class RentalObject:ImmoGlobalEntity
     {
         public int RentalObjectID { get; private set; }
         public string RentalObjectName { get; set; } = "";
@@ -31,10 +31,6 @@ namespace ImmoGlobalAdmin.MainClasses
         public bool HasWashingmachine { get; set; } = false;
         public bool HasTumbler { get; set; } = false;
 
-
-
-        public bool Enabled { get; private set; }
-        public string ReasonForDeleting { get; private set; } = "";
 
         #region CONSTRUCTORS
 
@@ -247,9 +243,9 @@ namespace ImmoGlobalAdmin.MainClasses
 
 
 
-        public void Delete(string reason)
+        public override void Delete(string reason)
         {
-            if (Type == RentalObjectType.RealEstateBaseObject) //Every realestate has to have a baseobject, therefore deleting of a realestateobject is not allowed
+            if (Type == RentalObjectType.RealEstateBaseObject) //Every realestate has to have a baseobject, therefore deleting of a realestatebaseobject is not allowed
             {
                 return;
             }
