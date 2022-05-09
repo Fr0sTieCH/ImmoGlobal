@@ -12,11 +12,11 @@ namespace ImmoGlobalAdmin.ViewModel
 {
     internal class RentalContractViewModel :BaseViewModel
     {
-       private RentalObject rentalObjetToGetContractsFrom;
-        private RealEstate realEstateOfRentalObject;
-        private RentalContract? selectedRentalContract;
-        private RentalObjectViewModel viewModelToUpdate;
-        private DateTime terminationDate;
+       private RentalObject _rentalObjetToGetContractsFrom;
+        private RealEstate _realEstateOfRentalObject;
+        private RentalContract? _selectedRentalContract;
+        private RentalObjectViewModel _viewModelToUpdate;
+        private DateTime _terminationDate;
 
         public RentalContractViewModel(RentalObject rentalObjetToGetContractsFrom,RealEstate realEstateOfRentalObject, RentalObjectViewModel viewModelToUpdate)
         {
@@ -24,20 +24,20 @@ namespace ImmoGlobalAdmin.ViewModel
             this.RentalObjetToGetContractsFrom = rentalObjetToGetContractsFrom;
             this.SelectedRentalContract = rentalObjetToGetContractsFrom.RentalContracts.FirstOrDefault();
             this.TerminationDate = DateTime.Now;
-            this.viewModelToUpdate = viewModelToUpdate;
+            this._viewModelToUpdate = viewModelToUpdate;
         }
 
         public RentalObject RentalObjetToGetContractsFrom
         {
             get
             {
-                return rentalObjetToGetContractsFrom;
+                return _rentalObjetToGetContractsFrom;
             }
 
             set
             {
                 
-                rentalObjetToGetContractsFrom = value;
+                _rentalObjetToGetContractsFrom = value;
                 OnPropertyChanged(nameof(RentalObjetToGetContractsFrom));
             }
         }
@@ -48,29 +48,29 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                return selectedRentalContract;
+                return _selectedRentalContract;
             }
             set
             {
                 
-                selectedRentalContract = value;
+                _selectedRentalContract = value;
                 OnPropertyChanged(nameof(SelectedRentalContract));
                 OnPropertyChanged(nameof(AllowedToValidateSelectedContract));
                 OnPropertyChanged(nameof(RentalContractSelected));
             }
         }
 
-        public bool RentalContractSelected => selectedRentalContract != null;
+        public bool RentalContractSelected => _selectedRentalContract != null;
 
         public RealEstate RealEstateOfRentalObject
         {
             get 
             { 
-                return realEstateOfRentalObject; 
+                return _realEstateOfRentalObject; 
             }
             set
             {
-                realEstateOfRentalObject = value;
+                _realEstateOfRentalObject = value;
                 OnPropertyChanged(nameof (RealEstateOfRentalObject));
             }
         }
@@ -81,11 +81,11 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get 
             { 
-                return terminationDate; 
+                return _terminationDate; 
             }
             set
             {
-                terminationDate = value;
+                _terminationDate = value;
                 OnPropertyChanged(nameof (TerminationDate));
             }
         }
@@ -98,15 +98,15 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (selectedRentalContract == null) return false;
+                if (_selectedRentalContract == null) return false;
 
-                if (selectedRentalContract.State == ContractState.ValidationPending)
+                if (_selectedRentalContract.State == ContractState.ValidationPending)
                 {
-                    if (rentalObjetToGetContractsFrom.ActiveRentalContract != null)
+                    if (_rentalObjetToGetContractsFrom.ActiveRentalContract != null)
                     {
-                        if (rentalObjetToGetContractsFrom.ActiveRentalContract.EndDate != null)
+                        if (_rentalObjetToGetContractsFrom.ActiveRentalContract.EndDate != null)
                         {
-                            if (rentalObjetToGetContractsFrom.ActiveRentalContract.EndDate <= selectedRentalContract.StartDate)
+                            if (_rentalObjetToGetContractsFrom.ActiveRentalContract.EndDate <= _selectedRentalContract.StartDate)
                             {
                                 return true;
                             }
@@ -138,38 +138,38 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand TerminateButtonCommand => new RelayCommand<object>(TerminateButtonClicked);
         private void TerminateButtonClicked(object obj)
         {
-            selectedRentalContract.TerminateContract(TerminationDate);
+            _selectedRentalContract.TerminateContract(TerminationDate);
             DataAccessLayer.GetInstance.SaveChanges();
-            foreach(RentalContract rc in rentalObjetToGetContractsFrom.RentalContracts)
+            foreach(RentalContract rc in _rentalObjetToGetContractsFrom.RentalContracts)
             {
                 rc.CheckState();
             }
             OnPropertyChanged(nameof(RentalObjetToGetContractsFrom));
             OnPropertyChanged(nameof(RentalContractsOfObject));
-            OnPropertyChanged(nameof(selectedRentalContract));
-            viewModelToUpdate.UpdateRentalObject();
+            OnPropertyChanged(nameof(_selectedRentalContract));
+            _viewModelToUpdate.UpdateRentalObject();
         }
 
         public ICommand RevertTerminationButtonCommand => new RelayCommand<object>(RevertTerminationButtonClicked);
         private void RevertTerminationButtonClicked(object obj)
         {
-            selectedRentalContract.ChangeEndDate = null;
+            _selectedRentalContract.ChangeEndDate = null;
             DataAccessLayer.GetInstance.SaveChanges();
             OnPropertyChanged(nameof(RentalObjetToGetContractsFrom));
             OnPropertyChanged(nameof(RentalContractsOfObject));
-            OnPropertyChanged(nameof(selectedRentalContract));
-            viewModelToUpdate.UpdateRentalObject();
+            OnPropertyChanged(nameof(_selectedRentalContract));
+            _viewModelToUpdate.UpdateRentalObject();
         }
 
         public ICommand ValidateButtonCommand => new RelayCommand<object>(ValidateButtonClicked);
 
         private void ValidateButtonClicked(object obj)
         {
-            selectedRentalContract.ValidateContract();
+            _selectedRentalContract.ValidateContract();
             DataAccessLayer.GetInstance.SaveChanges();
             OnPropertyChanged(nameof(RentalObjetToGetContractsFrom.RentalContracts));
-            OnPropertyChanged(nameof(selectedRentalContract));
-            viewModelToUpdate.UpdateRentalObject();
+            OnPropertyChanged(nameof(_selectedRentalContract));
+            _viewModelToUpdate.UpdateRentalObject();
         }
 
 
@@ -193,13 +193,13 @@ namespace ImmoGlobalAdmin.ViewModel
 
         protected override void CancelEditButtonClicked(object obj)
         {
-            if (creationMode)
+            if (_creationMode)
             {
-
+                _rentalObjetToGetContractsFrom.RemoveRentalContract(SelectedRentalContract);
             }
             else
             {
-                DataAccessLayer.GetInstance.RestoreValuesFromDB(selectedRentalContract);
+                DataAccessLayer.GetInstance.RestoreValuesFromDB(_selectedRentalContract);
             }
 
             base.CancelEditButtonClicked(obj);
@@ -210,7 +210,7 @@ namespace ImmoGlobalAdmin.ViewModel
 
         protected override void SaveEditButtonClicked(object obj)
         {
-            if (creationMode)
+            if (_creationMode)
             {
                 DataAccessLayer.GetInstance.StoreNewRentalContract(SelectedRentalContract);
             }
@@ -227,7 +227,7 @@ namespace ImmoGlobalAdmin.ViewModel
 
         protected override void CreateButtonClicked(object obj)
         {
-            SelectedRentalContract = new RentalContract(rentalObjetToGetContractsFrom,DateTime.Now);
+            SelectedRentalContract = _rentalObjetToGetContractsFrom.CreateNewRentalContract();
             OnPropertyChanged(nameof(SelectedRentalContract));
             base.CreateButtonClicked(obj);
         }

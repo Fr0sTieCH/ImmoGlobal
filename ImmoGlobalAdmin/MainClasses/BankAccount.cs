@@ -44,7 +44,7 @@ namespace ImmoGlobalAdmin.MainClasses
         #endregion
 
         [NotMapped]
-        public string IGID => BankAccountID.ToString("BA00000000");
+        public string IGID => BankAccountID.ToString("BA 00000000");
 
         /// <summary>
         /// Calculates the current balance based on all transactions associatet with this bankaccount

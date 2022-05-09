@@ -32,6 +32,7 @@
     <system:String x:Key="rentStatus">Mietzins Status</system:String>
     <system:String x:Key="dueDate">Zahlbar bis</system:String>
     <system:String x:Key="rentsDue">Nicht bezahlt</system:String>
+    <system:String x:Key="rentBalance">Mietzins Saldo</system:String>
     <system:String x:Key="dueDay">Stichtag</system:String>
     <system:String x:Key="lastPayment">Letzte Zahlung</system:String>
     <system:String x:Key="assignedEmployee">Verantwortlicher Mitarbeiter</system:String>
@@ -62,6 +63,7 @@
     <system:String x:Key="buildingInsurance">Gebäudeversicherung</system:String>
     <system:String x:Key="liabilityInsurance">Haftpflichtversicherung</system:String>
     <system:String x:Key="personalInsurance">Personenversicherung</system:String>
+    <system:String x:Key="language">Sprache</system:String>
     
     
 

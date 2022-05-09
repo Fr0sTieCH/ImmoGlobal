@@ -13,12 +13,12 @@ namespace ImmoGlobalAdmin.ViewModel
 {
     internal class RealEstateViewModel : BaseViewModel, IHasSearchableContent
     {
-        private string searchString = "";
-        private RealEstate? selectedRealEstate;
+        private string _searchString = "";
+        private RealEstate? _selectedRealEstate;
 
         #region Singleton
-        private static RealEstateViewModel? instance = null;
-        private static readonly object padlock = new();
+        private static RealEstateViewModel? _instance = null;
+        private static readonly object _padlock = new();
 
         public RealEstateViewModel()
         {
@@ -31,13 +31,13 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                lock (padlock)
+                lock (_padlock)
                 {
-                    if (instance == null)
+                    if (_instance == null)
                     {
-                        instance = new RealEstateViewModel();
+                        _instance = new RealEstateViewModel();
                     }
-                    return instance;
+                    return _instance;
                 }
             }
         }
@@ -50,7 +50,7 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (searchString == "" || searchString == null)
+                if (_searchString == "" || _searchString == null)
                 {
                     return DataAccessLayer.GetInstance.GetRealEstatesUnfiltered();
                 }
@@ -65,10 +65,10 @@ namespace ImmoGlobalAdmin.ViewModel
 
         public string SearchString
         {
-            get { return searchString; }
+            get { return _searchString; }
             set
             {
-                searchString = value;
+                _searchString = value;
                 OnPropertyChanged(nameof(AllRealEstates));
             }
         }
@@ -77,20 +77,22 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (selectedRealEstate == null)
+                if (_selectedRealEstate == null)
                 {
-                    selectedRealEstate = AllRealEstates.FirstOrDefault();
+                    _selectedRealEstate = AllRealEstates.FirstOrDefault();
                 }
-                return selectedRealEstate;
+
+                return _selectedRealEstate;
             }
             set
             {
-                if (editMode || DeleteDialogOpen)
+                if (_editMode || DeleteDialogOpen)
                 {
                     return;
                 }
-                selectedRealEstate = value;
-                OnPropertyChanged(nameof(selectedRealEstate));
+
+                _selectedRealEstate = value;
+                OnPropertyChanged(nameof(SelectedRealEstate));
             }
         }
 
@@ -117,30 +119,32 @@ namespace ImmoGlobalAdmin.ViewModel
 
         protected override void CancelEditButtonClicked(object obj)
         {
-            if (creationMode)
+            base.CancelEditButtonClicked(obj);
+
+            if (_creationMode)
             {
                 SelectedRealEstate = null;
             }
             else
             {
                 DataAccessLayer.GetInstance.RestoreValuesFromDB(SelectedRealEstate);
-                DataAccessLayer.GetInstance.RestoreValuesFromDB(selectedRealEstate.BaseObject);
-                foreach (RentalObject ro in selectedRealEstate.RentalObjects)
+                DataAccessLayer.GetInstance.RestoreValuesFromDB(_selectedRealEstate.BaseObject);
+                foreach (RentalObject ro in _selectedRealEstate.RentalObjects)
                 {
                     DataAccessLayer.GetInstance.RestoreValuesFromDB(ro);
                 }
             }
 
-            base.CancelEditButtonClicked(obj);
-
-            OnPropertyChanged(nameof(SelectedRealEstate));
+           
             OnPropertyChanged(nameof(AllRealEstates));
+            OnPropertyChanged(nameof(SelectedRealEstate));
+            
         }
 
 
         protected override void SaveEditButtonClicked(object obj)
         {
-            if (creationMode)
+            if (_creationMode)
             {
                 DataAccessLayer.GetInstance.StoreNewRealEstate(SelectedRealEstate);
                 SelectedRealEstate = null;
@@ -181,7 +185,7 @@ namespace ImmoGlobalAdmin.ViewModel
             base.DeleteAcceptButtonClicked(obj);
 
             SelectedRealEstate = null;
-            OnPropertyChanged(nameof(selectedRealEstate));
+            OnPropertyChanged(nameof(_selectedRealEstate));
             OnPropertyChanged(nameof(AllRealEstates));
             MainViewModel.GetInstance.DeleteAcceptButtonClicked(obj);
 
@@ -199,7 +203,7 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand OpenRentalObjectButtonCommand => new RelayCommand<object>(OpenRentalObjectButtonClicked);
         private void OpenRentalObjectButtonClicked(object obj)
         {
-            if (selectedRealEstate != null) 
+            if (_selectedRealEstate != null) 
             { 
             RentalObjectViewModel rovm = new RentalObjectViewModel((RentalObject)obj,SelectedRealEstate,false);
             MainViewModel.GetInstance.SelectedViewModel = rovm;
@@ -209,9 +213,9 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand CreateRentalObjectButtonCommand => new RelayCommand<object>(CreateRentalObjectButtonClicked);
         private void CreateRentalObjectButtonClicked(object obj)
         {
-            if (selectedRealEstate != null)
+            if (SelectedRealEstate != null)
             {
-                RentalObjectViewModel rovm = new RentalObjectViewModel(new RentalObject(selectedRealEstate.BaseObject), SelectedRealEstate, true);
+                RentalObjectViewModel rovm = new RentalObjectViewModel(SelectedRealEstate.AddRentalObject(), SelectedRealEstate, true);
                 MainViewModel.GetInstance.SelectedViewModel = rovm;
             }
         }

@@ -1,0 +1,6 @@
+Typ;Name;Adresszusatz;Räume;Fläche;geschätzter Mietzins;Geschätzte Nebenkosten;Kühlschrank;Abwaschmaschiene;Ofen;Waschmaschine;Tumbler
+1;Wohnung Links;A;3.5;92;1400;200;x;x;x;;
+1;Wohnung Rechts;B;4.5;111;2000;200;x;x;x;;
+3;Hobbyraum;;2;21;300;50;;;;;
+5;Parkplatz 1;;1;6;20;0;;;;;
+5;Parkplatz 2;;1;6;20;0;;;;;

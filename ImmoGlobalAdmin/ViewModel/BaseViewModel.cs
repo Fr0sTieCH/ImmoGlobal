@@ -19,16 +19,16 @@ namespace ImmoGlobalAdmin.ViewModel
 {
     internal abstract class BaseViewModel : DependencyObject, INotifyPropertyChanged
     {
-        protected bool deleteDialogOpen = false;
-        public bool DeleteDialogOpen => deleteDialogOpen;
-        public bool DeleteDialogNotOpen => !deleteDialogOpen;
+        protected bool _deleteDialogOpen = false;
+        public bool DeleteDialogOpen => _deleteDialogOpen;
+        public bool DeleteDialogNotOpen => !_deleteDialogOpen;
 
 
-        protected bool editMode = false;
-        public bool EditMode => editMode;
-        public bool EditModeInverted => !editMode;
-        public bool CreationMode => creationMode;
-        public bool CreationModeInverted => !creationMode;
+        protected bool _editMode = false;
+        public bool EditMode => _editMode;
+        public bool EditModeInverted => !_editMode;
+        public bool CreationMode => _creationMode;
+        public bool CreationModeInverted => !_creationMode;
 
 
         public virtual List<Person> AllPersons => DataAccessLayer.GetInstance.GetPersonsUnfiltered();
@@ -39,7 +39,7 @@ namespace ImmoGlobalAdmin.ViewModel
         public virtual List<RealEstate> AllRealEstates => DataAccessLayer.GetInstance.GetRealEstatesUnfiltered();
         public virtual List<Transaction> AllTransactions => DataAccessLayer.GetInstance.GetTransactionsUnfiltered();
 
-        protected bool creationMode;
+        protected bool _creationMode;
 
         public string[] ObjectTypeIcons
         {
@@ -91,7 +91,7 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand EditButtonCommand => new RelayCommand<object>(EditButtonClicked);
         protected virtual void EditButtonClicked(object obj)
         {
-            editMode = true;
+            _editMode = true;
             OnPropertyChanged(nameof(EditMode));
             OnPropertyChanged(nameof(EditModeInverted));
         }
@@ -100,8 +100,8 @@ namespace ImmoGlobalAdmin.ViewModel
         protected virtual void SaveEditButtonClicked(object obj)
         {
 
-            creationMode = false;
-            editMode = false;
+            _creationMode = false;
+            _editMode = false;
             OnPropertyChanged(nameof(EditMode));
             OnPropertyChanged(nameof(EditModeInverted));
 
@@ -110,8 +110,8 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand CancelEditButtonCommand => new RelayCommand<object>(CancelEditButtonClicked);
         protected virtual void CancelEditButtonClicked(object obj)
         {
-            editMode = false;
-            creationMode = false;
+            _editMode = false;
+            _creationMode = false;
             OnPropertyChanged(nameof(EditMode));
             OnPropertyChanged(nameof(EditModeInverted));
         }
@@ -119,8 +119,8 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand CreateButtonCommand => new RelayCommand<object>(CreateButtonClicked);
         protected virtual void CreateButtonClicked(object obj)
         {
-            editMode = true;
-            creationMode = true;
+            _editMode = true;
+            _creationMode = true;
             OnPropertyChanged(nameof(EditMode));
             OnPropertyChanged(nameof(EditModeInverted));
         }
@@ -133,7 +133,7 @@ namespace ImmoGlobalAdmin.ViewModel
         public virtual void DeleteButtonClicked(object obj)
         {
             //sets the bool to open the "Are You sure?" Dialog
-            deleteDialogOpen = true;
+            _deleteDialogOpen = true;
             OnPropertyChanged(nameof(DeleteDialogOpen));
             OnPropertyChanged(nameof(DeleteDialogNotOpen));
 
@@ -144,7 +144,7 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand DeleteAcceptButtonCommand => new RelayCommand<object>(DeleteAcceptButtonClicked);
         public virtual void DeleteAcceptButtonClicked(object obj)
         {
-            deleteDialogOpen = false;
+            _deleteDialogOpen = false;
             OnPropertyChanged(nameof(DeleteDialogOpen));
             OnPropertyChanged(nameof(DeleteDialogNotOpen));
         }
@@ -152,7 +152,7 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand DeleteCancelButtonCommand => new RelayCommand<object>(DeleteCancelButtonClicked);
         public virtual void DeleteCancelButtonClicked(object obj)
         {
-            deleteDialogOpen = false;
+            _deleteDialogOpen = false;
             OnPropertyChanged(nameof(DeleteDialogOpen));
             OnPropertyChanged(nameof(DeleteDialogNotOpen));
         }

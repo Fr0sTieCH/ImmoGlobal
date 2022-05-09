@@ -1,0 +1,15 @@
+Typ;Geschlecht;Name;Vorname;Adresse;Geburtsdatum;Telefon;Email;MWStNr;Notiz
+2;1;Beispiel;Anna;Beispielstrasse 3, 3010 Bern;01.01.1980;079 XXX XX XX;anna.beispiel@immo-global.ch;-;Test Mitarbeiterin
+2;0;Test;Richard;Teststrasse 1, 3010 Bern;01.01.1985;078 XXX XX XX;richard.test@immo-global.ch;-;Test Mitarbeiter
+0;0;Mueller;Stefan;Hauptstrasse 33, 3010 Bern;;031 XXX XX XX;s.mueller@gmail.com;-;Test Mieter
+0;0;Koch;Daniel;Hauptstrasse 33, 3010 Bern;;031 XXX XX XX;info.corona@ruhestand.ch;-;Test Mieter
+0;1;Suter;Corinne;Hauptstrasse 33, 3010 Bern;;031 XXX XX XX;suter@swissski.ch;-;Test Mieterin
+0;1;Obama;Michele;Route-principale 12, 1001 Lausanne;;021 XXX XX XX;mobama@us.gov;-;Test Mieterin
+0;1;Jordi;Francin;Route-principale 12, 1001 Lausanne;;022 XXX XX XX;jordinotlordi@music.ch;-;Test Mieterin
+0;0;Verstappen;Max;Hauptgasse 42, 8000 Zuerich;;044 XXX XX XX;max@redbull.com;-;Test Mieter
+0;0;Leclerc;Charles;Hauptgasse 42, 8000 Zuerich;;044 XXX XX XX;charie@ferrari.com;-;Test Mieter
+0;0;Steiner;Guenther;Hauptgasse 42, 8000 Zuerich;;044 XXX XX XX;guenthergoesfast@haas.com;-;Test Mieter
+0;0;Horner;Christian;Hauptgasse 42, 8000 Zuerich;;044 XXX XX XX;chef@redbull.com;-;Test Mieter
+1;2;ImmoGlobal;;Firmenstrasse 1, 3010 Bern;;031 XXX XX XX;info@immo-global.ch;465456456;Test Firma
+1;2;Musterhadwerk GmbH;;Firmenstrasse 11, 3010 Bern;;031 XXX XX XX;firma@muster.ch;13654163165;Test Firma
+1;2;CreditSuisse;;Hauptstrasse 123, 8000 Zuerich;;044 XXX XX XX;info@creditsuisse.ch;51564565464;Test Firma

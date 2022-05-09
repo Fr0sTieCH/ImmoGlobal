@@ -1,0 +1,30 @@
+Typ;Name;Adresszusatz;Räume;Fläche;geschätzter Mietzins;Geschätzte Nebenkosten;Kühlschrank;Abwaschmaschiene;Ofen;Waschmaschine;Tumbler
+0;Wohnung Links;A;5.5;132;2000;300;x;x;x;x;x
+0;Wohnung Rechts;B;5.5;132;2000;300;x;x;x;x;x
+0;Wohnung Oben;1.OG;10;352;3900;500;x;x;x;x;x
+1;Garage 1;;1;15;100;0;;;;;
+1;Garage 2;;1;15;100;0;;;;;
+1;Garage 3;;1;15;100;0;;;;;
+0;Wohnung Links;A;3.5;92;1400;200;x;x;x;;
+0;Wohnung Rechts;B;4.5;111;2000;200;x;x;x;;
+2;Hobbyraum;;2;21;300;50;;;;;
+4;Parkplatz 1;;1;6;20;0;;;;;
+4;Parkplatz 2;;1;6;20;0;;;;;
+0;Wohnung 1OG Links;1.OG L;5.5;132;2000;300;x;x;x;x;x
+0;Wohnung 1OG Rechts;1.OG R;5.5;132;2000;300;x;x;x;x;x
+0;Wohnung 2OG Links;2.OG L;5.5;132;2000;300;x;x;x;x;x
+0;Wohnung 2OG Rechts;2.OG R;5.5;132;2000;300;x;x;x;x;x
+3;Büro EG Links;EG L;8;320;6000;500;x;x;x;;
+3;Büro EG Rechts;EG R;8;320;6000;500;x;x;x;;
+1;Garage 1;;1;15;100;0;;;;;
+1;Garage 2;;1;15;100;0;;;;;
+1;Garage 3;;1;15;100;0;;;;;
+1;Garage 4;;1;15;100;0;;;;;
+4;Parkplatz 1;;1;6;20;0;;;;;
+4;Parkplatz 2;;1;6;20;0;;;;;
+4;Parkplatz 3;;1;6;20;0;;;;;
+4;Parkplatz 4;;1;6;20;0;;;;;
+4;Parkplatz 5;;1;6;20;0;;;;;
+4;Parkplatz 6;;1;6;20;0;;;;;
+4;Parkplatz 7;;1;6;20;0;;;;;
+4;Parkplatz 8;;1;6;20;0;;;;;

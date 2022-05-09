@@ -32,6 +32,7 @@
     <system:String x:Key="rentStatus">Rent payment status</system:String>
     <system:String x:Key="dueDay">Due on day</system:String>
     <system:String x:Key="rentsDue">Rents due</system:String>
+    <system:String x:Key="rentBalance">Rents Balance</system:String>
     <system:String x:Key="lastPayment">Last payment</system:String>
     <system:String x:Key="assignedEmployee">Assigned Employee</system:String>
     <system:String x:Key="rentalObjectType">Type</system:String>
@@ -61,6 +62,7 @@
     <system:String x:Key="buildingInsurance">Building insurance</system:String>
     <system:String x:Key="liabilityInsurance">Liability insurance</system:String>
     <system:String x:Key="personalInsurance">Personal insurance</system:String>
+    <system:String x:Key="language">Language</system:String>
 
     <!--#region PERSONTYPE ENUM TRANSLATION-->
     <system:String x:Key="Employee">Employee</system:String>

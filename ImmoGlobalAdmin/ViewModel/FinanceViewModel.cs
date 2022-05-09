@@ -10,8 +10,8 @@ namespace ImmoGlobalAdmin.ViewModel
 {
     internal class FinanceViewModel:BaseViewModel,IHasSearchableContent
     {
-        private string searchString = "";
-        private BankAccount? selectedBankAccount;
+        private string _searchString = "";
+        private BankAccount? _selectedBankAccount;
         #region Singleton
         private static FinanceViewModel? instance = null;
         private static readonly object padlock = new();
@@ -47,7 +47,7 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (searchString == "" || searchString == null)
+                if (_searchString == "" || _searchString == null)
                 {
                     return DataAccessLayer.GetInstance.GetBankAccountsUnfiltered();
                 }
@@ -62,10 +62,10 @@ namespace ImmoGlobalAdmin.ViewModel
 
         public string SearchString
         {
-            get { return searchString; }
+            get { return _searchString; }
             set
             {
-                searchString = value;
+                _searchString = value;
                 OnPropertyChanged(nameof(AllBankAccounts));
             }
         }
@@ -74,19 +74,19 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (selectedBankAccount == null)
+                if (_selectedBankAccount == null)
                 {
-                    selectedBankAccount = AllBankAccounts.FirstOrDefault();
+                    _selectedBankAccount = AllBankAccounts.FirstOrDefault();
                 }
-                return selectedBankAccount;
+                return _selectedBankAccount;
             }
             set
             {
-                if (editMode || DeleteDialogOpen)
+                if (_editMode || DeleteDialogOpen)
                 {
                     return;
                 }
-                selectedBankAccount = value;
+                _selectedBankAccount = value;
                 OnPropertyChanged(nameof(SelectedBankAccount));
             }
         }
@@ -107,7 +107,7 @@ namespace ImmoGlobalAdmin.ViewModel
 
         protected override void CancelEditButtonClicked(object obj)
         {
-            if (creationMode)
+            if (_creationMode)
             {
                 SelectedBankAccount = null;
             }
@@ -125,7 +125,7 @@ namespace ImmoGlobalAdmin.ViewModel
 
         protected override void SaveEditButtonClicked(object obj)
         {
-            if (creationMode)
+            if (_creationMode)
             {
                 DataAccessLayer.GetInstance.StoreNewBankAccount(SelectedBankAccount);
                 SelectedBankAccount= null;

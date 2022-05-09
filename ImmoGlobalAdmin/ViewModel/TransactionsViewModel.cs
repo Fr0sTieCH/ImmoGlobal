@@ -13,16 +13,16 @@ namespace ImmoGlobalAdmin.ViewModel
     internal class TransactionsViewModel : BaseViewModel, IHasSearchableContent
     {
 
-        private string searchString = "";
-        private Transaction? selectedTransaction;
-        private RealEstate? realEstateToSelectObjects;//used for choosing a rentalObject on creation
-        private RentalObject? rentalObjectToFilterTransactions = null; //if not null, only the transactions of this specific Object will get loaded
+        private string _searchString = "";
+        private Transaction? _selectedTransaction;
+        private RealEstate? _realEstateToSelectObjects;//used for choosing a rentalObject on creation
+        private RentalObject? _rentalObjectToFilterTransactions = null; //if not null, only the transactions of this specific Object will get loaded
 
         #region constructors
         public TransactionsViewModel() { }
         public TransactionsViewModel(RentalObject rentalObjectToFilterTransactions)
         {
-            this.rentalObjectToFilterTransactions = rentalObjectToFilterTransactions;
+            this._rentalObjectToFilterTransactions = rentalObjectToFilterTransactions;
         }
         #endregion
 
@@ -31,9 +31,9 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (rentalObjectToFilterTransactions == null)//if not null, get only Transactions of the specified rental object
+                if (_rentalObjectToFilterTransactions == null)//if not null, get only Transactions of the specified rental object
                 {
-                    if (searchString == "" || searchString == null)
+                    if (_searchString == "" || _searchString == null)
                     {
                         return DataAccessLayer.GetInstance.GetTransactionsUnfiltered();
                     }
@@ -46,7 +46,7 @@ namespace ImmoGlobalAdmin.ViewModel
                 else
                 {
 
-                    return rentalObjectToFilterTransactions.Transactions.Where(x=>x.Enabled==true).ToList(); 
+                    return _rentalObjectToFilterTransactions.Transactions.Where(x=>x.Enabled==true).ToList(); 
                 }
 
             }
@@ -56,21 +56,21 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (selectedTransaction == null)
+                if (_selectedTransaction == null)
                 {
-                    selectedTransaction = AllTransactions.FirstOrDefault();
+                    _selectedTransaction = AllTransactions.FirstOrDefault();
                 }
 
-                return selectedTransaction;
+                return _selectedTransaction;
             }
             set
             {
-                if (editMode || DeleteDialogOpen)
+                if (_editMode || DeleteDialogOpen)
                 {
                     return;
                 }
 
-                selectedTransaction = value;
+                _selectedTransaction = value;
                 RealEstateToSelectObjects = GetRealEstateFromTransaction(value);
                 
                 OnPropertyChanged(nameof(RealEstateToSelectObjects));
@@ -84,12 +84,12 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (selectedTransaction == null) return "";
+                if (_selectedTransaction == null) return "";
                 return Application.Current.TryFindResource(SelectedTransaction.SetTypeString) as string ?? SelectedTransaction.SetTypeString;
             }
             set
             {
-                if (selectedTransaction == null) return;
+                if (_selectedTransaction == null) return;
                 string convertedString = Application.Current.TryFindResource(value) as string ?? value;
                 SelectedTransaction.SetTypeString = convertedString;
             }
@@ -100,11 +100,11 @@ namespace ImmoGlobalAdmin.ViewModel
             get
             {
 
-                return realEstateToSelectObjects;
+                return _realEstateToSelectObjects;
             }
             set
             {
-                realEstateToSelectObjects = value;
+                _realEstateToSelectObjects = value;
                 OnPropertyChanged(nameof(RealEstateToSelectObjects));
                 OnPropertyChanged(nameof(SelectedObject));
                 OnPropertyChanged(nameof(ObjectsToSelect));
@@ -133,7 +133,7 @@ namespace ImmoGlobalAdmin.ViewModel
                         list = new List<RentalObject>();
                     }
 
-                    list.Insert(0,realEstateToSelectObjects.BaseObject);
+                    list.Insert(0,_realEstateToSelectObjects.BaseObject);
                     return list;
                 }
             }
@@ -143,39 +143,41 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get 
             {
-                if (selectedTransaction == null) return null;
+                if (_selectedTransaction == null) return null;
                 return SelectedTransaction.RentalObject; 
             }
             set
             {
                 SelectedTransaction.SetRentalObject = value;
 
-                if (creationMode && value!=null)
+                if (_creationMode && value!=null)
                 {
-                    selectedTransaction.SetBankAccount = value.Account;
+                    _selectedTransaction.SetBankAccount = value.Account;
 
-                    if (selectedTransaction.Type == TransactionType.Rent && value.ActiveRentalContract != null)
+                    if (_selectedTransaction.Type == TransactionType.Rent && value.ActiveRentalContract != null)
                     {
 
-                        selectedTransaction.SetAssociatedPerson = value.ActiveRentalContract.Tenant;
-                        selectedTransaction.SetValue = value.ActiveRentalContract.RentTotal;
+                        _selectedTransaction.SetAssociatedPerson = value.ActiveRentalContract.Tenant;
+                        _selectedTransaction.SetValue = value.ActiveRentalContract.RentTotal;
                     }
                     OnPropertyChanged(nameof(SelectedTransaction));
+                    OnPropertyChanged(nameof(SelectedTransaction.SetAssociatedPerson));
+                    OnPropertyChanged(nameof(SelectedTransaction.SetValue));
                 }
             }
         }
 
         public string SearchString
         {
-            get { return searchString; }
+            get { return _searchString; }
             set
             {
-                searchString = value;
+                _searchString = value;
                 OnPropertyChanged(nameof(AllTransactions));
             }
         }
 
-        public bool ButtonsEnabled => rentalObjectToFilterTransactions == null;
+        public bool ButtonsEnabled => _rentalObjectToFilterTransactions == null;
         #endregion
 
         #region Button Methods
@@ -193,10 +195,13 @@ namespace ImmoGlobalAdmin.ViewModel
             if (SelectedTransaction != null)
             {
                 SelectedTransaction.Lock();
-                selectedTransaction.RentalObject.Transactions.Add(selectedTransaction);
+                if (SelectedTransaction.RentalObject != null)
+                {
+                    _selectedTransaction.RentalObject.Transactions.Add(_selectedTransaction);
+                }
                 DataAccessLayer.GetInstance.StoreNewTransaction(SelectedTransaction);
                 SelectedTransaction = null;
-                realEstateToSelectObjects = null;
+                _realEstateToSelectObjects = null;
             }
 
             base.SaveEditButtonClicked(obj);
@@ -207,7 +212,9 @@ namespace ImmoGlobalAdmin.ViewModel
         protected override void CreateButtonClicked(object obj)
         {
             SelectedTransaction = new Transaction(true);
+            SelectedTransaction.SetDateTimeOfTransaction = DateTime.Now;
             OnPropertyChanged(nameof(SelectedTransaction));
+            OnPropertyChanged(nameof(TranslatedTypeOfSelectedTransaction));
             base.CreateButtonClicked(obj);
         }
 

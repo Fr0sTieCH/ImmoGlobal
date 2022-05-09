@@ -12,7 +12,7 @@ namespace ImmoGlobalAdmin.Model
     /// </summary>
     internal class DataAccessLayer
     {
-        private ImmoGlobalContext db;
+        private ImmoGlobalContext _db;
 
         #region Singleton
         private static DataAccessLayer? instance = null;
@@ -27,7 +27,7 @@ namespace ImmoGlobalAdmin.Model
             //create new context object
             //make sure we always use the same context-object to be able to lazyload the objects
             //this approach will be changed in the real application, as it uses a lot of memory
-            db = new ImmoGlobalContext();
+            _db = new ImmoGlobalContext();
 
         }
 
@@ -52,7 +52,7 @@ namespace ImmoGlobalAdmin.Model
 
         public void SaveChanges()
         {
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         public void DisposeContext()
@@ -62,61 +62,61 @@ namespace ImmoGlobalAdmin.Model
         }
         public void RestoreValuesFromDB(object entity)
         {
-            db.Entry(entity).Reload();
+            _db.Entry(entity).Reload();
         }
 
         #region Store
         public void StoreNewUser(User newUser)
         {
-            db.users.Add(newUser);
+            _db.users.Add(newUser);
             SaveChanges();
         }
 
         public void StoreNewTransaction(Transaction newTransaction)
         {
-            db.transactions.Add(newTransaction);
+            _db.transactions.Add(newTransaction);
             SaveChanges();
         }
 
         public void StoreNewRentalObject(RentalObject newRentalObject)
         {
-            db.rentalObjects.Add(newRentalObject);
+            _db.rentalObjects.Add(newRentalObject);
             SaveChanges();
         }
 
         public void StoreNewRentalContract(RentalContract newRentalContract)
         {
-            db.rentalContracts.Add(newRentalContract);
+            _db.rentalContracts.Add(newRentalContract);
             SaveChanges();
         }
 
         public void StoreNewRealEstate(RealEstate newRealEstate)
         {
-            db.realEstates.Add(newRealEstate);
+            _db.realEstates.Add(newRealEstate);
             SaveChanges();
         }
 
         public void StoreNewProtocol(Protocol newProtocol)
         {
-            db.protocols.Add(newProtocol);
+            _db.protocols.Add(newProtocol);
             SaveChanges();
         }
 
         public void StoreNewPerson(Person newPerson)
         {
-            db.persons.Add(newPerson);
+            _db.persons.Add(newPerson);
             SaveChanges();
         }
 
         public void StoreNewInvoice(Invoice newInvoice)
         {
-            db.invoices.Add(newInvoice);
+            _db.invoices.Add(newInvoice);
             SaveChanges();
         }
 
         public void StoreNewBankAccount(BankAccount newBankAccount)
         {
-            db.bankAccounts.Add(newBankAccount);
+            _db.bankAccounts.Add(newBankAccount);
             SaveChanges();
         }
 
@@ -127,50 +127,54 @@ namespace ImmoGlobalAdmin.Model
 
         public User? GetUserByName(string username)
         {
-            return db.users.Where(x => x.Username == username && x.Enabled).FirstOrDefault();
+            return _db.users.Where(x => x.Username == username && x.Enabled).FirstOrDefault();
         }
 
         public List<RealEstate> GetRealEstatesUnfiltered()
         {
-            return db.realEstates.Where(x => x.Enabled).ToList();
+            return _db.realEstates.Where(x => x.Enabled).ToList();
         }
 
         public List<Person> GetPersonsUnfiltered()
         {
-            return db.persons.Where(x => x.Enabled).ToList();
+            return _db.persons.Where(x => x.Enabled).ToList();
         }
 
         public List<Person> GetEmployeesUnfiltered()
         {
-            return db.persons.Where(x => x.Enabled && x.Type == PersonType.Employee).ToList();
+            return _db.persons.Where(x => x.Enabled && x.Type == PersonType.Employee).ToList();
         }
 
         public List<Person> GetPrivatePersonsUnfiltered()
         {
-            return db.persons.Where(x => x.Enabled && x.Type == PersonType.PrivatePerson).ToList();
+            return _db.persons.Where(x => x.Enabled && x.Type == PersonType.PrivatePerson).ToList();
         }
 
         public List<Person> GetCompaniesUnfiltered()
         {
-            return db.persons.Where(x => x.Enabled && x.Type == PersonType.Company).ToList();
+            return _db.persons.Where(x => x.Enabled && x.Type == PersonType.Company).ToList();
         }
 
         public List<BankAccount> GetBankAccountsUnfiltered()
         {
-            return db.bankAccounts.Where(x => x.Enabled).ToList();
+            return _db.bankAccounts.Where(x => x.Enabled).ToList();
         }
 
         public List<Transaction> GetTransactionsUnfiltered()
         {
-            return db.transactions.Where(x => x.Enabled).ToList();
+            return _db.transactions.Where(x => x.Enabled).ToList();
         }
 
         public List<Transaction> GetTransactionsByRentalObject(RentalObject rentalObject)
         {
             if (rentalObject == null) return new List<Transaction>();
-            return db.transactions.Where(x => x.Enabled && x.RentalObject != null && x.RentalObject.RentalObjectID == rentalObject.RentalObjectID).ToList();
+            return _db.transactions.Where(x => x.Enabled && x.RentalObject != null && x.RentalObject.RentalObjectID == rentalObject.RentalObjectID).ToList();
         }
 
+        public List<RentalContract> GetContractsUnfiltered()
+        {
+            return _db.rentalContracts.Where(x => x.Enabled).ToList();
+        }
         #endregion
 
 

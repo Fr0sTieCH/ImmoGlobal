@@ -76,21 +76,37 @@ namespace ImmoGlobalAdmin.MainClasses
         public double TotalRentalSpace => RentalObjects.Sum(x=> x.SpaceInQM);
         #endregion
 
-        public void AddRentalObject(RentalObject rentalObject)
+        /// <summary>
+        /// Creates and returns a new empty RentalObject and adds it to this RealEstate
+        /// </summary>
+        public RentalObject AddRentalObject()
         {
-            RentalObjects.Add(rentalObject);
+            RentalObject newRO = new RentalObject(this.BaseObject);
+            RentalObjects.Add(newRO);
+            return newRO;
         }
         
+        /// <summary>
+        /// Removes a given objet from RentalObjects (Use this only if the RentalObject is not yet saved to the DB)
+        /// </summary>
+        /// <param name="objectToRemove"></param>
+        public void RemoveRentalObject(RentalObject objectToRemove)
+        {
+            RentalObjects.Remove(objectToRemove);
+        }
 
-        public override void Delete(string reason)
+        protected override void DeleteLogic(string reason)
         {
             BaseObject.DeleteBaseObject($"Deleted because the realestate got deleted with the reason:{reason}");
-            foreach(RentalObject ro in RentalObjects)
+
+            if (RentalObjects != null && RentalObjects.Count > 0)
             {
-                ro.Delete($"Deleted because the realestate got deleted with the reason:{reason}"); 
+                foreach (RentalObject ro in RentalObjects)
+                {
+                    ro.Delete($"Deleted because the realestate got deleted with the reason:{reason}");
+                }
             }
-            Enabled = false;
-            ReasonForDeleting = reason;
+            base.DeleteLogic(reason);
         }
     }
 }

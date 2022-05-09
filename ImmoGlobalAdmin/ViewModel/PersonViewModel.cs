@@ -13,15 +13,15 @@ namespace ImmoGlobalAdmin.ViewModel
     internal class PersonViewModel : BaseViewModel, IHasSearchableContent
     {
 
-        private string searchString = "";
-        private Person? selectedPerson = null;
+        private string _searchString = "";
+        private Person? _selectedPerson = null;
 
 
 
 
         #region Singleton
-        private static PersonViewModel? instance = null;
-        private static readonly object padlock = new();
+        private static PersonViewModel? _instance = null;
+        private static readonly object _padlock = new();
 
         public PersonViewModel()
         {
@@ -34,13 +34,13 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                lock (padlock)
+                lock (_padlock)
                 {
-                    if (instance == null)
+                    if (_instance == null)
                     {
-                        instance = new PersonViewModel();
+                        _instance = new PersonViewModel();
                     }
-                    return instance;
+                    return _instance;
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (searchString == "" || searchString == null)
+                if (_searchString == "" || _searchString == null)
                 {
                     return DataAccessLayer.GetInstance.GetPersonsUnfiltered();
                 }
@@ -70,10 +70,10 @@ namespace ImmoGlobalAdmin.ViewModel
 
         public string SearchString
         {
-            get { return searchString; }
+            get { return _searchString; }
             set
             {
-                searchString = value;
+                _searchString = value;
                 OnPropertyChanged(nameof(AllPersons));
             }
         }
@@ -84,19 +84,19 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (selectedPerson == null)
+                if (_selectedPerson == null)
                 {
-                    selectedPerson = AllPersons.FirstOrDefault();
+                    _selectedPerson = AllPersons.FirstOrDefault();
                 }
-                return selectedPerson;
+                return _selectedPerson;
             }
             set
             {
-                if (editMode || DeleteDialogOpen)
+                if (_editMode || DeleteDialogOpen)
                 {
                     return;
                 }
-                selectedPerson = value;
+                _selectedPerson = value;
                 OnPropertyChanged(nameof(SelectedPerson));
                 OnPropertyChanged(nameof(TranslatedTypeOfSelectedPerson));
                 OnPropertyChanged(nameof(TranslatedSexOfSelectedPerson));
@@ -107,14 +107,14 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if(selectedPerson == null) return "";
-                return Application.Current.TryFindResource(selectedPerson.SetPersonTypeString) as string ?? selectedPerson.SetPersonTypeString;
+                if(_selectedPerson == null) return "";
+                return Application.Current.TryFindResource(_selectedPerson.SetPersonTypeString) as string ?? _selectedPerson.SetPersonTypeString;
             }
             set
             {
-                if (selectedPerson == null) return;
+                if (_selectedPerson == null) return;
                 string convertedString = Application.Current.TryFindResource(value) as string ?? value;
-                selectedPerson.SetPersonTypeString = convertedString;             
+                _selectedPerson.SetPersonTypeString = convertedString;             
             }
         }
 
@@ -122,14 +122,14 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (selectedPerson == null) return "";
-                return Application.Current.TryFindResource(selectedPerson.SetSexString) as string ?? selectedPerson.SetSexString;
+                if (_selectedPerson == null) return "";
+                return Application.Current.TryFindResource(_selectedPerson.SetSexString) as string ?? _selectedPerson.SetSexString;
             }
             set
             {
-                if (selectedPerson == null) return;
+                if (_selectedPerson == null) return;
                 string convertedString = Application.Current.TryFindResource(value) as string ?? value;
-                selectedPerson.SetSexString = convertedString;
+                _selectedPerson.SetSexString = convertedString;
             }
         }
 
@@ -161,14 +161,14 @@ namespace ImmoGlobalAdmin.ViewModel
         }
         protected override void CancelEditButtonClicked(object obj)
         {
-            if (creationMode)
+            if (_creationMode)
             {
-                selectedPerson = null;
+                _selectedPerson = null;
 
             }
             else
             {
-                DataAccessLayer.GetInstance.RestoreValuesFromDB(selectedPerson);
+                DataAccessLayer.GetInstance.RestoreValuesFromDB(_selectedPerson);
             }
 
             OnPropertyChanged(nameof(SelectedPerson));
@@ -177,11 +177,11 @@ namespace ImmoGlobalAdmin.ViewModel
         }
         protected override void SaveEditButtonClicked(object obj)
         {
-            if (creationMode)
+            if (_creationMode)
             {
                 Debug.WriteLine("Storing person");
-                DataAccessLayer.GetInstance.StoreNewPerson(selectedPerson);
-                selectedPerson = null;
+                DataAccessLayer.GetInstance.StoreNewPerson(_selectedPerson);
+                _selectedPerson = null;
             }
             else
             {
@@ -205,13 +205,13 @@ namespace ImmoGlobalAdmin.ViewModel
         }
         public override void DeleteAcceptButtonClicked(object obj)
         {
-            selectedPerson.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this Person on {DateTime.Now} with reason: ({(string)obj})");
+            _selectedPerson.Delete($"{MainViewModel.GetInstance.LoggedInUser.Username} deleted this Person on {DateTime.Now} with reason: ({(string)obj})");
             DataAccessLayer.GetInstance.SaveChanges();
             OnPropertyChanged(nameof(AllPersons));
 
             base.DeleteAcceptButtonClicked(obj);
 
-            selectedPerson = null;
+            _selectedPerson = null;
             OnPropertyChanged(nameof(SelectedPerson));
             MainViewModel.GetInstance.DeleteAcceptButtonClicked(obj);
 
@@ -228,7 +228,7 @@ namespace ImmoGlobalAdmin.ViewModel
         #region Creaton Button
         protected override void CreateButtonClicked(object obj)
         {
-            selectedPerson = new Person(true);
+            _selectedPerson = new Person(true);
             OnPropertyChanged(nameof(SelectedPerson));
             base.CreateButtonClicked(obj);
         }

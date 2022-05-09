@@ -13,17 +13,17 @@ namespace ImmoGlobalAdmin.ViewModel
 {
     internal class RentalObjectViewModel : BaseViewModel
     {
-        private RentalObject rentalObjectToDisplay;
-        private RealEstate realEstateOfRentalObject;
-        private BaseViewModel? secondaryViewModel;
+        private RentalObject _rentalObjectToDisplay;
+        private RealEstate _realEstateOfRentalObject;
+        private BaseViewModel? _secondaryViewModel;
 
 
         public RentalObjectViewModel(RentalObject rentalObjectToDisplay, RealEstate realEstateOfRentalObject,bool creationMode)
         {
             this.RentalObjectToDisplay = rentalObjectToDisplay;
             this.RealEstateOfRentalObject = realEstateOfRentalObject;
-            this.creationMode = creationMode;
-            this.editMode = creationMode;
+            this._creationMode = creationMode;
+            this._editMode = creationMode;
 
         }
 
@@ -32,11 +32,11 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                return rentalObjectToDisplay;
+                return _rentalObjectToDisplay;
             }
             set
             {
-                rentalObjectToDisplay = value;
+                _rentalObjectToDisplay = value;
                 OnPropertyChanged(nameof(RentalObjectToDisplay));
             }
         }
@@ -45,11 +45,11 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                return realEstateOfRentalObject;
+                return _realEstateOfRentalObject;
             }
             set
             {
-                realEstateOfRentalObject = value;
+                _realEstateOfRentalObject = value;
                 OnPropertyChanged(nameof(RealEstateOfRentalObject));
             }
         }
@@ -58,12 +58,12 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                return secondaryViewModel;
+                return _secondaryViewModel;
             }
             set
             {
 
-                secondaryViewModel = value;
+                _secondaryViewModel = value;
                 OnPropertyChanged(nameof(SecondaryViewModel));
             }
         }
@@ -102,13 +102,14 @@ namespace ImmoGlobalAdmin.ViewModel
 
         protected override void CancelEditButtonClicked(object obj)
         {
-            if (creationMode)
+            if (_creationMode)
             {
+                _realEstateOfRentalObject.RemoveRentalObject(RentalObjectToDisplay);
                 CloseViewClicked("");
             }
             else
             {
-                DataAccessLayer.GetInstance.RestoreValuesFromDB(rentalObjectToDisplay);
+                DataAccessLayer.GetInstance.RestoreValuesFromDB(_rentalObjectToDisplay);
             }
 
             base.CancelEditButtonClicked(obj);
@@ -119,9 +120,8 @@ namespace ImmoGlobalAdmin.ViewModel
 
         protected override void SaveEditButtonClicked(object obj)
         {
-            if (creationMode)
+            if (_creationMode)
             {
-                realEstateOfRentalObject.AddRentalObject(RentalObjectToDisplay);
                 DataAccessLayer.GetInstance.StoreNewRentalObject(RentalObjectToDisplay);
             }
             else
@@ -145,11 +145,11 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand ShowRentalContractsViewCommand => new RelayCommand<object>(ShowRentalContractsViewClicked);
         private void ShowRentalContractsViewClicked(object obj)
         {
-            if (secondaryViewModel !=null)
+            if (_secondaryViewModel !=null)
             {
-                if (secondaryViewModel.GetType() != typeof(RentalContractViewModel))
+                if (_secondaryViewModel.GetType() != typeof(RentalContractViewModel))
                 {
-                    SecondaryViewModel = new RentalContractViewModel(rentalObjectToDisplay, realEstateOfRentalObject, this);
+                    SecondaryViewModel = new RentalContractViewModel(_rentalObjectToDisplay, _realEstateOfRentalObject, this);
                 }
                 else
                 {
@@ -158,7 +158,7 @@ namespace ImmoGlobalAdmin.ViewModel
             }
             else
             {
-                SecondaryViewModel = new RentalContractViewModel(rentalObjectToDisplay, realEstateOfRentalObject, this);
+                SecondaryViewModel = new RentalContractViewModel(_rentalObjectToDisplay, _realEstateOfRentalObject, this);
             }
 
         }
@@ -166,11 +166,11 @@ namespace ImmoGlobalAdmin.ViewModel
         public ICommand ShowTransactionsViewCommand => new RelayCommand<object>(ShowTransactionsViewClicked);
         private void ShowTransactionsViewClicked(object obj)
         {
-            if (secondaryViewModel != null)
+            if (_secondaryViewModel != null)
             {
-                if (secondaryViewModel.GetType() != typeof(TransactionsViewModel))
+                if (_secondaryViewModel.GetType() != typeof(TransactionsViewModel))
                 {
-                    SecondaryViewModel = new TransactionsViewModel(rentalObjectToDisplay);
+                    SecondaryViewModel = new TransactionsViewModel(_rentalObjectToDisplay);
                 }
                 else
                 {
@@ -179,7 +179,7 @@ namespace ImmoGlobalAdmin.ViewModel
             }
             else
             {
-                SecondaryViewModel = new TransactionsViewModel(rentalObjectToDisplay); 
+                SecondaryViewModel = new TransactionsViewModel(_rentalObjectToDisplay); 
             }
 
         }

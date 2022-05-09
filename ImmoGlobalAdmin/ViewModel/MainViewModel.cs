@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ImmoGlobalAdmin.ViewModel
@@ -13,27 +14,29 @@ namespace ImmoGlobalAdmin.ViewModel
     internal class MainViewModel : BaseViewModel
     {
         private BaseViewModel _selectedViewModel;
-        private BaseViewModel activeMainMenuViewModel;
-        private BaseViewModel? dialogView;
-        private User? loggedInUser;
+        private BaseViewModel _activeMainMenuViewModel;
+        private BaseViewModel? _dialogView;
+        private User? _loggedInUser;
+        private string _usernameToLogin;
 
-        private bool showDialog;
+        private bool _showDialog;
 
         #region Singleton
-        private static MainViewModel? instance = null;
-        private static readonly object padlock = new();
+        private static MainViewModel? _instance = null;
+        private static readonly object _padlock = new();
 
         public MainViewModel()
         {
             //For testing
-            loggedInUser = DataAccessLayer.GetInstance.GetUserByName("TestAnna");
-            if(loggedInUser == null)
-            {
-               DialogViewModel= EFTestingViewModel.GetInstance;
-            }
+            // _loggedInUser = DataAccessLayer.GetInstance.GetUserByName("BeispielAnna");
+            //OnPropertyChanged(nameof(LoggedInUser));
+            //if(_loggedInUser == null)
+            //{
+            //   DialogViewModel= EFTestingViewModel.GetInstance;
+            //}
             MainMenuViewModel mainMenu = MainMenuViewModel.GetInstance;
             _selectedViewModel = mainMenu;
-            activeMainMenuViewModel = mainMenu;
+            _activeMainMenuViewModel = mainMenu;
         }
 
         /// <summary>
@@ -43,21 +46,23 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                lock (padlock)
+                lock (_padlock)
                 {
-                    if (instance == null)
+                    if (_instance == null)
                     {
-                        instance = new MainViewModel();
+                        _instance = new MainViewModel();
                     }
-                    return instance;
+                    return _instance;
                 }
             }
+
+
         }
 
         #endregion
 
-        public User LoggedInUser => loggedInUser;
-        public bool InMainMenu => _selectedViewModel == activeMainMenuViewModel;
+        public User? LoggedInUser => _loggedInUser;
+        public bool InMainMenu => _selectedViewModel == _activeMainMenuViewModel;
 
 
         private string searchString = "";
@@ -74,9 +79,24 @@ namespace ImmoGlobalAdmin.ViewModel
         //EnableDisable Search function
         public bool SearchAllowed => _selectedViewModel is IHasSearchableContent;
 
+        public bool NoUserLoggedIn => !(_loggedInUser != null);
+
+        public string UsernameToLogIn
+        {
+            get
+            {
+                return _usernameToLogin;
+            }
+            set
+            {
+                _usernameToLogin = value;
+                OnPropertyChanged(nameof(_usernameToLogin));
+            }
+        }
+
         public bool ShowDialog
         {
-            get 
+            get
             {
                 if (DeleteDialogOpen)
                 {
@@ -85,15 +105,15 @@ namespace ImmoGlobalAdmin.ViewModel
                 }
                 else
                 {
-                    return showDialog;
+                    return _showDialog;
                 }
-                
+
             }
             set
             {
-                showDialog = value;
+                _showDialog = value;
                 OnPropertyChanged(nameof(ShowDialog));
-            } 
+            }
         }
 
         public BaseViewModel SelectedViewModel
@@ -111,18 +131,18 @@ namespace ImmoGlobalAdmin.ViewModel
             }
         }
 
-        public BaseViewModel ActiveMainMenuViewModel => activeMainMenuViewModel;
+        public BaseViewModel ActiveMainMenuViewModel => _activeMainMenuViewModel;
 
         public BaseViewModel? DialogViewModel
         {
             get
             {
-                return dialogView;
+                return _dialogView;
             }
             set
             {
                 ShowDialog = true;
-                dialogView= value;
+                _dialogView = value;
                 OnPropertyChanged(nameof(DialogViewModel));
             }
         }
@@ -134,24 +154,24 @@ namespace ImmoGlobalAdmin.ViewModel
 
         public override void DeleteButtonClicked(object obj)
         {
-            
+
             base.DeleteButtonClicked(obj);
             OnPropertyChanged(nameof(ShowDialog));
         }
         public override void DeleteAcceptButtonClicked(object obj)
         {
-           
+
             base.DeleteAcceptButtonClicked(obj);
             OnPropertyChanged(nameof(ShowDialog));
         }
         public override void DeleteCancelButtonClicked(object obj)
         {
-            
+
             base.DeleteCancelButtonClicked(obj);
             OnPropertyChanged(nameof(ShowDialog));
         }
 
-        
+
         #endregion
         public ICommand HomeButtonCommand
         {
@@ -204,8 +224,59 @@ namespace ImmoGlobalAdmin.ViewModel
         {
 
             ShowDialog = false;
-            dialogView = null;
+            _dialogView = null;
 
+        }
+
+        public ICommand LoginUserCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(LoginUserButtonClicked);
+            }
+        }
+
+        private void LoginUserButtonClicked(object obj)
+        {
+            //only for prototype this is not secure and violates the MVVM architecture
+            PasswordBox pwb = (PasswordBox)obj;
+
+            if (DataAccessLayer.GetInstance.GetUserByName(UsernameToLogIn) != null)
+            {
+                User user = DataAccessLayer.GetInstance.GetUserByName(UsernameToLogIn);
+                
+
+                if (user.VerifyCredentials(UsernameToLogIn, pwb.Password))
+                {
+                    _loggedInUser = user;
+                    OnPropertyChanged(nameof(NoUserLoggedIn));
+                    OnPropertyChanged(nameof(LoggedInUser));
+                    MainMenuViewModel.GetInstance.OnLoggedInUserChanged();
+                }
+
+            }
+
+            UsernameToLogIn = "";
+            pwb.Clear();
+
+        }
+
+
+        public ICommand LogoutUserCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(LogoutUserButtonClicked);
+            }
+        }
+
+        private void LogoutUserButtonClicked(object obj)
+        {
+            SelectedViewModel = MainMenuViewModel.GetInstance;
+            _loggedInUser = null;
+            OnPropertyChanged(nameof(NoUserLoggedIn));
+            OnPropertyChanged(nameof(LoggedInUser));
+            MainMenuViewModel.GetInstance.OnLoggedInUserChanged();
         }
 
         #endregion

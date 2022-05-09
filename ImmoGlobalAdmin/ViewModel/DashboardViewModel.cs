@@ -9,8 +9,8 @@ namespace ImmoGlobalAdmin.ViewModel
     internal class DashboardViewModel:BaseViewModel
     {
         #region Singleton
-        private static DashboardViewModel? instance = null;
-        private static readonly object padlock = new();
+        private static DashboardViewModel? _instance = null;
+        private static readonly object _padlock = new();
 
         public DashboardViewModel()
         {
@@ -23,13 +23,13 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                lock (padlock)
+                lock (_padlock)
                 {
-                    if (instance == null)
+                    if (_instance == null)
                     {
-                        instance = new DashboardViewModel();
+                        _instance = new DashboardViewModel();
                     }
-                    return instance;
+                    return _instance;
                 }
             }
         }

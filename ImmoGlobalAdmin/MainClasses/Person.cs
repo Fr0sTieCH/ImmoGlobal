@@ -26,7 +26,7 @@ namespace ImmoGlobalAdmin.MainClasses
 
 
         [NotMapped]
-        public string IGID => PersonID.ToString("PE00000000");
+        public string IGID => PersonID.ToString("PE 00000000");
 
         [NotMapped]
         public string FullName => $"{Name} {Prename}";

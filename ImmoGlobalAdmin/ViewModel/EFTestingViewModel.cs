@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.IO;
 using System.Diagnostics;
+using System.Security;
 
 namespace ImmoGlobalAdmin.ViewModel
 {
@@ -44,9 +45,9 @@ namespace ImmoGlobalAdmin.ViewModel
         }
         #endregion
 
-        private List<Person> aviablePersons = new List<Person>();
-        private List<BankAccount> aviableBankAccounts = new List<BankAccount>();
-        private List<RealEstate> aviableRealEstates = new List<RealEstate>();
+        private List<Person> _aviablePersons = new List<Person>();
+        private List<BankAccount> _aviableBankAccounts = new List<BankAccount>();
+        private List<RealEstate> _aviableRealEstates = new List<RealEstate>();
 
         public ICommand TestButtonCommand
         {
@@ -61,257 +62,295 @@ namespace ImmoGlobalAdmin.ViewModel
             DataAccessLayer.GetInstance.SaveChanges();
 
             StoreTestPersonsToDB();
-            StoreTestJuristicPersonsToDB();
-            StoreTestBankAccountsToDB();
-            StoreTestRealEstatesToDB();
             StoreTestUsersToDB();
-            StoreTestRentalContractsToDB();
+            StoreBankAccountsToDB();
+            StoreTestRealEstatesIncludingRentalObjects();
+            StoreTransactions();
+            //StoreTestJuristicPersonsToDB();
+            //StoreTestBankAccountsToDB();
+            //StoreTestRealEstatesToDB();
+            //StoreTestRentalContractsToDB();
 
+            //System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            //Application.Current.Shutdown();
+        }
+
+        //Gets all lines exept the first from csv
+        private string[] GetDataLinesFromCSV(string filename)
+        {
+            string filePath = AppDomain.CurrentDomain.BaseDirectory + @$"\TestData\{filename}";
+            return File.ReadAllLines(filePath).Skip(1).ToArray();
         }
 
 
-
-        #region Test Persons
+     
         private void StoreTestPersonsToDB() //Create Persons and stor them in the db (if they dont exist already)
         {
-            aviablePersons = DataAccessLayer.GetInstance.GetPersonsUnfiltered();
-
-            foreach (Person p in TestPersonsFromCSV("TestPersons"))
+            foreach (string s in GetDataLinesFromCSV("TestPersonen.csv"))
             {
-                if (!PersonExists(p))
-                {
-                    DataAccessLayer.GetInstance.StoreNewPerson(p);
-                }
+                string[] data = s.Split(';');
+
+                Person newPerson = new Person(true);
+                newPerson.Type = (PersonType)int.Parse(data[0]);
+                newPerson.Sex = (Sex)int.Parse(data[1]);
+                newPerson.Name = data[2];
+                newPerson.Prename = data[3];
+                newPerson.Adress = data[4];
+                newPerson.Birthdate = data[5] == "" ? null : DateTime.Parse(data[5]);
+                newPerson.Phone = data[6];
+                newPerson.EMail = data[7];
+                newPerson.VatNuber = data[8];
+                newPerson.Note = data[9];
+
+                DataAccessLayer.GetInstance.StoreNewPerson(newPerson);
             }
         }
-
-        private void StoreTestJuristicPersonsToDB()
-        {
-            aviablePersons = DataAccessLayer.GetInstance.GetPersonsUnfiltered();
-
-            foreach (Person p in TestJuristicPersonsFromCSV("TestPersons(JuristicEntities)"))
-            {
-                if (!JuristicPersonExists(p))
-                {
-                    DataAccessLayer.GetInstance.StoreNewPerson(p);
-                }
-            }
-        }
-
-        private List<Person> TestPersonsFromCSV(string filename)
-        {
-            string filePath = AppDomain.CurrentDomain.BaseDirectory + @$"\TestData\{filename}.csv";
-            string[] lines = File.ReadAllLines(filePath);
-
-            return lines.Select(line =>
-            {
-                string[] data = line.Split(';');
-                string name = data[0];
-                string prename = data[1];
-                string address = data[2];
-                string phone = data[3];
-                string fax = data[4];
-                string email = data[5];
-                DateTime birthdate = DateTime.Parse(data[6]);
-                string note = data[7];
-                int type = int.Parse(data[8]);
-
-                Person newPerson = new Person(name, prename, address, phone, email, birthdate, note);
-                newPerson.Type = (PersonType)type;
-                return newPerson;
-            }).ToList();
-        }
-
-        private List<Person> TestJuristicPersonsFromCSV(string filename)
-        {
-            string filePath = AppDomain.CurrentDomain.BaseDirectory + @$"\TestData\{filename}.csv";
-            string[] lines = File.ReadAllLines(filePath);
-
-            return lines.Select(line =>
-            {
-                string[] data = line.Split(';');
-                string name = data[0];
-                string adress = data[1];
-                string phone = data[2];
-                string fax = data[3];
-                string email = data[4];
-                string vatNumber = data[5];
-                string note = data[6];
-                int type = int.Parse(data[7]);
-
-                Person newPerson = new Person(name, adress, phone, email, vatNumber, note);
-                newPerson.Type = (PersonType)type;
-                return newPerson;
-            }).ToList();
-        }
-        private bool JuristicPersonExists(Person personToCheck)
-        {
-            return aviablePersons.Exists(x => x.Name == personToCheck.Name && x.VatNuber == personToCheck.VatNuber && x.Adress == personToCheck.Adress);
-        }
-
-        private bool PersonExists(Person personToCheck)
-        {
-            return aviablePersons.Exists(x => x.Name == personToCheck.Name && x.Prename == personToCheck.Prename && x.Adress == personToCheck.Adress && x.Birthdate == personToCheck.Birthdate);
-        }
-        #endregion
-
-        #region Test BankAccounts
-        private void StoreTestBankAccountsToDB() //Create Persons and stor them in the db (if they dont exist already)
-        {
-            aviableBankAccounts = DataAccessLayer.GetInstance.GetBankAccountsUnfiltered();
-
-            foreach (BankAccount ba in TestBankAccountsFromCSV("TestBankAccounts"))
-            {
-                if (!BankAccountExists(ba))
-                {
-                    DataAccessLayer.GetInstance.StoreNewBankAccount(ba);
-                }
-            }
-        }
-
-        private List<BankAccount> TestBankAccountsFromCSV(string filename)
-        {
-            string filePath = AppDomain.CurrentDomain.BaseDirectory + @$"\TestData\{filename}.csv";
-            string[] lines = File.ReadAllLines(filePath);
-
-            return lines.Select(line =>
-            {
-                string[] data = line.Split(';');
-                string name = data[0];
-                string iban = data[1];
-
-
-                return new BankAccount(name, iban);
-            }).ToList();
-        }
-
-        private bool BankAccountExists(BankAccount bankAccountToCheck)
-        {
-            return aviableBankAccounts.Exists(x => x.AccountName == bankAccountToCheck.AccountName && x.Iban == bankAccountToCheck.Iban);
-        }
-        #endregion
-
-        #region Test RealEstates
-
-        private void StoreTestRealEstatesToDB()
-        {
-            aviableRealEstates = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered();
-
-            foreach (RealEstate re in TestRealEstatesFromCSV("TestRealEstates"))
-            {
-                if (!RealEstateExists(re))
-                {
-                    DataAccessLayer.GetInstance.StoreNewRealEstate(re);
-                }
-            }
-        }
-
-        private List<RealEstate> TestRealEstatesFromCSV(string filename)
-        {
-            string filePath = AppDomain.CurrentDomain.BaseDirectory + @$"\TestData\{filename}.csv";
-            string[] lines = File.ReadAllLines(filePath);
-
-            return lines.Select(line =>
-            {
-                string[] data = line.Split(';');
-                string name = data[0];
-                string address = data[1];
-                string rooms = data[2];
-                string qm = data[3];
-                Person owner = DataAccessLayer.GetInstance.GetPersonsUnfiltered().Where(x => x.Name == "CreditSuisse").First();
-                Person janitor = new Person($"{name}", "Janitor", address, "079 235 56 32", $"{name}janitor@gmail.com", DateTime.Parse("01.01.1980"), "Test janitor, would be a real person");
-                RealEstate tmpRE = new RealEstate(name, address, owner, janitor, double.Parse(rooms), double.Parse(qm), DataAccessLayer.GetInstance.GetBankAccountsUnfiltered()[0]);
-
-                for (int i = 0; i < 4; i++)//create appartements
-                {
-                    RentalObject newObject = new RentalObject($"{i + 1}.Appartment of {tmpRE.RealEstateName}", RentalObjectType.Apartement, $"Ap.{i + 1}", 3, 72.5, tmpRE.Owner, 900, 200, tmpRE, tmpRE.Account);
-                    newObject.ResponsibleEmployee = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x=> x.Name=="Test" && x.Prename=="Anna");
-                }
-                for (int i = 0; i < 4; i++)//create Garages
-                {
-                    RentalObject newObject = new RentalObject($"{i + 1}.Garage of {tmpRE.RealEstateName}", RentalObjectType.Garage, "", 1, 12, tmpRE.Owner, 60, 10, tmpRE, tmpRE.Account);
-                    newObject.ResponsibleEmployee = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x => x.Name == "Test" && x.Prename == "Anna");
-
-                }
-                for (int i = 0; i < 2; i++)//create hobbyrooms
-                {
-                    RentalObject newObject = new RentalObject($"{i + 1}.Hobbyroom in {tmpRE.RealEstateName}", RentalObjectType.Hobby, $"HR.{i + 1}", 1, 12, tmpRE.Owner, 100, 20, tmpRE, tmpRE.Account);
-                    newObject.ResponsibleEmployee = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x => x.Name == "Test" && x.Prename == "Anna");
-
-                }
-
-                return tmpRE;
-
-            }).ToList();
-        }
-
-        private bool RealEstateExists(RealEstate realEstateToCheck)
-        {
-            return aviableRealEstates.Exists(x => x.RealEstateName == realEstateToCheck.RealEstateName);
-        }
-        #endregion
-
-        #region Test Users
 
         private void StoreTestUsersToDB()
         {
-            if (aviablePersons.Count < 3)
+
+            foreach (Person p in DataAccessLayer.GetInstance.GetEmployeesUnfiltered())
             {
-                return;
-            }
-            else
-            {
-                foreach(Person p in DataAccessLayer.GetInstance.GetEmployeesUnfiltered())
+                string username = $"{p.Name}{p.Prename}";
+                if (DataAccessLayer.GetInstance.GetUserByName(username) == null)
                 {
 
-                    string username = $"{p.Name}{p.Prename}";
-
-                    if (DataAccessLayer.GetInstance.GetUserByName(username) == null)
-                    {
-                        DataAccessLayer.GetInstance.StoreNewUser(new User(username, p, "Passwort1234", Permissions.Admin));
-                    }
+                    DataAccessLayer.GetInstance.StoreNewUser(new User(username, p, "Passwort1234", Permissions.Admin));
                 }
-                
-                  
-                
             }
 
         }
 
-        #endregion
-
-        #region test RentalContracts
-
-        private void StoreTestRentalContractsToDB()
+        private void StoreBankAccountsToDB()
         {
-            Random random = new Random();
-            List<Person> persons = DataAccessLayer.GetInstance.GetPersonsUnfiltered();
-            Debug.WriteLine("-----Generating Rental Contracts-----");
-
-            foreach (RealEstate re in DataAccessLayer.GetInstance.GetRealEstatesUnfiltered())
+            foreach (string s in GetDataLinesFromCSV("TestBankAccounts.csv"))
             {
-                Debug.WriteLine($"Generating for: {re.RealEstateID} ");
-                foreach (RentalObject ro in re.RentalObjects)
+                string[] data = s.Split(';');
+
+                BankAccount newAccount = new BankAccount(true);
+
+                newAccount.AccountName = data[0];
+                newAccount.Iban = data[1];
+
+                DataAccessLayer.GetInstance.StoreNewBankAccount(newAccount);
+            }
+
+
+        }
+
+        private void StoreTestRealEstatesIncludingRentalObjects()
+        {
+            foreach (string s in GetDataLinesFromCSV("TestLiegenschaften.csv"))
+            {
+                string[] data = s.Split(';');
+
+                RealEstate newRealEstate = new RealEstate(true);
+
+                newRealEstate.RealEstateName = data[0];
+                newRealEstate.BaseObject.RentalObjectName = data[0];
+                newRealEstate.Address = data[1];
+                newRealEstate.BaseObject.RoomCount = double.Parse(data[2]);
+                newRealEstate.BaseObject.SpaceInQM = double.Parse(data[3]);
+                newRealEstate.BuildingInsurance = data[4];
+                newRealEstate.LiabilityInsurance = data[5];
+                newRealEstate.PersonalInsurance = data[6];
+                newRealEstate.BaseObject.Owner = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x => x.Name.StartsWith("ImmoGlobal"));
+                newRealEstate.Janitor = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x => x.Name == "Test");
+                newRealEstate.BaseObject.Account = DataAccessLayer.GetInstance.GetBankAccountsUnfiltered()[2];
+
+
+                { DataAccessLayer.GetInstance.StoreNewRealEstate(newRealEstate); }
+
+
+
+
+            }
+
+            int appartementCount = 0;
+            Person[] tenantsOfRealEstate = DataAccessLayer.GetInstance.GetPersonsUnfiltered().Where(x => x.Name == "Mueller" || x.Name == "Koch" || x.Name == "Suter").ToArray();
+
+            foreach (string s in GetDataLinesFromCSV("TestMietObjekteLiegenschaft1.csv"))
+            {
+                string[] data = s.Split(';');
+
+                RentalObject newRentalObject = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered()[0].AddRentalObject();
+
+                newRentalObject.Type = (RentalObjectType)int.Parse(data[0]);
+                newRentalObject.RentalObjectName = data[1];
+                newRentalObject.AddressSupplement = data[2];
+                newRentalObject.RoomCount = double.Parse(data[3]);
+                newRentalObject.SpaceInQM = double.Parse(data[4]);
+                newRentalObject.EstimatedBaseRent = double.Parse(data[5]);
+                newRentalObject.EstimatedAdditionalCosts = double.Parse(data[6]);
+                newRentalObject.HasFridge = data[7] == "" ? false : true;
+                newRentalObject.HasDishwasher = data[8] == "" ? false : true;
+                newRentalObject.HasStove = data[9] == "" ? false : true;
+                newRentalObject.HasWashingmachine = data[10] == "" ? false : true;
+                newRentalObject.HasTumbler = data[11] == "" ? false : true;
+                newRentalObject.Owner = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered()[0].Owner;
+                newRentalObject.Account = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered()[0].Account;
+                newRentalObject.ResponsibleEmployee = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x => x.Name == "Beispiel");
+
+                DataAccessLayer.GetInstance.StoreNewRentalObject(newRentalObject);
+                DataAccessLayer.GetInstance.SaveChanges();
+
+                if (newRentalObject.Type == RentalObjectType.Apartement)
                 {
-                    Debug.WriteLine($"Generating for object: {ro.RentalObjectName}");
-                    Debug.WriteLine("Generating Rental Contracts");
-                    Person randomTenant = persons[random.Next(0, persons.Count - 1)];
+                    RentalContract newContract = newRentalObject.CreateNewRentalContract();
+                    newContract.ChangeStartDate = DateTime.Parse("01.01.2022");
+                    newContract.ChangeResponsibleEmployee = newRentalObject.ResponsibleEmployee;
+                    newContract.ChangeTenant = tenantsOfRealEstate[appartementCount];
+                    newContract.ChangeRentDueDay = 5;
+                    newContract.ValidateContract();
 
-                    RentalContract newRentalContract = new RentalContract(randomTenant,persons.First(x=>x.Name=="Test"&&x.Prename=="Anna"),ro,900,200,5,DateTime.Parse("01.01.2022"));
-                    newRentalContract.ValidateContract();
+                    appartementCount++;
+                }
 
-                    //ro.RentalContracts.Add(newRentalContract);
-                    DataAccessLayer.GetInstance.StoreNewRentalContract(newRentalContract);
-                    DataAccessLayer.GetInstance.SaveChanges();
+            }
 
+            appartementCount = 0;
+            tenantsOfRealEstate = DataAccessLayer.GetInstance.GetPersonsUnfiltered().Where(x => x.Name == "Obama" || x.Name == "Jordi").ToArray();
+
+
+            foreach (string s in GetDataLinesFromCSV("TestMietObjekteLiegenschaft2.csv"))
+            {
+                string[] data = s.Split(';');
+
+                RentalObject newRentalObject = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered()[1].AddRentalObject();
+
+                newRentalObject.Type = (RentalObjectType)int.Parse(data[0]);
+                newRentalObject.RentalObjectName = data[1];
+                newRentalObject.AddressSupplement = data[2];
+                newRentalObject.RoomCount = double.Parse(data[3]);
+                newRentalObject.SpaceInQM = double.Parse(data[4]);
+                newRentalObject.EstimatedBaseRent = double.Parse(data[5]);
+                newRentalObject.EstimatedAdditionalCosts = double.Parse(data[6]);
+                newRentalObject.HasFridge = data[7] == "" ? false : true;
+                newRentalObject.HasDishwasher = data[8] == "" ? false : true;
+                newRentalObject.HasStove = data[9] == "" ? false : true;
+                newRentalObject.HasWashingmachine = data[10] == "" ? false : true;
+                newRentalObject.HasTumbler = data[11] == "" ? false : true;
+                newRentalObject.Owner = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered()[1].Owner;
+                newRentalObject.Account = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered()[1].Account;
+                newRentalObject.ResponsibleEmployee = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x => x.Name == "Beispiel");
+
+
+                DataAccessLayer.GetInstance.StoreNewRentalObject(newRentalObject);
+
+                if (newRentalObject.Type == RentalObjectType.Apartement)
+                {
+                    RentalContract newContract = newRentalObject.CreateNewRentalContract();
+                    newContract.ChangeStartDate = DateTime.Parse("01.01.2022");
+                    newContract.ChangeResponsibleEmployee = newRentalObject.ResponsibleEmployee;
+                    newContract.ChangeTenant = tenantsOfRealEstate[appartementCount];
+                    newContract.ChangeRentDueDay = 5;
+                    newContract.ValidateContract();
+
+                    DataAccessLayer.GetInstance.StoreNewRentalContract(newContract);
+
+                    appartementCount++;
                 }
             }
 
-            Debug.WriteLine("----- Finished Generating Rental Contracts-----");
+            appartementCount = 0;
+            tenantsOfRealEstate = DataAccessLayer.GetInstance.GetPersonsUnfiltered().Where(x => x.Name == "Verstappen" || x.Name == "Leclerc" || x.Name == "Steiner" || x.Name == "Horner").ToArray();
+
+
+            foreach (string s in GetDataLinesFromCSV("TestMietObjekteLiegenschaft3.csv"))
+            {
+                string[] data = s.Split(';');
+
+                RentalObject newRentalObject = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered()[2].AddRentalObject();
+
+                newRentalObject.Type = (RentalObjectType)int.Parse(data[0]);
+                newRentalObject.RentalObjectName = data[1];
+                newRentalObject.AddressSupplement = data[2];
+                newRentalObject.RoomCount = double.Parse(data[3]);
+                newRentalObject.SpaceInQM = double.Parse(data[4]);
+                newRentalObject.EstimatedBaseRent = double.Parse(data[5]);
+                newRentalObject.EstimatedAdditionalCosts = double.Parse(data[6]);
+                newRentalObject.HasFridge = data[7] == "" ? false : true;
+                newRentalObject.HasDishwasher = data[8] == "" ? false : true;
+                newRentalObject.HasStove = data[9] == "" ? false : true;
+                newRentalObject.HasWashingmachine = data[10] == "" ? false : true;
+                newRentalObject.HasTumbler = data[11] == "" ? false : true;
+                newRentalObject.Owner = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered()[2].Owner;
+                newRentalObject.Account = DataAccessLayer.GetInstance.GetRealEstatesUnfiltered()[2].Account;
+                newRentalObject.ResponsibleEmployee = DataAccessLayer.GetInstance.GetPersonsUnfiltered().FirstOrDefault(x => x.Name == "Beispiel");
+
+
+                DataAccessLayer.GetInstance.StoreNewRentalObject(newRentalObject);
+
+                if (newRentalObject.Type == RentalObjectType.Apartement)
+                {
+                    RentalContract newContract = newRentalObject.CreateNewRentalContract();
+                    newContract.ChangeStartDate = DateTime.Parse("01.01.2022");
+                    newContract.ChangeResponsibleEmployee = newRentalObject.ResponsibleEmployee;
+                    newContract.ChangeTenant = tenantsOfRealEstate[appartementCount];
+                    newContract.ChangeRentDueDay = 5;
+                    newContract.ValidateContract();
+
+                    DataAccessLayer.GetInstance.StoreNewRentalContract(newContract);
+
+                    appartementCount++;
+                }
+            }
+
         }
 
+        private void StoreTransactions()
+        {
+            Random rnd = new Random();
 
-        #endregion
+            foreach(RentalContract rc in DataAccessLayer.GetInstance.GetContractsUnfiltered())
+            {
+
+                for(int i = 0; i < 4; i++)
+                {
+                    Transaction newTransaction = new Transaction(true);
+                    newTransaction.SetValue = rc.RentTotal;
+                    newTransaction.SetRentalObject = rc.RentalObject;
+                    newTransaction.SetBankAccount = rc.RentalObject.Account;
+                    newTransaction.SetType = TransactionType.Rent;
+                    newTransaction.SetDateTimeOfTransaction = DateTime.Parse("01.01.2022").AddMonths(i);
+                    newTransaction.SetAssociatedPerson = rc.Tenant;
+                    newTransaction.Lock();
+                    DataAccessLayer.GetInstance.StoreNewTransaction(newTransaction);
+
+                }
+
+                int rndValue = rnd.Next(0,100);
+
+                if (rndValue > 90)
+                {
+                    Transaction newTransaction = new Transaction(true);
+                    newTransaction.SetValue = rc.RentTotal + 500;
+                    newTransaction.SetRentalObject = rc.RentalObject;
+                    newTransaction.SetBankAccount = rc.RentalObject.Account;
+                    newTransaction.SetType = TransactionType.Rent;
+                    newTransaction.SetDateTimeOfTransaction = DateTime.Parse("01.01.2022").AddMonths(5);
+                    newTransaction.SetAssociatedPerson = rc.Tenant;
+                    newTransaction.Lock();
+                    DataAccessLayer.GetInstance.StoreNewTransaction(newTransaction);
+                }
+                else if(rndValue>25)
+                {
+                    Transaction newTransaction = new Transaction(true);
+                    newTransaction.SetValue = rc.RentTotal;
+                    newTransaction.SetRentalObject = rc.RentalObject;
+                    newTransaction.SetBankAccount = rc.RentalObject.Account;
+                    newTransaction.SetType = TransactionType.Rent;
+                    newTransaction.SetDateTimeOfTransaction = DateTime.Parse("01.01.2022").AddMonths(5);
+                    newTransaction.SetAssociatedPerson = rc.Tenant;
+                    newTransaction.Lock();
+                    DataAccessLayer.GetInstance.StoreNewTransaction(newTransaction);
+                }
+
+            }
+        }
+       
+     
+      
     }
 }
 

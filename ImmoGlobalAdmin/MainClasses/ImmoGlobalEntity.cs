@@ -8,22 +8,26 @@ namespace ImmoGlobalAdmin.MainClasses
 {
     public abstract class ImmoGlobalEntity
     {
-        public virtual bool Enabled { get; protected set; }
-        public virtual string ReasonForDeleting { get; protected set; } = "";
-        public virtual bool Locked { get; protected set; }
+        public bool Enabled { get; protected set; }
+        public string ReasonForDeleting { get; protected set; } = "";
+        public bool Locked { get; protected set; }
 
-
+        
+        public void Delete(string Reason) => DeleteLogic(Reason);
         /// <summary>
         /// Deleting an Entity only sets Enabled to false, that way we dont loose references
         /// </summary>
         /// <param name="reason"></param>
-        public virtual void Delete(string reason)
+        protected virtual void DeleteLogic(string reason)
         {
             Enabled = false;
             ReasonForDeleting = reason;
         }
 
-        public virtual void Lock()
+        /// <summary>
+        /// Sets Lock = True used to prevent unwanted changes
+        /// </summary>
+        public void Lock()
         {
             Locked = true;
         }

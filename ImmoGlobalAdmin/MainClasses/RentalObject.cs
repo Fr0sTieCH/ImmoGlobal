@@ -10,7 +10,7 @@ namespace ImmoGlobalAdmin.MainClasses
 {/// <summary>
 /// Represents a rental object (Apartement,Garage, Hobbyroom etc)
 /// </summary>
-    public class RentalObject:ImmoGlobalEntity
+    public class RentalObject : ImmoGlobalEntity
     {
         public int RentalObjectID { get; private set; }
         public string RentalObjectName { get; set; } = "";
@@ -24,7 +24,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public double EstimatedAdditionalCosts { get; set; } = 0;
         public virtual BankAccount? Account { get; set; }
         public virtual ICollection<RentalContract?> RentalContracts { get; set; } = new List<RentalContract>();
-        public virtual ICollection<Transaction?> Transactions { get; set; } =new List<Transaction>();
+        public virtual ICollection<Transaction?> Transactions { get; set; } = new List<Transaction>();
         public bool HasFridge { get; set; } = false;
         public bool HasDishwasher { get; set; } = false;
         public bool HasStove { get; set; } = false;
@@ -36,7 +36,7 @@ namespace ImmoGlobalAdmin.MainClasses
 
         public RentalObject()
         {
-            
+
         }
 
         public RentalObject(RentalObject refBaseOject)
@@ -51,7 +51,7 @@ namespace ImmoGlobalAdmin.MainClasses
         {
             if (IsBaseObject)
             {
-               
+
                 Type = RentalObjectType.RealEstateBaseObject;
             }
 
@@ -82,7 +82,6 @@ namespace ImmoGlobalAdmin.MainClasses
             this.EstimatedBaseRent = estimatedBaseRent;
             this.EstimatedAdditionalCosts = estimatedAdditionalCosts;
             this.Account = account;
-            realEstate.AddRentalObject(this);
 
             this.Enabled = true;
         }
@@ -135,11 +134,11 @@ namespace ImmoGlobalAdmin.MainClasses
             {
                 if (this.Type == RentalObjectType.RealEstateBaseObject)
                 {
-                    return RentalObjectID.ToString("RE00000000");
+                    return RentalObjectID.ToString("RE 00000000");
                 }
                 else
                 {
-                    return RentalObjectID.ToString("OB00000000");
+                    return RentalObjectID.ToString("OB 00000000");
                 }
             }
         }
@@ -149,22 +148,16 @@ namespace ImmoGlobalAdmin.MainClasses
 
         [NotMapped]
         public bool RentalContractActive => ActiveRentalContract != null;
-        [NotMapped]
-        public bool RentStatusOK
-        {
-            get
-            {
-                if (RentsDue.Count > 1)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
 
-            }
-        }
+        /// <summary>
+        /// Returns true if Tenant is not in default of payment
+        /// </summary>
+        [NotMapped]
+        public bool RentStatusOK => RentBalance >= 0;
+       
+        /// <summary>
+        /// Returns true if Tenant is in default of payment
+        /// </summary>
         [NotMapped]
         public bool RentStatusNotOK => !RentStatusOK;
 
@@ -193,48 +186,37 @@ namespace ImmoGlobalAdmin.MainClasses
         public List<Transaction?> PayedRents => Transactions.Where(x => x.Type == TransactionType.Rent).ToList();
 
         [NotMapped]
-        public Transaction? LastPayedRent => Transactions.Where(x => x.Type == TransactionType.Rent).FirstOrDefault();
+        public Transaction? LastPayedRent => Transactions.OrderByDescending(x =>x.DateTimeOfTransaction).Where(x => x.Type == TransactionType.Rent).FirstOrDefault();
 
+        /// <summary>
+        /// Returns the current Balance => <0 = Tenant is in default of payment >0 Tenant payed to much
+        /// </summary>
         [NotMapped]
-        public List<DateTime> RentsDue
+        public double RentBalance
         {
             get
-            {
+            {             
                 if (RentalContractActive)
                 {
-                    List<DateTime> tmp = new List<DateTime>();
+                    double owedRent = 0;
 
                     //loop throught every month since the active contract started
-                    for (DateTime d = ActiveRentalContract.StartDate.Date; d.Date < DateTime.Now.AddMonths(1).Date; d = d.AddMonths(1))
+                    for (DateTime d = ActiveRentalContract.StartDate.Date; d.Date < DateTime.Now.Date; d = d.AddMonths(1))
                     {
-
-                        tmp.Add(DateTime.Parse($"{ActiveRentalContract.RentDueDay},{d.Month},{d.Year}"));
+                        owedRent += ActiveRentalContract.RentTotal;
                     }
+                    //List of all the Transactions of the current Tenant (only transactions wich were payed after the start of the contract - 1 month)
+                    List<Transaction?> transactionsOfActiveTenant = PayedRents.Where(x => x.AssociatedPerson == ActiveRentalContract.Tenant 
+                                                                               && x.DateTimeOfTransaction > ActiveRentalContract.StartDate.AddMonths(-1).Date)
+                                                                               .ToList();
+                    //total sum of payments
+                    double sumPayments = transactionsOfActiveTenant.Sum(x => x.Value);
 
-                    if (PayedRents.Count(x => x.AssociatedPerson == ActiveRentalContract.Tenant) == 0)
-                    {
-                        return tmp;
-                    }
-                    else
-                    {
-
-
-                        foreach (Transaction t in PayedRents.Where(x => x.AssociatedPerson == ActiveRentalContract.Tenant))
-                        {
-
-                            if (t.DateTimeOfTransaction > ActiveRentalContract.StartDate.AddMonths(-1).Date)//in case one tenant was tenant of this object before => only account transactions wich are less than 1 month before the startdate of the contract
-                            {
-                                tmp.RemoveAt(0);
-                                //foreach payment remove one duedate
-                            }
-                        }
-
-                        return tmp;
-                    }
+                    return sumPayments - owedRent;
                 }
                 else
                 {
-                    return new List<DateTime>();
+                    return 0;
                 }
             }
         }
@@ -242,8 +224,35 @@ namespace ImmoGlobalAdmin.MainClasses
         #endregion
 
 
+        /// <summary>
+        /// Creates Adds and returns a new Rental contract
+        /// StartDate gets set to the enddate of the active rentalcontract or to today if there's none
+        /// </summary>
+        /// <returns></returns>
+        public RentalContract CreateNewRentalContract()
+        {
+            DateTime? suggestedStartDate = null;
+            if (ActiveRentalContract != null)
+            {
+                suggestedStartDate = ActiveRentalContract.EndDate;
+            }
 
-        public override void Delete(string reason)
+            RentalContract newRC = new RentalContract(this, suggestedStartDate ?? DateTime.Now);
+            RentalContracts.Add(newRC);
+
+            return newRC;
+        }
+
+        /// <summary>
+        /// Removes a given RentalContract (Only use this if the rentalcontract is not already stored to the DB)
+        /// </summary>
+        /// <param name="contractToRemove"></param>
+        public void RemoveRentalContract(RentalContract contractToRemove)
+        {
+            RentalContracts.Remove(contractToRemove);
+        }
+
+        protected override void DeleteLogic(string reason)
         {
             if (Type == RentalObjectType.RealEstateBaseObject) //Every realestate has to have a baseobject, therefore deleting of a realestatebaseobject is not allowed
             {

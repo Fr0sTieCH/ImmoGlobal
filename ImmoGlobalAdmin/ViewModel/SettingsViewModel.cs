@@ -9,11 +9,11 @@ namespace ImmoGlobalAdmin.ViewModel
 {
     internal class SettingsViewModel : BaseViewModel
     {
-        private LanguageSetting currentLanguage;
+        private LanguageSetting _currentLanguage;
 
         #region Singleton
-        private static SettingsViewModel? instance = null;
-        private static readonly object padlock = new();
+        private static SettingsViewModel? _instance = null;
+        private static readonly object _padlock = new();
 
 
         public SettingsViewModel()
@@ -27,13 +27,13 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                lock (padlock)
+                lock (_padlock)
                 {
-                    if (instance == null)
+                    if (_instance == null)
                     {
-                        instance = new SettingsViewModel();
+                        _instance = new SettingsViewModel();
                     }
-                    return instance;
+                    return _instance;
                 }
             }
         }
@@ -47,16 +47,16 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (currentLanguage == null)
+                if (_currentLanguage == null)
                 {
-                    currentLanguage = LanguageSetting.English;
+                    _currentLanguage = LanguageSetting.English;
                 }
-                return Enum.GetName(currentLanguage);
+                return Enum.GetName(_currentLanguage);
             }
             set
             {
 
-                currentLanguage = Enum.Parse<LanguageSetting>(value);
+                _currentLanguage = Enum.Parse<LanguageSetting>(value);
                 SetLanguage();
                 OnPropertyChanged();
             }
@@ -76,7 +76,7 @@ namespace ImmoGlobalAdmin.ViewModel
             ResourceDictionary dict = new ResourceDictionary();
 
 
-            switch (currentLanguage)
+            switch (_currentLanguage)
             {
                 case LanguageSetting.English:
                     dict.Source = new Uri("..\\Resources\\StringResources.xaml", UriKind.Relative);

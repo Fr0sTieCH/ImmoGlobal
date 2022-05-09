@@ -1,0 +1,19 @@
+Typ;Name;Adresszusatz;Räume;Fläche;geschätzter Mietzins;Geschätzte Nebenkosten;Kühlschrank;Abwaschmaschiene;Ofen;Waschmaschine;Tumbler
+1;Wohnung 1OG Links;1.OG L;5.5;132;2000;300;x;x;x;x;x
+1;Wohnung 1OG Rechts;1.OG R;5.5;132;2000;300;x;x;x;x;x
+1;Wohnung 2OG Links;2.OG L;5.5;132;2000;300;x;x;x;x;x
+1;Wohnung 2OG Rechts;2.OG R;5.5;132;2000;300;x;x;x;x;x
+4;Buero EG Links;EG L;8;320;6000;500;x;x;x;;
+4;Buero EG Rechts;EG R;8;320;6000;500;x;x;x;;
+2;Garage 1;;1;15;100;0;;;;;
+2;Garage 2;;1;15;100;0;;;;;
+2;Garage 3;;1;15;100;0;;;;;
+2;Garage 4;;1;15;100;0;;;;;
+5;Parkplatz 1;;1;6;20;0;;;;;
+5;Parkplatz 2;;1;6;20;0;;;;;
+5;Parkplatz 3;;1;6;20;0;;;;;
+5;Parkplatz 4;;1;6;20;0;;;;;
+5;Parkplatz 5;;1;6;20;0;;;;;
+5;Parkplatz 6;;1;6;20;0;;;;;
+5;Parkplatz 7;;1;6;20;0;;;;;
+5;Parkplatz 8;;1;6;20;0;;;;;

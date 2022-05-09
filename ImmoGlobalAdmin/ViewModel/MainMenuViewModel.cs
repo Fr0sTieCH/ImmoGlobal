@@ -14,8 +14,8 @@ namespace ImmoGlobalAdmin.ViewModel
     {
 
         #region Singleton
-        private static MainMenuViewModel? instance = null;
-        private static readonly object padlock = new();
+        private static MainMenuViewModel? _instance = null;
+        private static readonly object _padlock = new();
 
         public MainMenuViewModel()
         {
@@ -28,13 +28,13 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                lock (padlock)
+                lock (_padlock)
                 {
-                    if (instance == null)
+                    if (_instance == null)
                     {
-                        instance = new MainMenuViewModel();
+                        _instance = new MainMenuViewModel();
                     }
-                    return instance;
+                    return _instance;
                 }
             }
         }
@@ -278,6 +278,15 @@ namespace ImmoGlobalAdmin.ViewModel
             OnPropertyChanged(nameof(PersonActive));
             OnPropertyChanged(nameof(SettingsActive));
             OnPropertyChanged(nameof(DashboardActive));
+        }
+
+        public void OnLoggedInUserChanged()
+        {
+            OnPropertyChanged(nameof(FinanceEnabled));
+            OnPropertyChanged(nameof(RealEstateEnabled));
+            OnPropertyChanged(nameof(UserEnabled));
+            OnPropertyChanged(nameof(PersonsEnabled));
+
         }
 
     }

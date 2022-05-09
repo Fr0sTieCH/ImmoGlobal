@@ -9,8 +9,8 @@ namespace ImmoGlobalAdmin.ViewModel
     internal class UserManagementViewModel:BaseViewModel
     {
         #region Singleton
-        private static UserManagementViewModel? instance = null;
-        private static readonly object padlock = new();
+        private static UserManagementViewModel? _instance = null;
+        private static readonly object _padlock = new();
 
         public UserManagementViewModel()
         {
@@ -23,13 +23,13 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                lock (padlock)
+                lock (_padlock)
                 {
-                    if (instance == null)
+                    if (_instance == null)
                     {
-                        instance = new UserManagementViewModel();
+                        _instance = new UserManagementViewModel();
                     }
-                    return instance;
+                    return _instance;
                 }
             }
         }

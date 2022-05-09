@@ -380,32 +380,21 @@
                                                                         </materialDesign:PackIcon>
                                                                     </StackPanel>
                                                                 </materialDesign:Card>
-                                                                <Label Content="{DynamicResource rentsDue}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                                                <Label x:Name="DueCountLabel" Width="30" Content="{Binding RentalObjectToDisplay.RentsDue.Count, Mode=OneWay}" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                                                <Label Content="{DynamicResource lastPayment}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                                                <Label  Width="100" Content="{Binding RentalObjectToDisplay.LastPayedRent.DateTimeOfTransaction,Mode=OneWay}" ContentStringFormat="dd.MMM.yyyy" />
                                                             </StackPanel>
-
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <!--Rent Balance-->
+                                                                <StackPanel>
+                                                                    <Label Content="{DynamicResource rentBalance}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                    <Label IsEnabled="False" Width="150" Content="{Binding RentalObjectToDisplay.RentBalance, Mode=OneWay}" ContentStringFormat="0 CHF" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                </StackPanel>
+                                                                <!--Date of the last rent-Payment-->
+                                                                <StackPanel>
+                                                                    <Label Content="{DynamicResource lastPayment}" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                    <DatePicker IsEnabled="False" Width="150" SelectedDate="{Binding RentalObjectToDisplay.LastPayedRent.DateTimeOfTransaction,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
                                                         </StackPanel>
                                                     </materialDesign:Card>
-                                                    <ItemsControl ItemsSource="{Binding RentalObjectToDisplay.RentsDue}" >
-                                                        <ItemsControl.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <WrapPanel />
-                                                            </ItemsPanelTemplate>
-                                                        </ItemsControl.ItemsPanel>
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <materialDesign:Card Margin="2,2,2,2" Width="100">
-                                                                    <StackPanel Orientation="Horizontal">
-                                                                        <materialDesign:PackIcon Kind="DollarOff" Foreground="OrangeRed" VerticalAlignment="Center"/>
-                                                                        <Label Content="{Binding Date}" ContentStringFormat="dd.MMM.yyyy" VerticalAlignment="Center" Foreground="OrangeRed"/>
-                                                                        <Label Content="{DynamicResource notPayed}"/>
-                                                                    </StackPanel>
-                                                                </materialDesign:Card>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
                                                 </StackPanel>
                                             </Expander>
                                         </materialDesign:Card>

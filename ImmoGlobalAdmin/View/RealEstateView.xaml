@@ -33,7 +33,7 @@
                 <DataGridTextColumn Header="{DynamicResource address}" Binding="{Binding Address}"/>
                 <DataGridTextColumn Header="{DynamicResource owner}" Binding="{Binding BaseObject.Owner.Name}"/>
                 <DataGridTextColumn Header="{DynamicResource janitor}" Binding="{Binding Janitor.Name}"/>
-                <DataGridTextColumn Header="{DynamicResource bankAccount}" Binding="{Binding BaseObject.Account.Iban}"/>
+                <DataGridTextColumn Header="{DynamicResource bankAccount}" Binding="{Binding BaseObject.Account.AccountName}"/>
                 <DataGridTextColumn Header="{DynamicResource totalObjects}" Binding="{Binding TotalObjectCount}"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -127,8 +127,9 @@
                                             <ComboBox IsEnabled="{Binding EditMode}" Width="300" ItemsSource="{Binding AllBankAccounts}" SelectedItem="{Binding SelectedRealEstate.BaseObject.Account}">
                                                 <ComboBox.ItemTemplate>
                                                     <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding Iban}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding AccountName}" FontSize="12" Margin="0,0,2,0"></TextBlock>
+                                                            <TextBlock Text="{Binding Iban}" FontSize="9" Margin="0,0,2,0"></TextBlock>
                                                         </StackPanel>
                                                     </DataTemplate>
                                                 </ComboBox.ItemTemplate>
@@ -178,25 +179,25 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </materialDesign:Card>
-                            
-                            
-                            <!--#region INSURANCE-->
+
+
+                                <!--#region INSURANCE-->
                                 <materialDesign:Card Margin="5,5,5,5">
                                     <StackPanel>
-                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                        <Label Content="{DynamicResource buildingInsurance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                        <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.BuildingInsurance}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    </StackPanel>
+                                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                            <Label Content="{DynamicResource buildingInsurance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                            <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.BuildingInsurance}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        </StackPanel>
 
-                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                        <Label Content="{DynamicResource liabilityInsurance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                        <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.LiabilityInsurance}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    </StackPanel>
+                                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                            <Label Content="{DynamicResource liabilityInsurance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                            <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.LiabilityInsurance}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        </StackPanel>
 
-                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
-                                        <Label Content="{DynamicResource personalInsurance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                        <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.PersonalInsurance}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    </StackPanel>
+                                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,5,5">
+                                            <Label Content="{DynamicResource personalInsurance}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                            <TextBox IsEnabled="{Binding EditMode}" Width="350" Text="{Binding SelectedRealEstate.PersonalInsurance}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        </StackPanel>
                                     </StackPanel>
                                 </materialDesign:Card>
                                 <!--#endregion-->
@@ -430,6 +431,7 @@
 
                                                         <materialDesign:Card Margin="5,5,5,5">
                                                             <StackPanel>
+
                                                                 <StackPanel Orientation="Horizontal">
                                                                     <materialDesign:PackIcon Kind="Payment" VerticalAlignment="Center" Margin="5,5,5,5">
                                                                         <materialDesign:PackIcon.LayoutTransform>
@@ -468,13 +470,18 @@
                                                                         </StackPanel>
                                                                     </materialDesign:Card>
 
-                                                                    <!--Count of how many rent-payments are missing-->
-                                                                    <Label Content="{DynamicResource rentsDue}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                                                    <TextBox IsEnabled="False" Width="30" Text="{Binding RentsDue.Count, Mode=OneWay}" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
-
+                                                                </StackPanel>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <!--Rent Balance-->
+                                                                    <StackPanel>
+                                                                        <Label Content="{DynamicResource rentBalance}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                        <Label IsEnabled="False" Width="150" Content="{Binding RentBalance, Mode=OneWay}" ContentStringFormat="0 CHF" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                    </StackPanel>
                                                                     <!--Date of the last rent-Payment-->
-                                                                    <Label Content="{DynamicResource lastPayment}" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>
-                                                                    <DatePicker IsEnabled="False" Width="70" SelectedDate="{Binding LastPayedRent.DateTimeOfTransaction, Mode=OneWay}"/>
+                                                                    <StackPanel>
+                                                                        <Label Content="{DynamicResource lastPayment}" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,5"/>
+                                                                        <DatePicker IsEnabled="False" Width="150" SelectedDate="{Binding LastPayedRent.DateTimeOfTransaction, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
                                                                 </StackPanel>
                                                             </StackPanel>
                                                         </materialDesign:Card>
@@ -521,10 +528,10 @@
                     </StackPanel>
                 </materialDesign:Card>
                 <!--#endregion-->
-                
+
             </Grid>
             <!--#endregion-->
-            
+
         </Grid>
 
     </Grid>

@@ -31,16 +31,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestData\TestRealEstates.CSV">
+    <None Update="TestData\TestBankAccounts.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\TestBankAccounts.CSV">
+    <None Update="TestData\TestLiegenschaften.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\TestPersons(JuristicEntities).CSV">
+    <None Update="TestData\TestMietobjekte.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\TestPersons.CSV">
+    <None Update="TestData\TestMietobjekteLiegenschaft1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\TestMietobjekteLiegenschaft2.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\TestMietobjekteLiegenschaft3.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\TestPersonen.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
