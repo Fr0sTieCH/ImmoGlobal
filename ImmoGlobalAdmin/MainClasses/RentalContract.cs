@@ -25,7 +25,7 @@ namespace ImmoGlobalAdmin.MainClasses
      
 
         #region CONSTRUCTORS
-        public RentalContract()
+        public RentalContract()//used by EntityFramework
         {
             
         }
@@ -43,54 +43,10 @@ namespace ImmoGlobalAdmin.MainClasses
             this.Enabled = true;
             this.Locked = false;
 
-        }
-
-        /// <summary>
-        /// New rental Contract
-        /// </summary>
-        /// <param name="tenant">The tenant of the rental object</param>
-        /// <param name="responsibleEmployee">The employee who's responsible for the rental object</param>
-        /// <param name="rentalObject">The rental object</param>
-        /// <param name="baseRent"> base rent per month wich without any additional costs</param>
-        /// <param name="additionalCosts">additional costs per month</param>
-        /// <param name="startDate">start of the rental contract</param>
-        public RentalContract(Person tenant, Person responsibleEmployee, RentalObject rentalObject, double baseRent, double additionalCosts,int rentDueDay, DateTime startDate)
-        {
-            this.Tenant = tenant;
-            this.ResponsibleEmployee = responsibleEmployee;
-            this.RentalObject = rentalObject;
-            this.BaseRent = baseRent;
-            this.AdditionalCosts = additionalCosts;
-            this.StartDate = startDate;
-            this.RentDueDay = rentDueDay;
-            this.State = ContractState.ValidationPending;
-            this.Enabled = true;
-            this.Locked = false;
-        }
-
-        /// <summary>
-        /// New rental contract based on a reference contract
-        /// </summary>
-        /// <param name="referenceContract"></param>
-        /// <param name="tenant"></param>
-        /// <param name="responsibleEmployee"></param>
-        /// <param name="startDate"></param>
-        public RentalContract(RentalContract referenceContract, Person tenant, Person responsibleEmployee, DateTime startDate)
-        {
-            this.Tenant = tenant;
-            this.ResponsibleEmployee = responsibleEmployee;
-            this.RentalObject = referenceContract.RentalObject;
-            this.BaseRent = referenceContract.BaseRent;
-            this.AdditionalCosts = referenceContract.AdditionalCosts;
-            this.StartDate = startDate;
-            this.State = ContractState.ValidationPending;
-            this.Enabled = true;
-            this.Locked = false;
-        }
-
+        }     
         #endregion
 
-        #region PUBLIC SETTERS
+        #region PUBLIC GETSET
         [NotMapped]
         public double ChangeBaseRent
         {
@@ -140,9 +96,6 @@ namespace ImmoGlobalAdmin.MainClasses
             set => RentDueDay = Locked ? RentDueDay : value;
         }
 
-        #endregion
-
-        #region PUBLIC GETTERS
         [NotMapped]
         public string IGID => RentalContractID.ToString("RC00000000");
         [NotMapped]

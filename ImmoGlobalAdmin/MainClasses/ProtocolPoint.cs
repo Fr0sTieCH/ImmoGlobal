@@ -13,7 +13,7 @@ namespace ImmoGlobalAdmin.MainClasses
     public class ProtocolPoint
     {
         public int protocolPointID { get; private set; }
-        public string protocolPointName { get; set; }
+        public string protocolPointName { get; set; } = "";
         public PointCondition condition { get; set; }
 
         #region CONSTRUCTORS

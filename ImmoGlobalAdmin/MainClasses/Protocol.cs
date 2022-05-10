@@ -7,58 +7,25 @@ using System.Threading.Tasks;
 
 namespace ImmoGlobalAdmin.MainClasses
 {
+    /// <summary>
+    /// Represents a protocol
+    /// </summary>
     public class Protocol:ImmoGlobalEntity
     {
         public int ProtocolID { get; private set; }
         public virtual RentalObject? RentalObject { get; private set; }
         public virtual RentalContract? RentalContract { get; private set; }
         public ProtocolType Type { get; private set; }
-        public virtual ICollection<ProtocolPoint?> Points { get; private set; }
+        public virtual ICollection<ProtocolPoint?> Points { get; private set; } = new List<ProtocolPoint?>();
         public DateTime Date { get; private set; }
+       
         #region CONSTRUCTORS
-
-        /// <summary>
-        /// Creates a new Protocol
-        /// </summary>
-        /// <param name="rentalObject"></param>
-        /// <param name="rentalContract"></param>
-        /// <param name="type"></param>
-        /// <param name="points"></param>
-        /// <param name="date"></param>
-        public Protocol(RentalObject rentalObject, RentalContract rentalContract, ProtocolType type, List<ProtocolPoint> points, DateTime date)
-        {
-            this.RentalObject = rentalObject;
-            this.RentalContract = rentalContract;
-            this.Type = type;
-            this.Points = points;
-            this.Date = date;
-            this.Enabled = true;
-            this.Locked = false;
-        }
-        
-        /// <summary>
-        /// Creates a new protocol by using a reference protocol
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="referenceProtocol"></param>
-        /// <param name="date"></param>
-        public Protocol(ProtocolType type, Protocol referenceProtocol, DateTime date)
-        {
-            this.RentalObject = referenceProtocol.RentalObject;
-            this.RentalContract = referenceProtocol.RentalContract;
-            this.Type = type;
-            this.Points = referenceProtocol.Points;
-            this.Date = date;
-            this.Enabled = true;
-            this.Locked = false;
-        }
-
-        public Protocol()
+        public Protocol() //used by EntityFramework
         {
         }
         #endregion
 
-        #region PUBLIC SETTERS
+        #region PUBLIC GETSET
         [NotMapped]
         public RentalObject SetRentalObject
         {
@@ -78,7 +45,7 @@ namespace ImmoGlobalAdmin.MainClasses
         }
 
         [NotMapped]
-        public List<ProtocolPoint> SetPoints
+        public List<ProtocolPoint?> SetPoints
         {
             set => Points = Locked ? Points : value;
         }

@@ -23,8 +23,8 @@ namespace ImmoGlobalAdmin.MainClasses
         public double EstimatedBaseRent { get; set; } = 0;
         public double EstimatedAdditionalCosts { get; set; } = 0;
         public virtual BankAccount? Account { get; set; }
-        public virtual ICollection<RentalContract?> RentalContracts { get; set; } = new List<RentalContract>();
-        public virtual ICollection<Transaction?> Transactions { get; set; } = new List<Transaction>();
+        public virtual ICollection<RentalContract?> RentalContracts { get; set; } = new List<RentalContract?>();
+        public virtual ICollection<Transaction?> Transactions { get; set; } = new List<Transaction?>();
         public bool HasFridge { get; set; } = false;
         public bool HasDishwasher { get; set; } = false;
         public bool HasStove { get; set; } = false;
@@ -34,7 +34,7 @@ namespace ImmoGlobalAdmin.MainClasses
 
         #region CONSTRUCTORS
 
-        public RentalObject()
+        public RentalObject()//used by EntityFramework
         {
 
         }
@@ -59,60 +59,9 @@ namespace ImmoGlobalAdmin.MainClasses
         }
 
 
-        /// <summary>
-        /// New Rental Object
-        /// </summary>
-        /// <param name="rentalObjectName">Name of the object</param>
-        /// <param name="type">type of the object (Apartement, Garage etc.)</param>
-        /// <param name="addressSupplement">Address supplement of the object (Example: "RealEstate Address" + 1.Floor left)</param>
-        /// <param name="roomCount">Number of rooms of the object</param>
-        /// <param name="spaceInQM">total space in squaremeters of the object</param>
-        /// <param name="owner">owner of the object (if null => owner of rental object = owner of realestate)</param>
-        /// <param name="estimatedBaseRent">is used to</param>
-        /// <param name="realEstate">the realestate to wich this object belongs</param>
-        /// <param name="account">Bankaccount on wich all the transactions of this object will get debited or deposited</param>
-        public RentalObject(string rentalObjectName, RentalObjectType type, string addressSupplement, double roomCount, double spaceInQM, Person? owner, double estimatedBaseRent, double estimatedAdditionalCosts, RealEstate realEstate, BankAccount account)
-        {
-            this.RentalObjectName = rentalObjectName;
-            this.Type = type;
-            this.AddressSupplement = addressSupplement;
-            this.RoomCount = roomCount;
-            this.SpaceInQM = spaceInQM;
-            this.Owner = owner ?? realEstate.Owner;
-            this.EstimatedBaseRent = estimatedBaseRent;
-            this.EstimatedAdditionalCosts = estimatedAdditionalCosts;
-            this.Account = account;
-
-            this.Enabled = true;
-        }
-
-        /// <summary>
-        /// Creates a new BaseObject for realestates
-        /// </summary>
-        /// <param name="realEstate"></param>
-        /// <param name="nonRentalRoomCount">Number of rooms wich dont belong to any rental object</param>
-        /// <param name="nonRentalSpaceInQM">Space wich is not part of any rental object in squaremeters</param>
-        /// <param name="owner">owner of the realEstate</param>
-        /// <param name="account">Bankaccount on wich all the transactions of this realestate will get debited or deposited</param>
-        public RentalObject(string realEstateName, double nonRentalRoomCount, double nonRentalSpaceInQM, Person owner, BankAccount account)
-        {
-            this.RentalObjectName = $"{realEstateName}BaseObject";
-            this.Type = RentalObjectType.RealEstateBaseObject;
-            this.AddressSupplement = "";
-            this.RoomCount = nonRentalRoomCount;
-            this.SpaceInQM = nonRentalSpaceInQM;
-            this.Owner = owner;
-            this.EstimatedBaseRent = 0;
-            this.EstimatedAdditionalCosts = 0;
-            this.Account = account;
-
-            this.Enabled = true;
-        }
-
-
         #endregion
 
-        #region PUBLIC GETTERS
+        #region PUBLIC GETSET
         [NotMapped]
         public string TypeIconName
         {
@@ -125,7 +74,6 @@ namespace ImmoGlobalAdmin.MainClasses
                 this.Type = EnumTools.GetEnumFromDescriptionAttribute<RentalObjectType>(value);
             }
         }
-
 
         [NotMapped]
         public string IGID
@@ -154,7 +102,7 @@ namespace ImmoGlobalAdmin.MainClasses
         /// </summary>
         [NotMapped]
         public bool RentStatusOK => RentBalance >= 0;
-       
+
         /// <summary>
         /// Returns true if Tenant is in default of payment
         /// </summary>
@@ -172,21 +120,24 @@ namespace ImmoGlobalAdmin.MainClasses
                 }
                 else
                 {
-                    foreach (RentalContract rc in RentalContracts)
+                    foreach (RentalContract? rc in RentalContracts)
                     {
-                        rc.CheckState();
+                        if (rc != null)
+                        {
+                            rc.CheckState();
+                        }
                     }
-                    return RentalContracts.FirstOrDefault(x => x.State == ContractState.Active || x.State == ContractState.RunningOut);
+                    return RentalContracts.FirstOrDefault(x => x != null && x.State == ContractState.Active || x != null && x.State == ContractState.RunningOut);
                 }
             }
 
         }
 
         [NotMapped]
-        public List<Transaction?> PayedRents => Transactions.Where(x => x.Type == TransactionType.Rent).ToList();
+        public List<Transaction?> PayedRents => Transactions.Where(x => x != null && x.Type == TransactionType.Rent).ToList();
 
         [NotMapped]
-        public Transaction? LastPayedRent => Transactions.OrderByDescending(x =>x.DateTimeOfTransaction).Where(x => x.Type == TransactionType.Rent).FirstOrDefault();
+        public Transaction? LastPayedRent => Transactions.OrderByDescending(x => x.DateTimeOfTransaction).Where(x => x.Type == TransactionType.Rent).FirstOrDefault();
 
         /// <summary>
         /// Returns the current Balance => <0 = Tenant is in default of payment >0 Tenant payed to much
@@ -195,7 +146,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public double RentBalance
         {
             get
-            {             
+            {
                 if (RentalContractActive)
                 {
                     double owedRent = 0;
@@ -206,7 +157,7 @@ namespace ImmoGlobalAdmin.MainClasses
                         owedRent += ActiveRentalContract.RentTotal;
                     }
                     //List of all the Transactions of the current Tenant (only transactions wich were payed after the start of the contract - 1 month)
-                    List<Transaction?> transactionsOfActiveTenant = PayedRents.Where(x => x.AssociatedPerson == ActiveRentalContract.Tenant 
+                    List<Transaction?> transactionsOfActiveTenant = PayedRents.Where(x => x.AssociatedPerson == ActiveRentalContract.Tenant
                                                                                && x.DateTimeOfTransaction > ActiveRentalContract.StartDate.AddMonths(-1).Date)
                                                                                .ToList();
                     //total sum of payments

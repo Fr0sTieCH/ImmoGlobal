@@ -30,13 +30,5 @@ namespace ImmoGlobalAdmin.Model
             optionsBuilder.UseLazyLoadingProxies();
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<RentalObject>().HasMany(x => x.Transactions).WithRequired().HasForeignKey(x => x.RentalObject);
-
-        //    modelBuilder.Entity<City>().HasMany(city => city.Connections)
-        //                               .WithRequired().HasForeignKey(con => con.StartCityId);
-        //}
-
     }
 }

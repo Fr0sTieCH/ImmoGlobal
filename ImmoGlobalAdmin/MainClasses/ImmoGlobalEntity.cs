@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ImmoGlobalAdmin.MainClasses
 {
+    /// <summary>
+    /// every entity that can be deleted or locked inherits from this class
+    /// </summary>
     public abstract class ImmoGlobalEntity
     {
         public bool Enabled { get; protected set; }

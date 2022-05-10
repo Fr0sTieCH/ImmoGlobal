@@ -13,11 +13,11 @@ namespace ImmoGlobalAdmin.MainClasses
     public class BankAccount:ImmoGlobalEntity
     {
         public int BankAccountID { get; private set; }
-        public string AccountName { get; set; }
-        public string Iban { get; set; }
-        public virtual ICollection<Transaction?> Transactions { get; private set; }
+        public string AccountName { get; set; } = "";
+        public string Iban { get; set; } = "";
+        public virtual ICollection<Transaction?> Transactions { get; private set; } = new List<Transaction?>();
+       
         #region CONSTRUCTORS
-
         /// <summary>
         /// New Bankaccount
         /// </summary>
@@ -28,20 +28,20 @@ namespace ImmoGlobalAdmin.MainClasses
         {
             this.AccountName = accountName;
             this.Iban = iban;
-            this.Transactions = new List<Transaction>();
             this.Enabled = true;
         }
 
-        public BankAccount()
+        public BankAccount()//used by EntityFramework
         {
         }
 
         public BankAccount(bool enabled)
         {
             this.Enabled = enabled;
-            this.Transactions = new List<Transaction>();
         }
         #endregion
+
+        #region PUBLIC GETSET
 
         [NotMapped]
         public string IGID => BankAccountID.ToString("BA 00000000");
@@ -56,17 +56,16 @@ namespace ImmoGlobalAdmin.MainClasses
         {
             get
             {
-                return this.Transactions.Where(x => x.Enabled).Sum(x => x.Value);
-            }
-            
+                return this.Transactions.Where(x => x!=null && x.Enabled).Sum(x => x!=null? x.Value:0);
+            }      
         }
+        #endregion
+
 
         public void AddTransaction(Transaction transaction)
         {
             Transactions.Add(transaction);
         }
 
-     
-        
     }
 }

@@ -7,39 +7,28 @@ using System.Threading.Tasks;
 
 namespace ImmoGlobalAdmin.MainClasses
 {
-    public class Invoice:ImmoGlobalEntity
+    /// <summary>
+    /// Represents an invoice
+    /// </summary>
+    public class Invoice : ImmoGlobalEntity
     {
         public int InvoiceID { get; private set; }
-        public string Title { get; private set; }
+        public string Title { get; private set; } = "";
         public double Sum { get; private set; }
         public virtual RentalObject? RentalObject { get; private set; }
         public virtual RentalContract? RentalContract { get; private set; }
-        public virtual ICollection<Transaction?> Transactions { get; private set; }
+        public virtual ICollection<Transaction?> Transactions { get; private set; } = new List<Transaction?>();
         public DateTime Date { get; private set; }
         public virtual Person AssociatedPerson { get; private set; }
 
 
         #region CONSTRUCTORS
-        public Invoice()
+        public Invoice()//used by EntityFramework
         {
-        }
-
-        public Invoice(string title, RentalObject rentalObject, RentalContract rentalContract, List<Transaction> transactions, DateTime date, Person associatedPerson)
-        {
-            this.Title = title;
-            this.RentalObject = rentalObject;
-            this.RentalContract = rentalContract;
-            this.Transactions = transactions;
-            this.Date = date;
-            this.AssociatedPerson = associatedPerson;
-            this.Enabled = true;
-            this.Locked = false;
-
-            CalculateSum();
         }
         #endregion
 
-        #region PUBLIC SETTERS
+        #region PUBLIC GETSET
         [NotMapped]
         public string SetTitle
         {
@@ -59,7 +48,7 @@ namespace ImmoGlobalAdmin.MainClasses
         }
 
         [NotMapped]
-        public List<Transaction> SetTransactions
+        public List<Transaction?> SetTransactions
         {
             set => Transactions = Locked ? Transactions : value;
         }
@@ -71,13 +60,15 @@ namespace ImmoGlobalAdmin.MainClasses
         }
         #endregion
 
-
+        /// <summary>
+        /// calculets the sum of all referenced transactions
+        /// </summary>
         public void CalculateSum()
         {
             if (Locked) { return; }
-            Sum = Transactions.Sum(x=>x.Value);
+            Sum = Transactions.Sum(x => x != null ? x.Value : 0);
         }
 
-     
+
     }
 }

@@ -82,7 +82,6 @@ namespace ImmoGlobalAdmin.ViewModel
         }
 
 
-
         #region ButtonCommands
 
 

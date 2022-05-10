@@ -15,15 +15,15 @@
         Background="{DynamicResource MaterialDesignDarkBackground}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1200" MinHeight="500" MinWidth="1200">
+        Title="ImmoGlobalAdmin" Height="800" Width="1200" MinHeight="500" MinWidth="1200">
     
     <!--LOGIN DIALOGHOST-->
     <materialDesign:DialogHost IsOpen="{Binding NoUserLoggedIn,Mode=OneWay}" >
         <materialDesign:DialogHost.DialogContent>
             <StackPanel Width="300">
                 <Label Content="Login" FontSize="20" FontWeight="ExtraBold" HorizontalAlignment="Center" Margin="10,10,10,10"/>
-                <TextBox x:Name="UsernameTextBox"  Text="{Binding UsernameToLogIn}" Margin="10,10,10,10"  ToolTip="Reason" materialDesign:HintAssist.Hint="Reason"/>
-                <PasswordBox x:Name="PasswordBox"/>
+                <TextBox x:Name="UsernameTextBox"  Text="{Binding UsernameToLogIn}" Margin="15,10,15,10"  ToolTip="Username" materialDesign:HintAssist.Hint="Username"/>
+                <PasswordBox x:Name="PasswordBox"  ToolTip="Password" materialDesign:HintAssist.Hint="Password"  Margin="15,10,15,10"/>
                 <Button Command="{Binding LoginUserCommand }" CommandParameter="{Binding ElementName=PasswordBox}" Style="{DynamicResource MaterialDesignFloatingActionButton}" Foreground="GreenYellow" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,10,25,10">
                     <materialDesign:PackIcon Kind="Check">
                         <materialDesign:PackIcon.LayoutTransform>

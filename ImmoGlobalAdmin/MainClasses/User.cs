@@ -18,7 +18,7 @@ namespace ImmoGlobalAdmin.MainClasses
         public Permissions PermissionLevel { get; set; }
 
 
-        public User()
+        public User()//used by entityFramework
         {
         }
 

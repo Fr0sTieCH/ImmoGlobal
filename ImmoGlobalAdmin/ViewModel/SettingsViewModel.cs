@@ -9,7 +9,7 @@ namespace ImmoGlobalAdmin.ViewModel
 {
     internal class SettingsViewModel : BaseViewModel
     {
-        private LanguageSetting _currentLanguage;
+        private LanguageSetting _currentLanguage = LanguageSetting.English;
 
         #region Singleton
         private static SettingsViewModel? _instance = null;
@@ -47,11 +47,7 @@ namespace ImmoGlobalAdmin.ViewModel
         {
             get
             {
-                if (_currentLanguage == null)
-                {
-                    _currentLanguage = LanguageSetting.English;
-                }
-                return Enum.GetName(_currentLanguage);
+                return Enum.GetName(_currentLanguage)??"";
             }
             set
             {
